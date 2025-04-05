@@ -63,7 +63,7 @@ export default function Index() {
         "stnk",
     ];
 
-    const rows = pendaftaran.map((item, index) => ({
+    const rows = pendaftaran.data.map((item, index) => ({
         no: index + 1, // Menambahkan nomor urut
         id: item.id,
         no_pendaftaran: item.id,
@@ -154,6 +154,8 @@ export default function Index() {
                     rows={rows}
                     checkboxFields={checkboxFields}
                     urlDetailRow={"/pendaftaran"}
+                    paginationLinks={pendaftaran.links}
+                    paginationMeta={pendaftaran}
                 />
             </Container>
         </AuthenticatedLayout>

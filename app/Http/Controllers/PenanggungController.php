@@ -14,7 +14,7 @@ class PenanggungController extends Controller
      */
     public function index()
     {
-        $penanggung = Penanggung::all();
+        $penanggung = Penanggung::paginate(25);
         return Inertia::render('Penanggung/Index', [
             'penanggung' => $penanggung
         ]);
@@ -34,10 +34,10 @@ class PenanggungController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama' => 'required|string|max:100',
-            'alamat' => 'string|max:255',
-            'no_telepon' => 'string',
-            'no_fax' => 'string',
+            'nama' => 'required|string|max:100|unique:penanggung,nama',
+            'no_telepon' => 'nullable|unique:penanggung,no_telepon',
+            'no_fax' => 'nullable|unique:penanggung,no_fax',
+            'alamat' => 'nullable|max:255',
             'pph' => 'required|integer',
             'ppn' => 'required|integer',
         ]);
@@ -59,8 +59,7 @@ class PenanggungController extends Controller
             return redirect(route('penanggung.index', absolute: false));
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect(route('penanggung.create'))
-                ->withErrors(['error' => 'Gagal menyimpan data: ' . $e->getMessage()])
+            return back()->withErrors(['penanggung' => 'Gagal menyimpan data: ' . $e->getMessage()])
                 ->withInput();
         }
     }
@@ -92,12 +91,12 @@ class PenanggungController extends Controller
     public function update(Request $request, Penanggung $penanggung)
     {
         $request->validate([
-            'nama' => 'required|string|max:100',
-            'alamat' => 'string|max:255',
-            'no_telepon' => 'string',
-            'no_fax' => 'string',
-            'pph' => 'required|integer',
-            'ppn' => 'required|integer',
+            'nama' => 'required|string|max:100|unique:penanggung,nama,' . $penanggung->id,
+            'no_telepon' => 'nullable|unique:penanggung,no_telepon,' . $penanggung->id,
+            'no_fax' => 'nullable|unique:penanggung,no_fax,' . $penanggung->id,
+            'alamat' => 'nullable|max:255',
+            'pph' => 'required|integer|max:100',
+            'ppn' => 'required|integer|max:100',
         ]);
 
         DB::beginTransaction();
@@ -117,8 +116,7 @@ class PenanggungController extends Controller
                 ->with('success', 'Data berhasil diperbarui');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect(route('penanggung.show', $penanggung->id))
-                ->withErrors(['error' => 'Gagal memperbarui data: ' . $e->getMessage()])
+            return back()->withErrors(['penanggung' => 'Gagal menyimpan data: ' . $e->getMessage()])
                 ->withInput();
         }
     }

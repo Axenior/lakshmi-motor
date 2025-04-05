@@ -13,7 +13,7 @@ export default function Index() {
         { id: "tipe", label: "Tipe", minWidth: 100 },
     ];
 
-    const rows = tipe.map((item) => ({
+    const rows = tipe.data.map((item) => ({
         id: item.id,
         merk: item.merk.nama,
         tipe: item.nama,
@@ -44,6 +44,8 @@ export default function Index() {
                     columns={columns}
                     rows={rows}
                     urlDetailRow={"/kendaraan/tipe"}
+                    paginationLinks={tipe.links}
+                    paginationMeta={tipe}
                 />
                 <div className="mt-2">
                     <Button

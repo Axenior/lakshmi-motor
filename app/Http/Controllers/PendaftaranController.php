@@ -24,12 +24,14 @@ class PendaftaranController extends Controller
      */
     public function index()
     {
-        $pendaftaran = Pendaftaran::with('pelanggan', 'penanggung', 'kendaraan')->get();
+        $pendaftaran = Pendaftaran::with('pelanggan', 'penanggung', 'kendaraan')->paginate(25);
+
         return Inertia::render('Pendaftaran/Index', [
             'nama' => "Pendaftaran",
             'pendaftaran' => $pendaftaran
         ]);
     }
+
 
     /**
      * Show the form for creating a new resource.

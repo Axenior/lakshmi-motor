@@ -7,22 +7,21 @@ import { Head, useForm, usePage } from "@inertiajs/react";
 import { Button, Card, MenuItem, Select, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 
-export default function Create() {
-    const { merk } = usePage().props;
+export default function Edit() {
+    const { merk, sparepart } = usePage().props;
     const merkRef = useRef(null);
     const tipeRef = useRef(null);
     const satuanRef = useRef(null);
 
-    console.log(merk);
     const jenis = [{ value: "Pc" }, { value: "Set" }];
 
-    const { data, setData, post, processing, errors, reset } = useForm({
-        merk: "",
-        tipe: "",
-        kode: "",
-        nama: "",
-        satuan: "",
-        harga: "",
+    const { data, setData, put, processing, errors, reset } = useForm({
+        merk: sparepart.tipe.merk.id || "",
+        tipe: sparepart.tipe_id || "",
+        kode: sparepart.kode || "",
+        nama: sparepart.nama || "",
+        satuan: sparepart.satuan || "",
+        harga: sparepart.harga || "",
     });
 
     const [tipe, setTipe] = useState(null);
@@ -43,13 +42,12 @@ export default function Create() {
 
     useEffect(() => {
         if (data.merk) fetchTipe();
-        setData("tipe", "");
     }, [data.merk]);
 
     const submit = (e) => {
         e.preventDefault();
 
-        post(route("sparepart.store"), {
+        put(route("sparepart.update", sparepart.id), {
             onSuccess: () => {
                 alert("Data berhasil disimpan!");
                 reset();
@@ -80,12 +78,12 @@ export default function Create() {
                         Kembali
                     </Button>
                     <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                        Tambah Sparepart
+                        Edit Sparepart
                     </h2>
                 </div>
             }
         >
-            <Head title="Tambah Pendaftaran" />
+            <Head title="Edit Sparepart" />
 
             <Container>
                 <form onSubmit={submit}>

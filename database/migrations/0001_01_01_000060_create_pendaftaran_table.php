@@ -15,9 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('no_register');
             $table->string('no_polis');
-            // $table->string('no_rangka');
             $table->date('tanggal_pendaftaran');
-            // $table->string('kelengkapan_tambahan')->nullable();
             $table->string('keterangan');
             $table->timestamps();
 
@@ -30,13 +28,12 @@ return new class extends Migration
             $table->unsignedBigInteger('penanggung_id')->nullable();
             $table->foreign('penanggung_id')->references('id')->on('penanggung');
 
-            $table->integer('estimasi')->nullable();
+            // $table->integer('estimasi')->nullable();
             $table->integer('km_masuk')->nullable();
-            $table->unsignedBigInteger('nilai_or')->nullable();
-            $table->date('tanggal_spk')->nullable();
-            $table->boolean('lunas')->default(false);
-            $table->boolean('selesai')->default(false);
-            $table->string('foto_spk')->nullable();
+            // $table->unsignedBigInteger('nilai_or')->nullable();
+            // $table->date('tanggal_spk')->nullable();
+            // $table->boolean('lunas')->default(false);
+            // $table->boolean('selesai')->default(false);
         });
     }
 

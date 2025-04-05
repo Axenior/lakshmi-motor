@@ -4,7 +4,7 @@ import TextAreaInput from "@/Components/TextAreaInput";
 import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, useForm, usePage } from "@inertiajs/react";
-import { Button, Card, MenuItem, Select } from "@mui/material";
+import { Button, Card, MenuItem, Select, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 
 export default function Show() {
@@ -18,23 +18,14 @@ export default function Show() {
     ];
 
     const { data, setData, put, processing, errors, reset } = useForm({
-        nama: "",
-        alamat: "",
-        no_telepon: "",
-        no_fax: "",
-        pph: 0,
-        ppn: 0,
-        jenis_penanggung: "1",
+        nama: penanggung.nama || "",
+        alamat: penanggung.alamat || "",
+        no_telepon: penanggung.no_telepon || "",
+        no_fax: penanggung.no_fax || "",
+        pph: penanggung.pph || 0,
+        ppn: penanggung.ppn || 0,
+        jenis_penanggung: penanggung.jenis_penanggung || "",
     });
-
-    useEffect(() => {
-        setData("nama", penanggung.nama);
-        setData("alamat", penanggung.alamat);
-        setData("no_telepon", penanggung.no_telepon);
-        setData("no_fax", penanggung.no_fax);
-        setData("pph", penanggung.pph);
-        setData("ppn", penanggung.ppn);
-    }, [penanggung]);
 
     const submit = (e) => {
         e.preventDefault();
@@ -91,6 +82,18 @@ export default function Show() {
                                         setData("nama", e.target.value)
                                     }
                                 />
+                                {errors.nama && (
+                                    <>
+                                        <span></span>
+                                        <Typography
+                                            color="error"
+                                            variant="caption"
+                                            className="mt-1"
+                                        >
+                                            {errors.nama}
+                                        </Typography>
+                                    </>
+                                )}
 
                                 <InputLabel className="flex items-center">
                                     Alamat
@@ -101,6 +104,18 @@ export default function Show() {
                                         setData("alamat", e.target.value)
                                     }
                                 />
+                                {errors.alamat && (
+                                    <>
+                                        <span></span>
+                                        <Typography
+                                            color="error"
+                                            variant="caption"
+                                            className="mt-1"
+                                        >
+                                            {errors.alamat}
+                                        </Typography>
+                                    </>
+                                )}
 
                                 <InputLabel className="flex items-center">
                                     No Telepon
@@ -115,6 +130,18 @@ export default function Show() {
                                         setData("no_telepon", val);
                                     }}
                                 />
+                                {errors.no_telepon && (
+                                    <>
+                                        <span></span>
+                                        <Typography
+                                            color="error"
+                                            variant="caption"
+                                            className="mt-1"
+                                        >
+                                            {errors.no_telepon}
+                                        </Typography>
+                                    </>
+                                )}
 
                                 <InputLabel className="flex items-center">
                                     No Fax
@@ -125,6 +152,18 @@ export default function Show() {
                                         setData("no_fax", e.target.value)
                                     }
                                 />
+                                {errors.no_fax && (
+                                    <>
+                                        <span></span>
+                                        <Typography
+                                            color="error"
+                                            variant="caption"
+                                            className="mt-1"
+                                        >
+                                            {errors.no_fax}
+                                        </Typography>
+                                    </>
+                                )}
 
                                 <InputLabel className="flex items-center">
                                     Pph
@@ -146,6 +185,18 @@ export default function Show() {
                                     />
                                     <span>%</span>
                                 </div>
+                                {errors.pph && (
+                                    <>
+                                        <span></span>
+                                        <Typography
+                                            color="error"
+                                            variant="caption"
+                                            className="mt-1"
+                                        >
+                                            {errors.pph}
+                                        </Typography>
+                                    </>
+                                )}
 
                                 <InputLabel className="flex items-center">
                                     PPN
@@ -167,6 +218,18 @@ export default function Show() {
                                     />
                                     <span>%</span>
                                 </div>
+                                {errors.ppn && (
+                                    <>
+                                        <span></span>
+                                        <Typography
+                                            color="error"
+                                            variant="caption"
+                                            className="mt-1"
+                                        >
+                                            {errors.ppn}
+                                        </Typography>
+                                    </>
+                                )}
 
                                 <InputLabel className="flex items-center">
                                     Jenis Penanggung
@@ -174,10 +237,7 @@ export default function Show() {
                                 <Select
                                     ref={penanggungRef}
                                     // value={data.jenis_penanggung}
-                                    value={
-                                        data.jenis_penanggung ||
-                                        (jenis.length > 0 ? jenis[0].id : "")
-                                    }
+                                    value={data.jenis_penanggung}
                                     onChange={(e) =>
                                         setData(
                                             "jenis_penanggung",
@@ -218,6 +278,18 @@ export default function Show() {
                                             </MenuItem>
                                         ))}
                                 </Select>
+                                {errors.jenis_penanggung && (
+                                    <>
+                                        <span></span>
+                                        <Typography
+                                            color="error"
+                                            variant="caption"
+                                            className="mt-1"
+                                        >
+                                            {errors.jenis_penanggung}
+                                        </Typography>
+                                    </>
+                                )}
                             </div>
                         </Card>
                     </div>

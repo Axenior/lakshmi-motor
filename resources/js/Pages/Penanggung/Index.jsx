@@ -31,7 +31,7 @@ export default function Index() {
         },
     ];
 
-    const rows = penanggung;
+    const rows = penanggung.data;
 
     return (
         <AuthenticatedLayout
@@ -58,6 +58,8 @@ export default function Index() {
                     columns={columns}
                     rows={rows}
                     urlDetailRow={"/penanggung"}
+                    paginationLinks={penanggung.links}
+                    paginationMeta={penanggung}
                 />
             </Container>
         </AuthenticatedLayout>

@@ -17,7 +17,7 @@ class KendaraanController extends Controller
 
     public function indexMerk()
     {
-        $merk = Merk::get();
+        $merk = Merk::paginate(25);
         return Inertia::render(
             'Kendaraan/Merk/Index',
             [
@@ -28,7 +28,7 @@ class KendaraanController extends Controller
 
     public function indexTipe()
     {
-        $tipe = Tipe::with('merk')->get();
+        $tipe = Tipe::with('merk')->paginate(25);
         return Inertia::render(
             'Kendaraan/Tipe/Index',
             [
@@ -148,7 +148,7 @@ class KendaraanController extends Controller
     public function updateMerk(Request $request, Merk $merk)
     {
         $request->validate([
-            'merk' => 'required|string|max:255|unique:merks,nama,' . $merk->id,
+            'merk' => 'required|string|max:255|unique:merk,nama,' . $merk->id,
         ]);
 
         DB::beginTransaction();
@@ -169,8 +169,8 @@ class KendaraanController extends Controller
     public function updateTipe(Request $request, Tipe $tipe)
     {
         $request->validate([
-            'merk' => 'required|integer|exists:merks,id',
-            'tipe' => 'required|string|max:255|unique:tipes,nama,' . $tipe->id,
+            'merk' => 'required|integer|exists:merk,id',
+            'tipe' => 'required|string|max:255|unique:tipe,nama,' . $tipe->id,
         ]);
 
         DB::beginTransaction();

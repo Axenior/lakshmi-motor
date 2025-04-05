@@ -12,7 +12,7 @@ export default function Index() {
         { id: "merk", label: "Merk", minWidth: 100 },
     ];
 
-    const rows = merk.map((item) => ({
+    const rows = merk.data.map((item) => ({
         id: item.id,
         merk: item.nama,
     }));
@@ -42,6 +42,8 @@ export default function Index() {
                     columns={columns}
                     rows={rows}
                     urlDetailRow={"/kendaraan/merk"}
+                    paginationLinks={merk.links}
+                    paginationMeta={merk}
                 />
                 <div className="mt-2">
                     <Button

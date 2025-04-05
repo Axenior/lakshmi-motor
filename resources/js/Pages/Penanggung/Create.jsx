@@ -4,7 +4,7 @@ import TextAreaInput from "@/Components/TextAreaInput";
 import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, useForm } from "@inertiajs/react";
-import { Button, Card, MenuItem, Select } from "@mui/material";
+import { Button, Card, MenuItem, Select, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 
 export default function Create() {
@@ -22,7 +22,7 @@ export default function Create() {
         no_fax: "",
         pph: 0,
         ppn: 0,
-        jenis_penanggung: "1",
+        jenis_penanggung: "",
     });
 
     const submit = (e) => {
@@ -81,6 +81,19 @@ export default function Create() {
                                     }
                                 />
 
+                                {errors.nama && (
+                                    <>
+                                        <span></span>
+                                        <Typography
+                                            color="error"
+                                            variant="caption"
+                                            className="mt-1"
+                                        >
+                                            {errors.nama}
+                                        </Typography>
+                                    </>
+                                )}
+
                                 <InputLabel className="flex items-center">
                                     Alamat
                                 </InputLabel>
@@ -90,6 +103,18 @@ export default function Create() {
                                         setData("alamat", e.target.value)
                                     }
                                 />
+                                {errors.alamat && (
+                                    <>
+                                        <span></span>
+                                        <Typography
+                                            color="error"
+                                            variant="caption"
+                                            className="mt-1"
+                                        >
+                                            {errors.alamat}
+                                        </Typography>
+                                    </>
+                                )}
 
                                 <InputLabel className="flex items-center">
                                     No Telepon
@@ -104,6 +129,18 @@ export default function Create() {
                                         setData("no_telepon", val);
                                     }}
                                 />
+                                {errors.no_telepon && (
+                                    <>
+                                        <span></span>
+                                        <Typography
+                                            color="error"
+                                            variant="caption"
+                                            className="mt-1"
+                                        >
+                                            {errors.no_telepon}
+                                        </Typography>
+                                    </>
+                                )}
 
                                 <InputLabel className="flex items-center">
                                     No Fax
@@ -114,6 +151,18 @@ export default function Create() {
                                         setData("no_fax", e.target.value)
                                     }
                                 />
+                                {errors.no_fax && (
+                                    <>
+                                        <span></span>
+                                        <Typography
+                                            color="error"
+                                            variant="caption"
+                                            className="mt-1"
+                                        >
+                                            {errors.no_fax}
+                                        </Typography>
+                                    </>
+                                )}
 
                                 <InputLabel className="flex items-center">
                                     Pph
@@ -135,6 +184,18 @@ export default function Create() {
                                     />
                                     <span>%</span>
                                 </div>
+                                {errors.pph && (
+                                    <>
+                                        <span></span>
+                                        <Typography
+                                            color="error"
+                                            variant="caption"
+                                            className="mt-1"
+                                        >
+                                            {errors.pph}
+                                        </Typography>
+                                    </>
+                                )}
 
                                 <InputLabel className="flex items-center">
                                     PPN
@@ -156,6 +217,18 @@ export default function Create() {
                                     />
                                     <span>%</span>
                                 </div>
+                                {errors.ppn && (
+                                    <>
+                                        <span></span>
+                                        <Typography
+                                            color="error"
+                                            variant="caption"
+                                            className="mt-1"
+                                        >
+                                            {errors.ppn}
+                                        </Typography>
+                                    </>
+                                )}
 
                                 <InputLabel className="flex items-center">
                                     Jenis Penanggung
@@ -163,10 +236,7 @@ export default function Create() {
                                 <Select
                                     ref={penanggungRef}
                                     // value={data.jenis_penanggung}
-                                    value={
-                                        data.jenis_penanggung ||
-                                        (jenis.length > 0 ? jenis[0].id : "")
-                                    }
+                                    value={data.jenis_penanggung}
                                     onChange={(e) =>
                                         setData(
                                             "jenis_penanggung",
@@ -207,6 +277,18 @@ export default function Create() {
                                             </MenuItem>
                                         ))}
                                 </Select>
+                                {errors.jenis_penanggung && (
+                                    <>
+                                        <span></span>
+                                        <Typography
+                                            color="error"
+                                            variant="caption"
+                                            className="mt-1"
+                                        >
+                                            {errors.jenis_penanggung}
+                                        </Typography>
+                                    </>
+                                )}
                             </div>
                         </Card>
                     </div>

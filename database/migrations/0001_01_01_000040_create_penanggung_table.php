@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('penanggung', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
+            $table->string('nama')->unique();
             $table->string('alamat')->nullable();
             $table->string('no_telepon')->unique()->nullable();
             $table->string('no_fax')->unique()->nullable();

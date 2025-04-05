@@ -5,7 +5,6 @@ import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, useForm, usePage } from "@inertiajs/react";
 import { Alert, Button, Card, MenuItem, Select } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
 
 export default function Show() {
     const { penanggung } = usePage().props;
@@ -82,7 +81,7 @@ export default function Show() {
                             Nama
                         </InputLabel>
                         <TextInput
-                            value={penanggung.nama}
+                            value={penanggung.nama || ""}
                             onChange={(e) => setData("nama", e.target.value)}
                             readOnly
                         />
@@ -91,7 +90,7 @@ export default function Show() {
                             Alamat
                         </InputLabel>
                         <TextAreaInput
-                            value={penanggung.alamat}
+                            value={penanggung.alamat || ""}
                             onChange={(e) => setData("alamat", e.target.value)}
                             readOnly
                         />
@@ -100,7 +99,7 @@ export default function Show() {
                             No Telepon
                         </InputLabel>
                         <TextInput
-                            value={penanggung.no_telepon}
+                            value={penanggung.no_telepon || ""}
                             onChange={(e) => {
                                 const val = e.target.value.replace(
                                     /[^0-9- ]/g,
@@ -115,7 +114,7 @@ export default function Show() {
                             No Fax
                         </InputLabel>
                         <TextInput
-                            value={penanggung.no_fax}
+                            value={penanggung.no_fax || ""}
                             onChange={(e) => setData("no_fax", e.target.value)}
                             readOnly
                         />
