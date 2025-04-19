@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('pendaftaran', function (Blueprint $table) {
             $table->id();
             $table->string('no_register');
-            $table->string('no_polis');
+            $table->string('no_polis')->nullable();
             $table->date('tanggal_pendaftaran');
             $table->string('keterangan');
             $table->timestamps();

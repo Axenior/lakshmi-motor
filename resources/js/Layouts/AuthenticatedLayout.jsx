@@ -37,6 +37,11 @@ export default function AuthenticatedLayout({ header, children }) {
             href: route("sparepart.index"),
             active: route().current()?.startsWith("sparepart"),
         },
+        {
+            name: "Daftar Jasa",
+            href: route("jasa.index"),
+            active: route().current()?.startsWith("jasa"),
+        },
     ];
 
     return (

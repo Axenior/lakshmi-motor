@@ -68,16 +68,16 @@ export default function Index() {
         id: item.id,
         no_pendaftaran: item.id,
         tanggal_pendaftaran: item.tanggal_pendaftaran,
-        nama_pelanggan: item.pelanggan ? item.pelanggan.nama : null, // Jika pelanggan ada, ambil nama
-        nama_penanggung: item.penanggung ? item.penanggung.nama : null, // Pastikan ada data penanggung
+        nama_pelanggan: item.pelanggan ? item.pelanggan.nama : null,
+        nama_penanggung: item.penanggung ? item.penanggung.nama : null,
         no_polisi: item.kendaraan ? item.kendaraan.no_polisi : null,
         estimasi: item.estimasi,
-        foto_kerusakan: item.foto_kerusakan,
-        foto_epoxy: item.foto_epoxy,
-        surat_pengantar: item.foto_surat_pengantar,
-        gesek_rangka: item.foto_gesek_rangka,
-        spk: item.spk,
-        stnk: item.foto_stnk,
+        foto_kerusakan: item.foto_kerusakans,
+        foto_epoxy: item.foto_epoxys,
+        surat_pengantar: item.foto_surat_pengantars,
+        gesek_rangka: item.foto_gesek_rangkas,
+        spk: item.spks,
+        stnk: item.foto_stnks,
         status: item.status,
     }));
 

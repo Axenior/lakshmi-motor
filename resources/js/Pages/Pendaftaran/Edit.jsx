@@ -27,12 +27,12 @@ export default function Edit() {
     const [pelanggan, setPelanggan] = useState(pendaftaran.pelanggan);
     const [plate, setPlate] = useState({ prefix: "", number: "", suffix: "" });
 
-    const [stnkFiles, setStnkFiles] = useState(null);
-    const [kerusakanFiles, setKerusakanFiles] = useState(null);
-    const [gesekRangkaFiles, setGesekRangkaFiles] = useState(null);
-    const [suratPengantarFiles, setSuratPengantarFiles] = useState(null);
+    const [stnkFiles, setStnkFiles] = useState([]);
+    const [kerusakanFiles, setKerusakanFiles] = useState([]);
+    const [gesekRangkaFiles, setGesekRangkaFiles] = useState([]);
+    const [suratPengantarFiles, setSuratPengantarFiles] = useState([]);
 
-    const { data, setData, post, processing, reset } = useForm({
+    const { data, setData, post, processing, reset, errors } = useForm({
         no_pendaftaran: String(pendaftaran.id).padStart(6, "0") || "",
         no_telepon: pendaftaran.pelanggan?.no_telepon || "",
         nama: pendaftaran.pelanggan?.nama || "",
@@ -56,8 +56,10 @@ export default function Edit() {
         jenis: pendaftaran.kendaraan?.jenis || "",
         warna: pendaftaran.kendaraan?.warna || "",
         keterangan: pendaftaran.keterangan || "",
-        // foto_stnk: pendaftaran.foto_stnk || null,
-        // foto_kerusakan: pendaftaran.foto_kerusakan || null,
+        foto_stnk: [],
+        foto_kerusakan: [],
+        gesek_rangka: [],
+        surat_pengantar: [],
     });
 
     useEffect(() => {
@@ -229,12 +231,12 @@ export default function Edit() {
                         Kembali
                     </Button>
                     <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                        Detail Pendaftaran
+                        Edit Pendaftaran
                     </h2>
                 </div>
             }
         >
-            <Head title="Tambah Pendaftaran" />
+            <Head title="Edit Pendaftaran" />
             <Container>
                 <form onSubmit={submit}>
                     <LocalizationProvider
@@ -248,6 +250,7 @@ export default function Edit() {
                                     setData={setData}
                                     fetchPelanggan={fetchPelanggan}
                                     penanggung={penanggung}
+                                    errors={errors}
                                 />
                                 <VehicleInfoCard
                                     data={data}
@@ -255,9 +258,14 @@ export default function Edit() {
                                     plate={plate}
                                     setPlate={setPlate}
                                     fetchKendaraan={fetchKendaraan}
+                                    errors={errors}
                                 />
 
-                                <KeteranganCard data={data} setData={setData} />
+                                <KeteranganCard
+                                    data={data}
+                                    setData={setData}
+                                    errors={errors}
+                                />
                             </div>
                             <FileUploadSection
                                 stnkFiles={stnkFiles}
@@ -268,6 +276,7 @@ export default function Edit() {
                                 setGesekRangkaFiles={setGesekRangkaFiles}
                                 suratPengantarFiles={suratPengantarFiles}
                                 setSuratPengantarFiles={setSuratPengantarFiles}
+                                errors={errors}
                             />
                         </div>
                     </LocalizationProvider>

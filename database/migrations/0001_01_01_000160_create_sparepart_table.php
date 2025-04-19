@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('sparepart', function (Blueprint $table) {
             $table->id();
-            $table->string('kode');
+            $table->string('kode')->unique();
             $table->string('nama');
             $table->enum('satuan', ['Pc', 'Set']);
             $table->unsignedBigInteger('harga');

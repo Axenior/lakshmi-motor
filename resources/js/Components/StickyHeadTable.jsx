@@ -70,7 +70,10 @@ export default function StickyHeadTable({
                                     ) {
                                         value = (
                                             <Checkbox
-                                                checked={row[column.id] != null}
+                                                checked={
+                                                    !!row[column.id] &&
+                                                    !!row[column.id]?.length
+                                                }
                                                 disabled
                                                 sx={{
                                                     "&.Mui-checked": {

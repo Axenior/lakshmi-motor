@@ -36,7 +36,7 @@ class PendaftaranSeeder extends Seeder
       $kendaraan = $kendaraanList[$index] ?? null;
 
       if ($kendaraan) {
-        $penanggungId = rand(1, 5); // 1 = Pribadi, lainnya bisa Asuransi
+        $penanggungId = rand(1, 6); // 1 = Pribadi, lainnya bisa Asuransi
 
         Pendaftaran::create([
           'no_register' => 'REG-' . Str::upper(Str::random(6)),

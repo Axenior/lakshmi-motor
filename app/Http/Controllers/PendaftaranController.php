@@ -24,8 +24,23 @@ class PendaftaranController extends Controller
      */
     public function index()
     {
-        $pendaftaran = Pendaftaran::with('pelanggan', 'penanggung', 'kendaraan')->paginate(25);
-
+        $pendaftaran = Pendaftaran::with(
+            'pelanggan',
+            'penanggung',
+            'kendaraan',
+            'foto_kerusakans',
+            'foto_stnks',
+            'foto_gesek_rangkas',
+            'foto_surat_pengantars',
+        )->paginate(25);
+        // $pendaftaran->load([
+        //     'pelanggan',
+        //     'kendaraan.tipe.merk',
+        //     'foto_kerusakans',
+        //     'foto_stnks',
+        //     'foto_gesek_rangkas',
+        //     'foto_surat_pengantars',
+        // ]);
         return Inertia::render('Pendaftaran/Index', [
             'nama' => "Pendaftaran",
             'pendaftaran' => $pendaftaran
@@ -214,6 +229,9 @@ class PendaftaranController extends Controller
                 'tanggal_pendaftaran' => 'required|date',
                 'km_masuk' => 'integer|min:0',
                 'no_polisi' => 'required|string',
+                'no_register' => 'required',
+                'penanggung' => 'required',
+                'no_polis' => 'required_unless:penanggung,1,null|max:50',
                 'plate_prefix' => 'required',
                 'plate_number' => 'required',
                 'plate_suffix' => 'required',
@@ -259,7 +277,6 @@ class PendaftaranController extends Controller
                 $kendaraan->update([
                     'no_polisi' => $request->no_polisi,
                     'no_mesin' => $request->no_mesin,
-                    'merk' => $request->merk,
                     'tipe_id' => $request->tipe,
                     'tahun' => $request->tahun,
                     'jenis' => $request->jenis,
@@ -270,8 +287,7 @@ class PendaftaranController extends Controller
                     'no_rangka' => $request->no_rangka,
                     'no_polisi' => $request->no_polisi,
                     'no_mesin'  => $request->no_mesin,
-                    'merk' => $request->merk,
-                    'tipe' => $request->tipe,
+                    'tipe_id' => $request->tipe,
                     'tahun' => $request->tahun,
                     'jenis' => $request->jenis,
                     'warna' => $request->warna,

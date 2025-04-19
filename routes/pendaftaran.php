@@ -9,9 +9,6 @@ Route::middleware('auth')->group(function () {
   Route::get('/pendaftaran/create', [PendaftaranController::class, 'create'])->name('pendaftaran.create');
   Route::post('/pendaftaran', [PendaftaranController::class, 'store'])->name('pendaftaran.store');
   Route::get('/pendaftaran/{pendaftaran}', [PendaftaranController::class, 'show'])->name('pendaftaran.show');
+  Route::get('/pendaftaran/edit/{pendaftaran}', [PendaftaranController::class, 'edit'])->name('pendaftaran.edit');
   Route::post('/pendaftaran/{pendaftaran}', [PendaftaranController::class, 'update'])->name('pendaftaran.update');
 });
-
-// Route::get('/dashboard', function () {
-//   return Inertia::render('Dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');

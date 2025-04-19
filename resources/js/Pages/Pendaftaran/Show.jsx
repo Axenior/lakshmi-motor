@@ -134,6 +134,24 @@ export default function Create() {
         setData("foto_surat_pengantar", suratPengantarFiles);
     }, [suratPengantarFiles]);
 
+    const deleting = (e) => {
+        e.preventDefault();
+
+        destroy(route("pendaftaran.destroy", pendaftaran.id), {
+            onSuccess: () => {
+                alert("Data berhasil dihapus!");
+                reset();
+            },
+            onError: (errors) => {
+                console.error("Terjadi kesalahan:", errors);
+                alert(errors.error);
+            },
+            onFinish: () => {
+                console.log("Request selesai.");
+            },
+        });
+    };
+
     return (
         <AuthenticatedLayout
             header={
@@ -152,7 +170,26 @@ export default function Create() {
             }
         >
             <Head title="Tambah Pendaftaran" />
-            <Container>
+            <Container className="py-5">
+                <div className="flex gap-2 justify-end">
+                    <Button
+                        variant="contained"
+                        size="small"
+                        color="warning"
+                        href={route("pendaftaran.edit", pendaftaran.id)}
+                    >
+                        Edit
+                    </Button>
+
+                    <Button
+                        variant="contained"
+                        size="small"
+                        color="error"
+                        onClick={deleting}
+                    >
+                        Hapus
+                    </Button>
+                </div>
                 <LocalizationProvider
                     dateAdapter={AdapterDayjs}
                     adapterLocale="id"
