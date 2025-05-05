@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FotoGesekRangka;
-use App\Models\FotoKerusakan;
-use App\Models\FotoSTNK;
-use App\Models\FotoSuratPengantar;
+use App\Models\Estimasi;
+use App\Models\EstimasiJasa;
+use App\Models\EstimasiSparepart;
+use App\Models\FileEpoxy;
+use App\Models\FileGesekRangka;
+use App\Models\FileKerusakan;
+use App\Models\FileSPK;
+use App\Models\FileSTNK;
+use App\Models\FileSuratPengantar;
 use App\Models\Kendaraan;
 use App\Models\Pelanggan;
 use App\Models\Penanggung;
@@ -28,19 +33,12 @@ class PendaftaranController extends Controller
             'pelanggan',
             'penanggung',
             'kendaraan',
-            'foto_kerusakans',
-            'foto_stnks',
-            'foto_gesek_rangkas',
-            'foto_surat_pengantars',
+            'file_kerusakans',
+            'file_stnks',
+            'file_gesek_rangkas',
+            'file_surat_pengantars',
         )->paginate(25);
-        // $pendaftaran->load([
-        //     'pelanggan',
-        //     'kendaraan.tipe.merk',
-        //     'foto_kerusakans',
-        //     'foto_stnks',
-        //     'foto_gesek_rangkas',
-        //     'foto_surat_pengantars',
-        // ]);
+        // dd($pendaftaran);
         return Inertia::render('Pendaftaran/Index', [
             'nama' => "Pendaftaran",
             'pendaftaran' => $pendaftaran
@@ -158,10 +156,10 @@ class PendaftaranController extends Controller
                 'keterangan' => $request->keterangan
             ]);
 
-            $this->syncUploadedFiles($request, 'foto_kerusakan', FotoKerusakan::class, 'pendaftaran_id', $pendaftaran->id, 'FK', 'foto-kerusakan');
-            $this->syncUploadedFiles($request, 'foto_stnk', FotoSTNK::class, 'pendaftaran_id', $pendaftaran->id, 'STNK', 'foto-stnk');
-            $this->syncUploadedFiles($request, 'foto_gesek_rangka', FotoGesekRangka::class, 'pendaftaran_id', $pendaftaran->id, 'FGR', 'foto-gesek-rangka');
-            $this->syncUploadedFiles($request, 'foto_surat_pengantar', FotoSuratPengantar::class, 'pendaftaran_id', $pendaftaran->id, 'FSP', 'foto-surat-pengantar');
+            $this->syncUploadedFiles($request, 'file_kerusakan', FileKerusakan::class, 'pendaftaran_id', $pendaftaran->id, 'K', 'kerusakan');
+            $this->syncUploadedFiles($request, 'file_stnk', FileSTNK::class, 'pendaftaran_id', $pendaftaran->id, 'STNK', 'stnk');
+            $this->syncUploadedFiles($request, 'file_gesek_rangka', FileGesekRangka::class, 'pendaftaran_id', $pendaftaran->id, 'GR', 'gesek-rangka');
+            $this->syncUploadedFiles($request, 'file_surat_pengantar', FileSuratPengantar::class, 'pendaftaran_id', $pendaftaran->id, 'SP', 'surat-pengantar');
 
             DB::commit();
             return redirect(route('pendaftaran.index', absolute: false));
@@ -181,10 +179,13 @@ class PendaftaranController extends Controller
             'pelanggan',
             'kendaraan.tipe.merk',
             // 'kendaraan.merk',
-            'foto_kerusakans',
-            'foto_stnks',
-            'foto_gesek_rangkas',
-            'foto_surat_pengantars',
+            'file_kerusakans',
+            'file_stnks',
+            'file_gesek_rangkas',
+            'file_surat_pengantars',
+            'file_spks',
+            'file_epoxys',
+            'estimasi',
         ]);
         $penanggung = Penanggung::all();
         return Inertia::render('Pendaftaran/Show', [
@@ -202,10 +203,12 @@ class PendaftaranController extends Controller
             'pelanggan',
             'kendaraan.tipe.merk',
             // 'kendaraan.merk',
-            'foto_kerusakans',
-            'foto_stnks',
-            'foto_gesek_rangkas',
-            'foto_surat_pengantars',
+            'file_kerusakans',
+            'file_stnks',
+            'file_gesek_rangkas',
+            'file_surat_pengantars',
+            'file_spks',
+            'file_epoxys',
         ]);
         $penanggung = Penanggung::all();
         return Inertia::render('Pendaftaran/Edit', [
@@ -274,6 +277,12 @@ class PendaftaranController extends Controller
             // Update Kendaraan
             $kendaraan = Kendaraan::where('no_rangka', $request->no_rangka)->first();
             if ($kendaraan) {
+                if ($kendaraan->tipe_id != $request->tipe) {
+                    $estimasi = Estimasi::where('pendaftaran_id', $pendaftaran->id)->first();
+                    if ($estimasi) {
+                        EstimasiSparepart::where('estimasi_id', $estimasi->id)->delete();
+                    }
+                }
                 $kendaraan->update([
                     'no_polisi' => $request->no_polisi,
                     'no_mesin' => $request->no_mesin,
@@ -295,6 +304,14 @@ class PendaftaranController extends Controller
                 $pendaftaran->kendaraan_id = $kendaraan->id;
             }
 
+            if ($pendaftaran->penanggung_id != $request->penanggung) {
+                $estimasi = Estimasi::where('pendaftaran_id', $pendaftaran->id)->first();
+
+                if ($estimasi) {
+                    EstimasiJasa::where('estimasi_id', $estimasi->id)->delete();
+                }
+            }
+
             // Update data pendaftaran
             $pendaftaran->update([
                 'no_register' => $request->no_register,
@@ -305,10 +322,13 @@ class PendaftaranController extends Controller
                 'penanggung_id' => $request->penanggung,
             ]);
 
-            $this->syncUploadedFiles($request, 'foto_kerusakan', FotoKerusakan::class, 'pendaftaran_id', $pendaftaran->id, 'FK', 'foto-kerusakan');
-            $this->syncUploadedFiles($request, 'foto_stnk', FotoSTNK::class, 'pendaftaran_id', $pendaftaran->id, 'STNK', 'foto-stnk');
-            $this->syncUploadedFiles($request, 'foto_gesek_rangka', FotoGesekRangka::class, 'pendaftaran_id', $pendaftaran->id, 'FGR', 'foto-gesek-rangka');
-            $this->syncUploadedFiles($request, 'foto_surat_pengantar', FotoSuratPengantar::class, 'pendaftaran_id', $pendaftaran->id, 'FSP', 'foto-surat-pengantar');
+            $this->syncUploadedFiles($request, 'file_kerusakan', FileKerusakan::class, 'pendaftaran_id', $pendaftaran->id, 'K', 'kerusakan');
+            $this->syncUploadedFiles($request, 'file_stnk', FileSTNK::class, 'pendaftaran_id', $pendaftaran->id, 'STNK', 'stnk');
+            $this->syncUploadedFiles($request, 'file_gesek_rangka', FileGesekRangka::class, 'pendaftaran_id', $pendaftaran->id, 'GR', 'gesek-rangka');
+            $this->syncUploadedFiles($request, 'file_surat_pengantar', FileSuratPengantar::class, 'pendaftaran_id', $pendaftaran->id, 'SP', 'surat-pengantar');
+
+            $this->syncUploadedFiles($request, 'file_spk', FileSPK::class, 'pendaftaran_id', $pendaftaran->id, 'SPK', 'surat-perintah-kerja');
+            $this->syncUploadedFiles($request, 'file_epoxy', FileEpoxy::class, 'pendaftaran_id', $pendaftaran->id, 'EP', 'epoxy');
 
             DB::commit();
             return redirect(route('pendaftaran.index', false));

@@ -10,6 +10,7 @@ import { Checkbox } from "@mui/material";
 import { router } from "@inertiajs/react";
 
 export default function StickyHeadTable({
+    children,
     columns,
     rows,
     checkboxFields,
@@ -50,7 +51,7 @@ export default function StickyHeadTable({
                                 hover
                                 role="checkbox"
                                 tabIndex={-1}
-                                key={row.id || index}
+                                key={index}
                                 onClick={() => handleRowClick(row.id)}
                                 sx={{
                                     cursor: urlDetailRow
@@ -101,6 +102,7 @@ export default function StickyHeadTable({
                                 })}
                             </TableRow>
                         ))}
+                        {children}
                     </TableBody>
                 </Table>
             </TableContainer>

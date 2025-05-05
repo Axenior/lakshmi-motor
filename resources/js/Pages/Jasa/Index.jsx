@@ -1,4 +1,5 @@
 import Container from "@/Components/Container";
+import CustomSelect from "@/Components/CustomSelect";
 import InputLabel from "@/Components/InputLabel";
 import StickyHeadTable from "@/Components/StickyHeadTable";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
@@ -55,16 +56,14 @@ export default function Index() {
                 <form onSubmit={searchPenanggung}>
                     <div className="grid grid-cols-1 sm:grid-cols-[130px_350px] gap-1 w-full sm:w-[485px] self-start">
                         <InputLabel className="flex items-center">
-                            penanggung
+                            Penanggung
                         </InputLabel>
-                        <Select
-                            required
-                            ref={penanggungRef}
-                            name="penanggung"
+                        <CustomSelect
+                            name={"penanggung"}
                             value={selectedPenanggung}
-                            onChange={(e) => {
-                                setSelectedMerk(e.target.value);
-                                params.set("penanggung", e.target.value);
+                            onChange={(val) => {
+                                setSelectedMerk(val);
+                                params.set("penanggung", val);
 
                                 window.history.pushState(
                                     {},
@@ -74,37 +73,8 @@ export default function Index() {
                                     }?${params.toString()}`
                                 );
                             }}
-                            className="h-8"
-                            onClose={() => {
-                                penanggungRef.current.classList.remove(
-                                    "Mui-focused"
-                                );
-                                penanggungRef.current.previousSibling?.classList.remove(
-                                    "Mui-focused"
-                                );
-                            }}
-                            onOpen={() => {
-                                penanggungRef.current.classList.add(
-                                    "Mui-focused"
-                                );
-                                penanggungRef.current.previousSibling?.classList.add(
-                                    "Mui-focused"
-                                );
-                            }}
-                            sx={{
-                                "& .MuiOutlinedInput-notchedOutline": {
-                                    borderColor: "black",
-                                    borderRadius: "0.375rem",
-                                },
-                            }}
-                        >
-                            {penanggung &&
-                                penanggung.map((item) => (
-                                    <MenuItem key={item.id} value={item.id}>
-                                        {item.nama}
-                                    </MenuItem>
-                                ))}
-                        </Select>
+                            options={penanggung}
+                        />
                     </div>
                     <div className="my-1">
                         <Button variant="contained" size="small" type="submit">

@@ -52,10 +52,10 @@ export default function Create() {
         keterangan: "",
         perkiraan_waktu: 0,
         nilai_or: 0,
-        foto_stnk: [],
-        foto_kerusakan: [],
-        gesek_rangka: [],
-        surat_pengantar: [],
+        file_stnk: [],
+        file_kerusakan: [],
+        file_gesek_rangka: [],
+        file_surat_pengantar: [],
     });
 
     const fetchKendaraan = async () => {
@@ -128,19 +128,19 @@ export default function Create() {
     }, [pelanggan]);
 
     useEffect(() => {
-        setData("foto_stnk", stnkFiles);
+        setData("file_stnk", stnkFiles);
     }, [stnkFiles]);
 
     useEffect(() => {
-        setData("foto_kerusakan", kerusakanFiles);
+        setData("file_kerusakan", kerusakanFiles);
     }, [kerusakanFiles]);
 
     useEffect(() => {
-        setData("foto_gesek_rangka", gesekRangkaFiles);
+        setData("file_gesek_rangka", gesekRangkaFiles);
     }, [gesekRangkaFiles]);
 
     useEffect(() => {
-        setData("foto_surat_pengantar", suratPengantarFiles);
+        setData("file_surat_pengantar", suratPengantarFiles);
     }, [suratPengantarFiles]);
 
     const submit = (e) => {

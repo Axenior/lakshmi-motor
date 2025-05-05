@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class FotoGesekRangka extends Model
+class FileSTNK extends Model
 {
-  protected $table = 'foto_gesek_rangka';
+  protected $table = 'file_stnk';
 
   protected $fillable = [
     'path',
@@ -14,7 +14,7 @@ class FotoGesekRangka extends Model
     'pendaftaran_id'
   ];
 
-  public function pendaftarans()
+  public function pendaftaran()
   {
     return $this->belongsTo(Pendaftaran::class);
   }

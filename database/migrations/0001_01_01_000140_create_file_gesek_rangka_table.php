@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('foto_surat_pengantar', function (Blueprint $table) {
+        Schema::create('file_gesek_rangka', function (Blueprint $table) {
             $table->id();
             $table->string('path');
             $table->string('hash');
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('foto_surat_pengantar');
+        Schema::dropIfExists('file_gesek_rangka');
     }
 };

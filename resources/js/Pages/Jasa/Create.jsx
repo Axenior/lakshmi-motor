@@ -1,4 +1,5 @@
 import Container from "@/Components/Container";
+import CustomSelect from "@/Components/CustomSelect";
 import InputLabel from "@/Components/InputLabel";
 import TextAreaInput from "@/Components/TextAreaInput";
 import TextInput from "@/Components/TextInput";
@@ -9,7 +10,6 @@ import { useEffect, useRef, useState } from "react";
 
 export default function Create() {
     const { penanggung } = usePage().props;
-    const merkRef = useRef(null);
 
     const { data, setData, post, processing, errors, reset } = useForm({
         penanggung: "",
@@ -51,7 +51,7 @@ export default function Create() {
                         Kembali
                     </Button>
                     <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                        Tambah Sparepart
+                        Tambah Jasa
                     </h2>
                 </div>
             }
@@ -64,49 +64,16 @@ export default function Create() {
                         <Card className="flex flex-wrap gap-x-5 gap-y-1 p-4 my-1 sm:w-fit">
                             <div className="grid grid-cols-1 sm:grid-cols-[130px_350px] gap-1 w-full sm:w-[485px] self-start">
                                 <InputLabel className="flex items-center">
-                                    penanggung
+                                    Penanggung
                                 </InputLabel>
-                                <Select
-                                    ref={merkRef}
-                                    name="penanggung"
+                                <CustomSelect
+                                    name={"penanggung"}
                                     value={data.penanggung}
-                                    onChange={(e) =>
-                                        setData("penanggung", e.target.value)
+                                    onChange={(val) =>
+                                        setData("penanggung", val)
                                     }
-                                    className="h-8"
-                                    onClose={() => {
-                                        merkRef.current.classList.remove(
-                                            "Mui-focused"
-                                        );
-                                        merkRef.current.previousSibling?.classList.remove(
-                                            "Mui-focused"
-                                        );
-                                    }}
-                                    onOpen={() => {
-                                        merkRef.current.classList.add(
-                                            "Mui-focused"
-                                        );
-                                        merkRef.current.previousSibling?.classList.add(
-                                            "Mui-focused"
-                                        );
-                                    }}
-                                    sx={{
-                                        "& .MuiOutlinedInput-notchedOutline": {
-                                            borderColor: "black",
-                                            borderRadius: "0.375rem",
-                                        },
-                                    }}
-                                >
-                                    {penanggung &&
-                                        penanggung.map((item) => (
-                                            <MenuItem
-                                                key={item.id}
-                                                value={item.id}
-                                            >
-                                                {item.nama}
-                                            </MenuItem>
-                                        ))}
-                                </Select>
+                                    options={penanggung}
+                                />
                                 {errors.penanggung && (
                                     <>
                                         <span></span>

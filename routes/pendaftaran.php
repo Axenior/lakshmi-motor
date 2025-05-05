@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\PendaftaranController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 Route::middleware('auth')->group(function () {
   Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran.index');

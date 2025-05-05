@@ -1,4 +1,5 @@
 import Container from "@/Components/Container";
+import CustomSelect from "@/Components/CustomSelect";
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
@@ -8,9 +9,7 @@ import { useRef } from "react";
 
 export default function Show() {
     const { penanggung, jasa } = usePage().props;
-    const penanggungRef = useRef(null);
 
-    console.log(jasa);
     const { delete: destroy, reset } = useForm();
     const deleting = (e) => {
         e.preventDefault();
@@ -75,45 +74,13 @@ export default function Show() {
                             <InputLabel className="flex items-center">
                                 Penanggung
                             </InputLabel>
-                            <Select
-                                readOnly
-                                ref={penanggungRef}
-                                name="tipe"
+                            <CustomSelect
+                                name={"penanggung"}
                                 value={jasa.penanggung_id}
-                                onChange={(e) =>
-                                    setData("penanggung", e.target.value)
-                                }
-                                className="h-8"
-                                onClose={() => {
-                                    penanggungRef.current.classList.remove(
-                                        "Mui-focused"
-                                    );
-                                    penanggungRef.current.previousSibling?.classList.remove(
-                                        "Mui-focused"
-                                    );
-                                }}
-                                onOpen={() => {
-                                    penanggungRef.current.classList.add(
-                                        "Mui-focused"
-                                    );
-                                    penanggungRef.current.previousSibling?.classList.add(
-                                        "Mui-focused"
-                                    );
-                                }}
-                                sx={{
-                                    "& .MuiOutlinedInput-notchedOutline": {
-                                        borderColor: "black",
-                                        borderRadius: "0.375rem",
-                                    },
-                                }}
-                            >
-                                {penanggung &&
-                                    penanggung.map((item) => (
-                                        <MenuItem key={item.id} value={item.id}>
-                                            {item.nama}
-                                        </MenuItem>
-                                    ))}
-                            </Select>
+                                onChange={(val) => setData("penanggung", val)}
+                                options={penanggung}
+                                readOnly={true}
+                            />
 
                             <InputLabel className="flex items-center">
                                 Nama

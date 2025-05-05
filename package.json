@@ -25,9 +25,12 @@
         "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.14.0",
         "@mui/icons-material": "^6.4.7",
-        "@mui/material": "^6.4.7",
+        "@mui/material": "^6.4.11",
         "@mui/x-date-pickers": "^7.27.3",
+        "@react-pdf/renderer": "^4.3.0",
         "dayjs": "^1.11.13",
+        "pdfjs-dist": "^5.2.133",
+        "react-pdf": "^9.2.1",
         "react-router-dom": "^7.3.0"
     }
 }

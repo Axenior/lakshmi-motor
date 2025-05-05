@@ -58,7 +58,7 @@ export default function Index() {
                 <StickyHeadTable
                     columns={isMerk ? merkColumns : tipeColumns}
                     rows={isMerk ? merkRows : tipeRows}
-                    urlDetailRow={"kendaraan/merk"}
+                    urlDetailRow={"kendaraan/merk/edit"}
                 />
                 <div className="mt-2">
                     <Button

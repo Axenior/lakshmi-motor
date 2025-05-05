@@ -21,7 +21,7 @@ export default function VehicleInfoCard({
     const fetchMerk = async () => {
         try {
             const response = await axios.get(route("api.merk"));
-            console.log(response);
+            // console.log(response);
             setMerk(response.data);
         } catch (error) {
             console.error("Gagal mengambil data merk kendaraan", error);
@@ -35,7 +35,7 @@ export default function VehicleInfoCard({
                 route("api.tipe", { merk: data.merk })
             );
 
-            console.log(response);
+            // console.log(response);
 
             setTipe(response.data);
         } catch (error) {

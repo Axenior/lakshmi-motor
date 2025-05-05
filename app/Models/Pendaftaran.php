@@ -40,23 +40,38 @@ class Pendaftaran extends Model
         return $this->belongsTo(Kendaraan::class);
     }
 
-    public function foto_kerusakans()
+    public function estimasi()
     {
-        return $this->hasMany(FotoKerusakan::class, 'pendaftaran_id');
+        return $this->hasOne(Estimasi::class);
     }
 
-    public function foto_stnks()
+    public function file_kerusakans()
     {
-        return $this->hasMany(FotoSTNK::class, 'pendaftaran_id');
+        return $this->hasMany(FileKerusakan::class, 'pendaftaran_id');
     }
 
-    public function foto_gesek_rangkas()
+    public function file_stnks()
     {
-        return $this->hasMany(FotoGesekRangka::class, 'pendaftaran_id');
+        return $this->hasMany(FileSTNK::class, 'pendaftaran_id');
     }
 
-    public function foto_surat_pengantars()
+    public function file_gesek_rangkas()
     {
-        return $this->hasMany(FotoSuratPengantar::class, 'pendaftaran_id');
+        return $this->hasMany(FileGesekRangka::class, 'pendaftaran_id');
+    }
+
+    public function file_surat_pengantars()
+    {
+        return $this->hasMany(FileSuratPengantar::class, 'pendaftaran_id');
+    }
+
+    public function file_spks()
+    {
+        return $this->hasMany(FileSPK::class, 'pendaftaran_id');
+    }
+
+    public function file_epoxys()
+    {
+        return $this->hasMany(FileEpoxy::class, 'pendaftaran_id');
     }
 }

@@ -5,6 +5,7 @@ import { Button, Card, MenuItem, Select, Typography } from "@mui/material";
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 import { useEffect, useRef, useState } from "react";
+import CustomSelect from "@/Components/CustomSelect";
 
 export default function Create() {
     const { merk, tipe } = usePage().props;
@@ -68,44 +69,12 @@ export default function Create() {
                                 Merk
                             </InputLabel>
 
-                            <Select
-                                ref={merkRef}
-                                name="merk"
+                            <CustomSelect
+                                name={"merk"}
                                 value={data.merk}
-                                className={"h-8"}
-                                onChange={(e) =>
-                                    setData("merk", e.target.value)
-                                }
-                                onClose={() => {
-                                    merkRef.current.classList.remove(
-                                        "Mui-focused"
-                                    );
-                                    merkRef.current.previousSibling?.classList.remove(
-                                        "Mui-focused"
-                                    );
-                                }}
-                                onOpen={() => {
-                                    merkRef.current.classList.add(
-                                        "Mui-focused"
-                                    );
-                                    merkRef.current.previousSibling?.classList.add(
-                                        "Mui-focused"
-                                    );
-                                }}
-                                sx={{
-                                    "& .MuiOutlinedInput-notchedOutline": {
-                                        borderColor: "black",
-                                        borderRadius: "0.375rem",
-                                    },
-                                }}
-                            >
-                                {merk &&
-                                    merk.map((item) => (
-                                        <MenuItem key={item.id} value={item.id}>
-                                            {item.nama}
-                                        </MenuItem>
-                                    ))}
-                            </Select>
+                                onChange={(val) => setData("merk", val)}
+                                options={merk}
+                            />
 
                             <InputLabel className="flex items-center">
                                 Tipe

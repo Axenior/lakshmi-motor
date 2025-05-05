@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import Container from "@/Components/Container";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, useForm, usePage } from "@inertiajs/react";
-import { Button } from "@mui/material";
+import { Button, Divider } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
@@ -12,6 +12,8 @@ import PersonalInfoCard from "./Component/PersonalInfoCard";
 import VehicleInfoCard from "./Component/VehicleInfoCard";
 import KeteranganCard from "./Component/KeteranganCard";
 import FileUploadSection from "./Component/FileUploadSection";
+import FileUpload from "@/Components/FileUpload";
+import InputLabel from "@/Components/InputLabel";
 
 // Fungsi bantu untuk konversi URL ke File
 async function urlToFile(url, fileName, mimeType) {
@@ -31,6 +33,8 @@ export default function Edit() {
     const [kerusakanFiles, setKerusakanFiles] = useState([]);
     const [gesekRangkaFiles, setGesekRangkaFiles] = useState([]);
     const [suratPengantarFiles, setSuratPengantarFiles] = useState([]);
+    const [spkFiles, setSpkFiles] = useState([]);
+    const [epoxyFiles, setEpoxyFiles] = useState([]);
 
     const { data, setData, post, processing, reset, errors } = useForm({
         no_pendaftaran: String(pendaftaran.id).padStart(6, "0") || "",
@@ -56,10 +60,6 @@ export default function Edit() {
         jenis: pendaftaran.kendaraan?.jenis || "",
         warna: pendaftaran.kendaraan?.warna || "",
         keterangan: pendaftaran.keterangan || "",
-        foto_stnk: [],
-        foto_kerusakan: [],
-        gesek_rangka: [],
-        surat_pengantar: [],
     });
 
     useEffect(() => {
@@ -69,13 +69,28 @@ export default function Edit() {
             if (Array.isArray(filesData) && filesData.length > 0) {
                 try {
                     const files = await Promise.all(
-                        filesData.map((foto) =>
-                            urlToFile(
-                                "/storage/" + foto.path,
-                                foto.path.split("/").pop(),
-                                "image/" + foto.path.split(".").pop()
-                            )
-                        )
+                        filesData.map((fileObj) => {
+                            const filePath = "/storage/" + fileObj.path;
+                            const fileName = fileObj.path.split("/").pop();
+                            const fileExtension = fileName
+                                .split(".")
+                                .pop()
+                                .toLowerCase();
+
+                            // Tentukan MIME type
+                            const mimeTypeMap = {
+                                jpg: "image/jpeg",
+                                jpeg: "image/jpeg",
+                                png: "image/png",
+                                gif: "image/gif",
+                                pdf: "application/pdf",
+                            };
+                            const mimeType =
+                                mimeTypeMap[fileExtension] ||
+                                "application/octet-stream";
+
+                            return urlToFile(filePath, fileName, mimeType);
+                        })
                     );
                     setter(files);
                 } catch (error) {
@@ -87,18 +102,20 @@ export default function Edit() {
             }
         }
 
-        console.log(pendaftaran);
-
-        convertUrlToFileArray("foto_stnks", setStnkFiles);
-        convertUrlToFileArray("foto_kerusakans", setKerusakanFiles);
-        convertUrlToFileArray("foto_gesek_rangkas", setGesekRangkaFiles);
-        convertUrlToFileArray("foto_surat_pengantars", setSuratPengantarFiles);
+        convertUrlToFileArray("file_stnks", setStnkFiles);
+        convertUrlToFileArray("file_kerusakans", setKerusakanFiles);
+        convertUrlToFileArray("file_gesek_rangkas", setGesekRangkaFiles);
+        convertUrlToFileArray("file_surat_pengantars", setSuratPengantarFiles);
+        convertUrlToFileArray("file_spks", setSpkFiles);
+        convertUrlToFileArray("file_epoxys", setEpoxyFiles);
     }, [pendaftaran]);
 
     useEffect(() => {
         console.log("data", data);
     }, [data]);
     // Update data setelah `pendaftaran` tersedia
+
+    console.log(pendaftaran);
 
     useEffect(() => {
         // Parsing string defaultPlate menjadi object dengan prefix, number, dan suffix.
@@ -185,20 +202,28 @@ export default function Edit() {
     }, [pelanggan]);
 
     useEffect(() => {
-        setData("foto_stnk", stnkFiles);
+        setData("file_stnk", stnkFiles);
     }, [stnkFiles]);
 
     useEffect(() => {
-        setData("foto_kerusakan", kerusakanFiles);
+        setData("file_kerusakan", kerusakanFiles);
     }, [kerusakanFiles]);
 
     useEffect(() => {
-        setData("foto_gesek_rangka", gesekRangkaFiles);
+        setData("file_gesek_rangka", gesekRangkaFiles);
     }, [gesekRangkaFiles]);
 
     useEffect(() => {
-        setData("foto_surat_pengantar", suratPengantarFiles);
+        setData("file_surat_pengantar", suratPengantarFiles);
     }, [suratPengantarFiles]);
+
+    useEffect(() => {
+        setData("file_spk", spkFiles);
+    }, [spkFiles]);
+
+    useEffect(() => {
+        setData("file_epoxy", epoxyFiles);
+    }, [epoxyFiles]);
 
     const submit = (e) => {
         // console.log(data);
@@ -267,17 +292,55 @@ export default function Edit() {
                                     errors={errors}
                                 />
                             </div>
-                            <FileUploadSection
-                                stnkFiles={stnkFiles}
-                                setStnkFiles={setStnkFiles}
-                                kerusakanFiles={kerusakanFiles}
-                                setKerusakanFiles={setKerusakanFiles}
-                                gesekRangkaFiles={gesekRangkaFiles}
-                                setGesekRangkaFiles={setGesekRangkaFiles}
-                                suratPengantarFiles={suratPengantarFiles}
-                                setSuratPengantarFiles={setSuratPengantarFiles}
-                                errors={errors}
-                            />
+                            <div>
+                                <FileUploadSection
+                                    stnkFiles={stnkFiles}
+                                    setStnkFiles={setStnkFiles}
+                                    kerusakanFiles={kerusakanFiles}
+                                    setKerusakanFiles={setKerusakanFiles}
+                                    gesekRangkaFiles={gesekRangkaFiles}
+                                    setGesekRangkaFiles={setGesekRangkaFiles}
+                                    suratPengantarFiles={suratPengantarFiles}
+                                    setSuratPengantarFiles={
+                                        setSuratPengantarFiles
+                                    }
+                                    errors={errors}
+                                />
+                                <Divider sx={{ my: 2 }} />
+                                <div className="flex justify-end m-2">
+                                    <div className="sm:text-right">
+                                        <InputLabel className="mb-2">
+                                            Menu Estimasi
+                                        </InputLabel>
+                                        <Button
+                                            variant="contained"
+                                            size="small"
+                                            href={route(
+                                                "estimasi.create",
+                                                pendaftaran.id
+                                            )}
+                                        >
+                                            Estimasi
+                                        </Button>
+                                        <InputLabel className="my-2">
+                                            SPK
+                                        </InputLabel>
+                                        <FileUpload
+                                            label="SPK"
+                                            selectedFiles={spkFiles}
+                                            setSelectedFiles={setSpkFiles}
+                                        />
+                                        <InputLabel className="my-2">
+                                            Foto Epoxy
+                                        </InputLabel>
+                                        <FileUpload
+                                            label="Epoxy"
+                                            selectedFiles={epoxyFiles}
+                                            setSelectedFiles={setEpoxyFiles}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </LocalizationProvider>
                     <Button

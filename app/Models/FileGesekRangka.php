@@ -4,17 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class FotoKerusakan extends Model
+class FileGesekRangka extends Model
 {
-  protected $table = 'foto_kerusakan';
+  protected $table = 'file_gesek_rangka';
 
   protected $fillable = [
     'path',
     'hash',
-    'pendaftaran_id'
+    'estimasi_id'
   ];
 
-  public function pendaftarans()
+  public function pendaftaran()
   {
     return $this->belongsTo(Pendaftaran::class);
   }

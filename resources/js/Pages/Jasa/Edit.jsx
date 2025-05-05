@@ -1,4 +1,5 @@
 import Container from "@/Components/Container";
+import CustomSelect from "@/Components/CustomSelect";
 import InputLabel from "@/Components/InputLabel";
 import TextAreaInput from "@/Components/TextAreaInput";
 import TextInput from "@/Components/TextInput";
@@ -66,47 +67,14 @@ export default function Edit() {
                                 <InputLabel className="flex items-center">
                                     Penanggung
                                 </InputLabel>
-                                <Select
-                                    ref={penanggungRef}
-                                    name="penanggung"
+                                <CustomSelect
+                                    name={"penanggung"}
                                     value={data.penanggung}
-                                    onChange={(e) =>
-                                        setData("penanggung", e.target.value)
+                                    onChange={(val) =>
+                                        setData("penanggung", val)
                                     }
-                                    className="h-8"
-                                    onClose={() => {
-                                        penanggungRef.current.classList.remove(
-                                            "Mui-focused"
-                                        );
-                                        penanggungRef.current.previousSibling?.classList.remove(
-                                            "Mui-focused"
-                                        );
-                                    }}
-                                    onOpen={() => {
-                                        penanggungRef.current.classList.add(
-                                            "Mui-focused"
-                                        );
-                                        penanggungRef.current.previousSibling?.classList.add(
-                                            "Mui-focused"
-                                        );
-                                    }}
-                                    sx={{
-                                        "& .MuiOutlinedInput-notchedOutline": {
-                                            borderColor: "black",
-                                            borderRadius: "0.375rem",
-                                        },
-                                    }}
-                                >
-                                    {penanggung &&
-                                        penanggung.map((item) => (
-                                            <MenuItem
-                                                key={item.id}
-                                                value={item.id}
-                                            >
-                                                {item.nama}
-                                            </MenuItem>
-                                        ))}
-                                </Select>
+                                    options={penanggung}
+                                />
                                 {errors.penanggung && (
                                     <>
                                         <span></span>

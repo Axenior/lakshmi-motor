@@ -21,6 +21,7 @@ const FileUpload = ({
     selectedFiles,
     setSelectedFiles,
     isDisabled = false,
+    allowedType = "gambar",
 }) => {
     const [previews, setPreviews] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -44,7 +45,6 @@ const FileUpload = ({
         };
     }, [selectedFiles]);
 
-    // Tambahkan file baru ke dalam array file yang sudah ada
     const handleFileChange = (event) => {
         const files = Array.from(event.target.files);
         if (files.length > 0) {
@@ -60,7 +60,6 @@ const FileUpload = ({
 
     return (
         <div className="my-2">
-            {/* Button untuk membuka modal */}
             <Button
                 size="small"
                 variant="contained"
@@ -68,16 +67,14 @@ const FileUpload = ({
                     e.preventDefault();
                     setIsModalOpen(true);
                 }}
-                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-200"
+                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-200 "
             >
-                Pilih Gambar
+                Pilih {allowedType}
             </Button>
 
-            {/* Modal Fullscreen */}
             {isModalOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                     <div className="relative bg-white w-[90%] h-[90%] flex flex-col p-6 overflow-auto rounded-lg">
-                        {/* Tombol tutup di kanan atas */}
                         <IconButton
                             onClick={() => setIsModalOpen(false)}
                             className="absolute top-2 right-2"
@@ -89,7 +86,6 @@ const FileUpload = ({
                             Upload {label}
                         </h2>
 
-                        {/* Bagian input file */}
                         <div className="flex flex-col items-center">
                             <Button
                                 disabled={isDisabled}
@@ -102,33 +98,65 @@ const FileUpload = ({
                                 <VisuallyHiddenInput
                                     key={inputKey}
                                     type="file"
-                                    accept="image/*"
+                                    accept={
+                                        allowedType == "gambar"
+                                            ? "image/*"
+                                            : allowedType == "pdf"
+                                            ? "application/pdf"
+                                            : ""
+                                    }
                                     multiple
                                     onChange={handleFileChange}
                                 />
                             </Button>
-                            <p className="text-sm text-gray-500">
-                                Pilih satu atau beberapa file untuk menambah ke
+                            <p className="text-sm text-gray-500 text-center">
+                                Pilih satu atau beberapa File untuk menambah ke
                                 daftar.
                             </p>
                         </div>
 
-                        {/* Preview Gambar untuk setiap file */}
-                        {previews.length > 0 && (
+                        {selectedFiles?.length > 0 && (
                             <div className="mt-6 w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                                {previews.map((previewUrl, index) => (
+                                {selectedFiles.map((file, index) => (
                                     <div
                                         key={index}
                                         className="flex flex-col items-center border p-2 rounded-lg"
                                     >
-                                        <img
-                                            src={previewUrl}
-                                            alt={`Preview ${index}`}
-                                            className="w-full h-48 object-cover rounded-md shadow-sm cursor-pointer"
-                                            onClick={() =>
-                                                setZoomedImage(previewUrl)
-                                            }
-                                        />
+                                        {file.type === "application/pdf" ? (
+                                            <div
+                                                className="w-full h-48 flex flex-col justify-center items-center bg-gray-100 rounded cursor-pointer hover:bg-gray-200 transition"
+                                                onClick={() => {
+                                                    const fileURL =
+                                                        URL.createObjectURL(
+                                                            file
+                                                        );
+                                                    window.open(
+                                                        fileURL,
+                                                        "_blank",
+                                                        "noopener,noreferrer"
+                                                    );
+                                                }}
+                                            >
+                                                <p className="text-sm text-center text-gray-700 font-medium">
+                                                    {file.name}
+                                                </p>
+                                                <p className="text-xs text-gray-500">
+                                                    (Klik untuk membuka PDF)
+                                                </p>
+                                            </div>
+                                        ) : (
+                                            <img
+                                                src={previews[index]}
+                                                alt={`Preview ${index}`}
+                                                className="w-full h-48 object-cover rounded-md shadow-sm cursor-pointer"
+                                                onClick={() =>
+                                                    setZoomedImage(
+                                                        previews[index]
+                                                    )
+                                                }
+                                            />
+                                        )}
+
                                         <div className="mt-2 flex gap-2">
                                             <Button
                                                 disabled={isDisabled}
@@ -145,10 +173,17 @@ const FileUpload = ({
                                                 variant="contained"
                                                 size="small"
                                                 component="a"
-                                                href={previewUrl}
+                                                href={
+                                                    file.type.startsWith(
+                                                        "gambar/"
+                                                    )
+                                                        ? previews[index]
+                                                        : URL.createObjectURL(
+                                                              file
+                                                          )
+                                                }
                                                 download={
-                                                    selectedFiles[index]
-                                                        ?.name || "download"
+                                                    file.name || "download"
                                                 }
                                             >
                                                 Unduh
@@ -165,13 +200,12 @@ const FileUpload = ({
             {zoomedImage && (
                 <div
                     className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-[9999]"
-                    onClick={() => setZoomedImage(null)} // klik di luar gambar untuk menutup
+                    onClick={() => setZoomedImage(null)}
                 >
                     <div className="relative">
-                        {/* Tombol tutup di pojok atas gambar */}
                         <IconButton
                             onClick={(e) => {
-                                e.stopPropagation(); // agar tidak tertutup oleh onClick di parent
+                                e.stopPropagation();
                                 setZoomedImage(null);
                             }}
                             className="!absolute top-2 right-2"
