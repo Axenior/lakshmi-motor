@@ -30,9 +30,11 @@ return new class extends Migration
 
             // $table->integer('estimasi')->nullable();
             $table->integer('km_masuk')->nullable();
+            $table->enum('status', ['pendaftaran', 'estimasi', 'pengerjaan', 'selesai', 'batal'])->default('pendaftaran');
+            $table->date('tanggal_spk')->nullable();
+            $table->boolean('lunas')->default(false);
+
             // $table->unsignedBigInteger('nilai_or')->nullable();
-            // $table->date('tanggal_spk')->nullable();
-            // $table->boolean('lunas')->default(false);
             // $table->boolean('selesai')->default(false);
         });
     }

@@ -109,14 +109,14 @@ class EstimasiController extends Controller
     }
   }
 
-  public function show(Pendaftaran $pendaftaran, Request $request)
+  public function invoice(Pendaftaran $pendaftaran, Request $request)
   {
     $pendaftaran->load([
       'pelanggan',
       'penanggung',
       'kendaraan.tipe.merk',
-      'estimasi.estimasiJasas',
-      'estimasi.estimasiSpareparts',
+      'estimasi.estimasiJasas.jasa',
+      'estimasi.estimasiSpareparts.sparepart',
       // 'estimasi.spareparts',
     ]);
 
@@ -125,7 +125,7 @@ class EstimasiController extends Controller
 
     // dd($pendaftaran);
     return Inertia::render(
-      'Estimasi/Index',
+      'Estimasi/Preview',
       [
         'pendaftaran' => $pendaftaran,
         'sparepart' => $sparepart,

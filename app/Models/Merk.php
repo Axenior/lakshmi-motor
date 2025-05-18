@@ -8,9 +8,7 @@ class Merk extends Model
 {
     protected $table = 'merk';
 
-    protected $fillable = [
-        'nama'
-    ];
+    protected $guarded = [];
 
     public function kendaraans()
     {

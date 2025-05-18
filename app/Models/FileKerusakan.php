@@ -8,11 +8,7 @@ class FileKerusakan extends Model
 {
   protected $table = 'file_kerusakan';
 
-  protected $fillable = [
-    'path',
-    'hash',
-    'pendaftaran_id'
-  ];
+  protected $guarded = [];
 
   public function pendaftaran()
   {

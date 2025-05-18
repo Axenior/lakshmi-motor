@@ -36,7 +36,7 @@ export default function Show() {
                     <Button
                         variant="contained"
                         size="small"
-                        onClick={() => window.history.back()}
+                        href={route("jasa.index")}
                     >
                         Kembali
                     </Button>

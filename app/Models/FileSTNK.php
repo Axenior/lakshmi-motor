@@ -8,11 +8,7 @@ class FileSTNK extends Model
 {
   protected $table = 'file_stnk';
 
-  protected $fillable = [
-    'path',
-    'hash',
-    'pendaftaran_id'
-  ];
+  protected $guarded = [];
 
   public function pendaftaran()
   {

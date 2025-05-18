@@ -8,11 +8,7 @@ class FileEpoxy extends Model
 {
   protected $table = 'file_epoxy';
 
-  protected $fillable = [
-    'path',
-    'hash',
-    'pendaftaran_id'
-  ];
+  protected $guarded = [];
 
   public function estimasi()
   {

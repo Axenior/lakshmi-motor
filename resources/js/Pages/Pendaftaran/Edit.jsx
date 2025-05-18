@@ -14,6 +14,7 @@ import KeteranganCard from "./Component/KeteranganCard";
 import FileUploadSection from "./Component/FileUploadSection";
 import FileUpload from "@/Components/FileUpload";
 import InputLabel from "@/Components/InputLabel";
+import StatusCard from "./Component/StatusCard";
 
 // Fungsi bantu untuk konversi URL ke File
 async function urlToFile(url, fileName, mimeType) {
@@ -60,6 +61,8 @@ export default function Edit() {
         jenis: pendaftaran.kendaraan?.jenis || "",
         warna: pendaftaran.kendaraan?.warna || "",
         keterangan: pendaftaran.keterangan || "",
+        status: pendaftaran.status || "pendaftaran",
+        lunas: pendaftaran.lunas || false,
     });
 
     useEffect(() => {
@@ -251,7 +254,7 @@ export default function Edit() {
                     <Button
                         variant="contained"
                         size="small"
-                        onClick={() => window.history.back()}
+                        href={route("pendaftaran.show", pendaftaran.id)}
                     >
                         Kembali
                     </Button>
@@ -287,6 +290,11 @@ export default function Edit() {
                                 />
 
                                 <KeteranganCard
+                                    data={data}
+                                    setData={setData}
+                                    errors={errors}
+                                />
+                                <StatusCard
                                     data={data}
                                     setData={setData}
                                     errors={errors}

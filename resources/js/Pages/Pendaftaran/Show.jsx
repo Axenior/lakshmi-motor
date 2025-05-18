@@ -14,6 +14,7 @@ import FileUploadSection from "./Component/FileUploadSection";
 import EstimateCard from "./Component/EstimateCard";
 import InputLabel from "@/Components/InputLabel";
 import FileUpload from "@/Components/FileUpload";
+import StatusCard from "./Component/StatusCard";
 
 // Fungsi bantu untuk konversi URL ke File
 async function urlToFile(url, fileName, mimeType) {
@@ -64,6 +65,8 @@ export default function Create() {
         keterangan: pendaftaran.keterangan || "",
         perkiraan_waktu: pendaftaran.perkiraan_waktu || 0,
         nilai_or: pendaftaran.nilai_or || 0,
+        status: pendaftaran.status || "pendaftaran",
+        lunas: pendaftaran.lunas || false,
     });
 
     console.log(pendaftaran);
@@ -185,7 +188,7 @@ export default function Create() {
                     <Button
                         variant="contained"
                         size="small"
-                        onClick={() => window.history.back()}
+                        href={route("pendaftaran.index")}
                     >
                         Kembali
                     </Button>
@@ -241,7 +244,7 @@ export default function Create() {
                                 setData={setData}
                                 isReadOnly={true}
                             />
-                            <EstimateCard
+                            <StatusCard
                                 data={data}
                                 setData={setData}
                                 isReadOnly={true}

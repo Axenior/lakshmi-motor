@@ -8,13 +8,7 @@ class Sparepart extends Model
 {
   protected $table = 'sparepart';
 
-  protected $fillable = [
-    'kode',
-    'nama',
-    'satuan',
-    'harga',
-    'tipe_id'
-  ];
+  protected $guarded = [];
 
   public function tipe()
   {

@@ -8,10 +8,7 @@ class Tipe extends Model
 {
     protected $table = 'tipe';
 
-    protected $fillable = [
-        'merk_id',
-        'nama'
-    ];
+    protected $guarded = [];
 
     public function merk()
     {

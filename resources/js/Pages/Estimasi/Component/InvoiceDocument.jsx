@@ -162,17 +162,35 @@ const styles = StyleSheet.create({
 });
 
 const InvoiceDocument = ({ data }) => {
+    const total_jasa =
+        data.estimasi.estimasi_jasas.reduce((acc, item) => {
+            const jumlah = item.jumlah;
+            const harga = item.jasa.harga;
+            const diskon = item.diskon;
+            return acc + harga * jumlah * (1 - diskon / 100);
+        }, 0) - data.estimasi.diskon_jasa;
+
+    const total_sparepart =
+        data.estimasi.estimasi_spareparts.reduce((acc, item) => {
+            const jumlah = item.jumlah;
+            const harga = item.sparepart.harga;
+            const diskon = item.diskon;
+            return acc + harga * jumlah * (1 - diskon / 100);
+        }, 0) - data.estimasi.diskon_sparepart;
+
+    const grandTotal = total_jasa + total_sparepart - data.estimasi.nilai_or;
     return (
         <Document>
             <Page size={[595.44, 425.89]} style={styles.page}>
                 {/* Header */}
                 <Text style={styles.subtitle}>INV.W118.97687.03.2025</Text>
-                <Text style={styles.subtitle}>PT. ASURANSI BCA</Text>
+                <Text style={styles.subtitle}>{data.penanggung.nama}</Text>
 
                 {/* Description */}
                 <Text style={styles.section}>
-                    Biaya penggantian Spare Part dan Jasa Kerja pada mobil
-                    TOYOTA NEW HILUX B 9968 SBG
+                    <Text style={styles.section}>
+                        {`Biaya penggantian Spare Part dan Jasa Kerja pada mobil ${data.kendaraan.merk} ${data.kendaraan.tipe} ${data.kendaraan.no_polisi}`}
+                    </Text>
                 </Text>
 
                 {/* Table */}
@@ -182,24 +200,31 @@ const InvoiceDocument = ({ data }) => {
                 </View>
 
                 <View style={styles.tableRow}>
-                    <Text style={styles.label}>Material</Text>
-                    <View style={styles.value}>
-                        <Text>Rp</Text>
-                        <Text style={{ textAlign: "right" }}>1.492.000</Text>
-                    </View>
-                </View>
-                <View style={styles.tableRow}>
                     <Text style={styles.label}>Jasa</Text>
                     <View style={styles.value}>
                         <Text>Rp</Text>
-                        <Text style={{ textAlign: "right" }}>373.000</Text>
+                        <Text style={{ textAlign: "right" }}>
+                            {total_jasa.toLocaleString("id-ID")}
+                        </Text>
                     </View>
                 </View>
                 <View style={styles.tableRow}>
                     <Text style={styles.label}>Spare Part</Text>
                     <View style={styles.value}>
                         <Text>Rp</Text>
-                        <Text style={{ textAlign: "right" }}>802.750</Text>
+                        <Text style={{ textAlign: "right" }}>
+                            {" "}
+                            {total_sparepart.toLocaleString("id-ID")}
+                        </Text>
+                    </View>
+                </View>
+                <View style={styles.tableRow}>
+                    <Text style={styles.label}>OR</Text>
+                    <View style={styles.value}>
+                        <Text>Rp</Text>
+                        <Text style={{ textAlign: "right" }}>
+                            {data.estimasi.nilai_or.toLocaleString("id-ID")}
+                        </Text>
                     </View>
                 </View>
                 <View style={styles.tableRow}>
@@ -228,15 +253,17 @@ const InvoiceDocument = ({ data }) => {
                         <Text
                             style={{ textAlign: "right", fontWeight: "bold" }}
                         >
-                            2.961.203
+                            {grandTotal.toLocaleString("id-ID")}
                         </Text>
                     </View>
                 </View>
 
                 {/* Total number */}
-                <Text style={styles.totalAmount}>Rp 2.961.203</Text>
+                <Text style={styles.totalAmount}>
+                    Rp {grandTotal.toLocaleString("id-ID")}
+                </Text>
                 <Text style={styles.amountInWords}>
-                    *{numberToWord(2961203)} rupiah*
+                    *{numberToWord(grandTotal)} rupiah*
                 </Text>
                 {/* Footer */}
                 <Text style={styles.footer}>Palembang, 13 Maret 2025</Text>

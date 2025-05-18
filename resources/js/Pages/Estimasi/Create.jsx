@@ -64,7 +64,7 @@ export default function Create() {
                     <Button
                         variant="contained"
                         size="small"
-                        onClick={() => window.history.back()}
+                        href={route("pendaftaran.edit", pendaftaran.id)}
                     >
                         Kembali
                     </Button>
@@ -151,16 +151,31 @@ export default function Create() {
                         <Typography variant="h6">
                             Grand Total: {grandTotal.toLocaleString("id-ID")}
                         </Typography>
-
-                        <Button
-                            type="submit"
-                            size="small"
-                            variant="contained"
-                            className="ms-4"
-                            disabled={processing}
-                        >
-                            Simpan
-                        </Button>
+                        <div className="flex gap-5">
+                            <Button
+                                type="submit"
+                                size="small"
+                                variant="contained"
+                                // className="ms-4"
+                                disabled={processing}
+                            >
+                                Simpan
+                            </Button>
+                            {pendaftaran.estimasi && (
+                                <Button
+                                    href={route(
+                                        "estimasi.invoice.show",
+                                        pendaftaran.id
+                                    )}
+                                    size="small"
+                                    variant="contained"
+                                    className="ms-4"
+                                    disabled={processing}
+                                >
+                                    Cetak Invoice
+                                </Button>
+                            )}
+                        </div>
                     </Card>
                 </form>
             </Container>

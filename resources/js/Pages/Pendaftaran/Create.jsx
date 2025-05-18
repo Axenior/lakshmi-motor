@@ -167,7 +167,7 @@ export default function Create() {
                     <Button
                         variant="contained"
                         size="small"
-                        onClick={() => window.history.back()}
+                        href={route("pendaftaran.index")}
                     >
                         Kembali
                     </Button>
@@ -208,11 +208,11 @@ export default function Create() {
                                     errors={errors}
                                 />
 
-                                <EstimateCard
+                                {/* <EstimateCard
                                     data={data}
                                     setData={setData}
                                     errors={errors}
-                                />
+                                /> */}
                             </div>
                             <FileUploadSection
                                 errors={errors}

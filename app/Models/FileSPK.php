@@ -8,11 +8,7 @@ class FileSPK extends Model
 {
   protected $table = 'file_spk';
 
-  protected $fillable = [
-    'path',
-    'hash',
-    'pendaftaran_id'
-  ];
+  protected $guarded = [];
 
   public function estimasi()
   {

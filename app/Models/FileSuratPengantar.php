@@ -8,11 +8,7 @@ class FileSuratPengantar extends Model
 {
   protected $table = 'file_surat_pengantar';
 
-  protected $fillable = [
-    'path',
-    'hash',
-    'pendaftaran_id'
-  ];
+  protected $guarded = [];
 
   public function pendaftaran()
   {

@@ -37,6 +37,10 @@ class PendaftaranController extends Controller
             'file_stnks',
             'file_gesek_rangkas',
             'file_surat_pengantars',
+            'file_spks',
+            'file_epoxys',
+
+            'estimasi',
         )->paginate(25);
         // dd($pendaftaran);
         return Inertia::render('Pendaftaran/Index', [
@@ -162,7 +166,7 @@ class PendaftaranController extends Controller
             $this->syncUploadedFiles($request, 'file_surat_pengantar', FileSuratPengantar::class, 'pendaftaran_id', $pendaftaran->id, 'SP', 'surat-pengantar');
 
             DB::commit();
-            return redirect(route('pendaftaran.index', absolute: false));
+            return redirect(route('pendaftaran.show', $pendaftaran->id, absolute: false));
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->withErrors(['pendaftaran' => 'Gagal menyimpan data: ' . $e->getMessage()])
@@ -311,7 +315,7 @@ class PendaftaranController extends Controller
                     EstimasiJasa::where('estimasi_id', $estimasi->id)->delete();
                 }
             }
-
+            // dd($request->status);
             // Update data pendaftaran
             $pendaftaran->update([
                 'no_register' => $request->no_register,
@@ -320,6 +324,8 @@ class PendaftaranController extends Controller
                 'tanggal_pendaftaran' => $request->tanggal_pendaftaran,
                 'keterangan' => $request->keterangan,
                 'penanggung_id' => $request->penanggung,
+                'status' => $request->status,
+                'lunas' => $request->lunas,
             ]);
 
             $this->syncUploadedFiles($request, 'file_kerusakan', FileKerusakan::class, 'pendaftaran_id', $pendaftaran->id, 'K', 'kerusakan');

@@ -8,11 +8,7 @@ class Jasa extends Model
 {
   protected $table = 'jasa';
 
-  protected $fillable = [
-    'nama',
-    'harga',
-    'penanggung_id'
-  ];
+  protected $guarded = [];
 
   public function penanggung()
   {

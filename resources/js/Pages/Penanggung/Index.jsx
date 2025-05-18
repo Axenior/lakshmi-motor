@@ -17,18 +17,18 @@ export default function Index() {
         },
         { id: "no_telepon", label: "No Telepon", minWidth: 170 },
         { id: "no_fax", label: "No Fax", minWidth: 170 },
-        {
-            id: "pph",
-            label: "PPH",
-            minWidth: 100,
-            format: (value) => (value !== null ? `${value}%` : "-"),
-        },
-        {
-            id: "ppn",
-            label: "PPN",
-            minWidth: 100,
-            format: (value) => (value !== null ? `${value}%` : "-"),
-        },
+        // {
+        //     id: "pph",
+        //     label: "PPH",
+        //     minWidth: 100,
+        //     format: (value) => (value !== null ? `${value}%` : "-"),
+        // },
+        // {
+        //     id: "ppn",
+        //     label: "PPN",
+        //     minWidth: 100,
+        //     format: (value) => (value !== null ? `${value}%` : "-"),
+        // },
     ];
 
     const rows = penanggung.data;

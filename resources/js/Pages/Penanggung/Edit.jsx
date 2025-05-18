@@ -12,19 +12,14 @@ export default function Show() {
     console.log(usePage().props);
     const penanggungRef = useRef(null);
 
-    const jenis = [
-        { id: "1", nama: "Pribadi" },
-        { id: "2", nama: "PT. Ajinomoto" },
-    ];
-
     const { data, setData, put, processing, errors, reset } = useForm({
         nama: penanggung.nama || "",
         alamat: penanggung.alamat || "",
         no_telepon: penanggung.no_telepon || "",
         no_fax: penanggung.no_fax || "",
-        pph: penanggung.pph || 0,
-        ppn: penanggung.ppn || 0,
-        jenis_penanggung: penanggung.jenis_penanggung || "",
+        // pph: penanggung.pph || 0,
+        // ppn: penanggung.ppn || 0,
+        // jenis_penanggung: penanggung.jenis_penanggung || "",
     });
 
     const submit = (e) => {
@@ -56,7 +51,7 @@ export default function Show() {
                     <Button
                         variant="contained"
                         size="small"
-                        onClick={() => window.history.back()}
+                        href={route("penanggung.show", penanggung.id)}
                     >
                         Kembali
                     </Button>

@@ -39,7 +39,7 @@ export default function CustomSelect({
         >
             {options.map((item) => (
                 <MenuItem key={item.id} value={item.id}>
-                    {item.nama}
+                    {item.nama.charAt(0).toUpperCase() + item.nama.slice(1)}
                 </MenuItem>
             ))}
         </Select>

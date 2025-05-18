@@ -47,7 +47,7 @@ export default function Edit() {
                     <Button
                         variant="contained"
                         size="small"
-                        onClick={() => window.history.back()}
+                        href={route("jasa.show", jasa.id)}
                     >
                         Kembali
                     </Button>

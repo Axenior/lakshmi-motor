@@ -75,7 +75,7 @@ export default function Create() {
                     <Button
                         variant="contained"
                         size="small"
-                        onClick={() => window.history.back()}
+                        href={route("sparepart.index")}
                     >
                         Kembali
                     </Button>

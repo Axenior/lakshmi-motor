@@ -8,11 +8,7 @@ class FileGesekRangka extends Model
 {
   protected $table = 'file_gesek_rangka';
 
-  protected $fillable = [
-    'path',
-    'hash',
-    'estimasi_id'
-  ];
+  protected $guarded = [];
 
   public function pendaftaran()
   {

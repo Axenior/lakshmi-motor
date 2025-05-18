@@ -8,22 +8,23 @@ class Pendaftaran extends Model
 {
     protected $table = 'pendaftaran';
 
-    protected $fillable = [
-        'no_register',
-        'no_polis',
-        'no_rangka',
-        'km_masuk',
-        'tanggal_pendaftaran',
-        'kelengkapan_tambahan',
-        'keterangan',
-        'foto_stnk',
-        'foto_kerusakan',
-        'foto_surat_pengantar',
-        'foto_gesek_rangka',
-        'pelanggan_id',
-        'kendaraan_id',
-        'penanggung_id'
-    ];
+    protected $guarded = [];
+    // protected $fillable = [
+    //     'no_register',
+    //     'no_polis',
+    //     'no_rangka',
+    //     'km_masuk',
+    //     'tanggal_pendaftaran',
+    //     'kelengkapan_tambahan',
+    //     'keterangan',
+    //     'foto_stnk',
+    //     'foto_kerusakan',
+    //     'foto_surat_pengantar',
+    //     'foto_gesek_rangka',
+    //     'pelanggan_id',
+    //     'kendaraan_id',
+    //     'penanggung_id'
+    // ];
 
     public function pelanggan()
     {

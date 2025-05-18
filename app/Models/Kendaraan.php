@@ -8,15 +8,7 @@ class Kendaraan extends Model
 {
     protected $table = 'kendaraan';
 
-    protected $fillable = [
-        'no_rangka',
-        'no_polisi',
-        'no_mesin',
-        'tipe_id',
-        'tahun',
-        'jenis',
-        'warna'
-    ];
+    protected $guarded = [];
 
     public function pendaftarans()
     {

@@ -54,7 +54,7 @@ export default function Create() {
                     <Button
                         variant="contained"
                         size="small"
-                        onClick={() => window.history.back()}
+                        href={route("penanggung.index")}
                     >
                         Kembali
                     </Button>
@@ -164,7 +164,7 @@ export default function Create() {
                                     </>
                                 )}
 
-                                <InputLabel className="flex items-center">
+                                {/* <InputLabel className="flex items-center">
                                     Pph
                                 </InputLabel>
                                 <div className="flex gap-2 items-center ">
@@ -228,67 +228,7 @@ export default function Create() {
                                             {errors.ppn}
                                         </Typography>
                                     </>
-                                )}
-
-                                <InputLabel className="flex items-center">
-                                    Jenis Penanggung
-                                </InputLabel>
-                                <Select
-                                    ref={penanggungRef}
-                                    // value={data.jenis_penanggung}
-                                    value={data.jenis_penanggung}
-                                    onChange={(e) =>
-                                        setData(
-                                            "jenis_penanggung",
-                                            e.target.value
-                                        )
-                                    }
-                                    className="h-8"
-                                    onClose={() => {
-                                        penanggungRef.current.classList.remove(
-                                            "Mui-focused"
-                                        );
-                                        penanggungRef.current.previousSibling?.classList.remove(
-                                            "Mui-focused"
-                                        );
-                                    }}
-                                    onOpen={() => {
-                                        penanggungRef.current.classList?.add(
-                                            "Mui-focused"
-                                        );
-                                        penanggungRef.current.previousSibling?.classList.add(
-                                            "Mui-focused"
-                                        );
-                                    }}
-                                    sx={{
-                                        "& .MuiOutlinedInput-notchedOutline": {
-                                            borderColor: "black",
-                                            borderRadius: "0.375rem",
-                                        },
-                                    }}
-                                >
-                                    {jenis &&
-                                        jenis.map((item) => (
-                                            <MenuItem
-                                                key={item.id}
-                                                value={item.id}
-                                            >
-                                                {item.nama}
-                                            </MenuItem>
-                                        ))}
-                                </Select>
-                                {errors.jenis_penanggung && (
-                                    <>
-                                        <span></span>
-                                        <Typography
-                                            color="error"
-                                            variant="caption"
-                                            className="mt-1"
-                                        >
-                                            {errors.jenis_penanggung}
-                                        </Typography>
-                                    </>
-                                )}
+                                )} */}
                             </div>
                         </Card>
                     </div>

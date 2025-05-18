@@ -78,10 +78,10 @@ export default function Index() {
         file_gesek_rangka: item.file_gesek_rangkas,
         file_spk: item.file_spks,
         file_stnk: item.file_stnks,
-        status: item.status,
+        status: item.status.charAt(0).toUpperCase() + item.status.slice(1),
     }));
 
-    console.log(pendaftaran);
+    console.log(rows);
     return (
         <AuthenticatedLayout
             header={

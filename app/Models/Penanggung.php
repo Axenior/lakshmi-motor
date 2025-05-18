@@ -8,14 +8,7 @@ class Penanggung extends Model
 {
     protected $table = 'penanggung';
 
-    protected $fillable = [
-        'nama',
-        'alamat',
-        'no_telepon',
-        'no_fax',
-        'pph',
-        'ppn'
-    ];
+    protected $guarded = [];
 
     public function pendaftarans()
     {

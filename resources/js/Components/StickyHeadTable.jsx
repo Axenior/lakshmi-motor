@@ -72,8 +72,24 @@ export default function StickyHeadTable({
                                         value = (
                                             <Checkbox
                                                 checked={
-                                                    !!row[column.id] &&
-                                                    !!row[column.id]?.length
+                                                    (Array.isArray(
+                                                        row[column.id]
+                                                    ) &&
+                                                        row[column.id].length >
+                                                            0) ||
+                                                    (typeof row[column.id] ===
+                                                        "object" &&
+                                                        row[column.id] !==
+                                                            null &&
+                                                        !Array.isArray(
+                                                            row[column.id]
+                                                        ) &&
+                                                        Object.keys(
+                                                            row[column.id]
+                                                        ).length > 0) ||
+                                                    (typeof row[column.id] !==
+                                                        "object" &&
+                                                        !!row[column.id])
                                                 }
                                                 disabled
                                                 sx={{

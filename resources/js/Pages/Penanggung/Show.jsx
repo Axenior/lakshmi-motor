@@ -31,11 +31,6 @@ export default function Show() {
         });
     };
 
-    const jenis = [
-        { id: "1", nama: "Umum" },
-        { id: "2", nama: "Lainnya" },
-    ];
-
     return (
         <AuthenticatedLayout
             header={
@@ -43,7 +38,7 @@ export default function Show() {
                     <Button
                         variant="contained"
                         size="small"
-                        onClick={() => window.history.back()}
+                        href={route("penanggung.index")}
                     >
                         Kembali
                     </Button>
@@ -120,7 +115,7 @@ export default function Show() {
                             readOnly
                         />
 
-                        <InputLabel className="flex items-center">
+                        {/* <InputLabel className="flex items-center">
                             Pph
                         </InputLabel>
                         <div className="flex gap-2 items-center ">
@@ -208,7 +203,7 @@ export default function Show() {
                                         {item.nama}
                                     </MenuItem>
                                 ))}
-                        </Select>
+                        </Select> */}
                     </div>
                 </Card>
             </Container>

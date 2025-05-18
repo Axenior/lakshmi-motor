@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('alamat')->nullable();
             $table->string('no_telepon')->unique()->nullable();
             $table->string('no_fax')->unique()->nullable();
-            $table->integer('pph');
-            $table->integer('ppn');
+            // $table->integer('pph');
+            // $table->integer('ppn');
             // $table->string('jenis_penanggung');
             $table->timestamps();
         });
