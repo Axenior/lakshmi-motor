@@ -1,9 +1,10 @@
 <?php
 
 use App\Http\Controllers\JasaController;
+use App\Http\Middleware\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth')->group(function () {
+Route::middleware(Auth::class)->group(function () {
   Route::get('/jasa', [JasaController::class, 'index'])->name('jasa.index');
   Route::get('/jasa/create', [JasaController::class, 'create'])->name('jasa.create');
   Route::post('/jasa', [JasaController::class, 'store'])->name('jasa.store');

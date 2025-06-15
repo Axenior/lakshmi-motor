@@ -48,7 +48,7 @@ export default function Show() {
                 </div>
             }
         >
-            <Head title="Tambah Pendaftaran" />
+            <Head title="Detail Penanggung" />
 
             <Container className="py-5">
                 <div className="flex gap-2 justify-end">

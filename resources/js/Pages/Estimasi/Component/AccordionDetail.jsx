@@ -22,17 +22,23 @@ export default function AccordionDetail({ pendaftaran }) {
                     <div className="flex flex-wrap gap-x-5 gap-y-1 my-1">
                         <div className="grid grid-cols-2 sm:grid-cols-[130px_200px] gap-1 w-full sm:w-[350px] self-start">
                             <InputLabel className="flex items-center">
-                                No Transaksi
+                                ID Pendaftaran
                             </InputLabel>
                             <InputLabel className="flex items-center">
-                                123123123
+                                {String(pendaftaran.id).padStart(6, "0")}
                             </InputLabel>
 
                             <InputLabel className="flex items-center">
                                 Tanggal
                             </InputLabel>
                             <InputLabel className="flex items-center">
-                                09/09/2004
+                                {new Date(
+                                    pendaftaran.tanggal_pendaftaran
+                                ).toLocaleDateString("id-ID", {
+                                    day: "2-digit",
+                                    month: "long",
+                                    year: "numeric",
+                                })}
                             </InputLabel>
 
                             <InputLabel className="flex items-center">
@@ -41,22 +47,8 @@ export default function AccordionDetail({ pendaftaran }) {
                             <InputLabel className="flex items-center">
                                 {pendaftaran.penanggung.nama}
                             </InputLabel>
-
-                            <InputLabel className="flex items-center">
-                                Kelompok
-                            </InputLabel>
-                            <InputLabel className="flex items-center">
-                                xxxxxx
-                            </InputLabel>
                         </div>
                         <div className="grid grid-cols-2 sm:grid-cols-[130px_200px] gap-1 w-full sm:w-[350px] self-start">
-                            <InputLabel className="flex items-center">
-                                ID Pendaftaran
-                            </InputLabel>
-                            <InputLabel className="flex items-center">
-                                {String(pendaftaran.id).padStart(6, "0")}
-                            </InputLabel>
-
                             <div className="col-span-2">
                                 <InputLabel className="text-lg font-bold mb-1">
                                     Data Pelanggan

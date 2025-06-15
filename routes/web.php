@@ -6,21 +6,22 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
+    return redirect('dashboard');
     // if (auth()->guard()->user()) {
     //     // dd(auth()->guard()->user());
     //     return redirect()->route('dashboard');
     // }
-    return Inertia::render('Welcome', [
-        // 'canLogin' => Route::has('login'),
-        // 'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+    // return Inertia::render('Dashboard', [
+    // 'canLogin' => Route::has('login'),
+    // 'canRegister' => Route::has('register'),
+    // 'laravelVersion' => Application::VERSION,
+    // 'phpVersion' => PHP_VERSION,
+    // ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return Inertia::render('Dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -29,6 +30,7 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__ . '/auth.php';
+require __DIR__ . '/dashboard.php';
 require __DIR__ . '/pendaftaran.php';
 require __DIR__ . '/penanggung.php';
 require __DIR__ . '/kendaraan.php';
@@ -36,3 +38,4 @@ require __DIR__ . '/pelanggan.php';
 require __DIR__ . '/sparepart.php';
 require __DIR__ . '/jasa.php';
 require __DIR__ . '/estimasi.php';
+require __DIR__ . '/user.php';

@@ -18,6 +18,7 @@ import EstimateCard from "./Component/EstimateCard";
 
 export default function Create() {
     const { nextId, penanggung } = usePage().props;
+    const user = usePage().props.auth.user;
     // console.log(penanggung);
     const [kendaraan, setKendaraan] = useState(null);
     const [pelanggan, setPelanggan] = useState(null);
@@ -56,6 +57,7 @@ export default function Create() {
         file_kerusakan: [],
         file_gesek_rangka: [],
         file_surat_pengantar: [],
+        user: user.id,
     });
 
     const fetchKendaraan = async () => {

@@ -1,5 +1,4 @@
 import Container from "@/Components/Container";
-import CustomSelect from "@/Components/CustomSelect";
 import InputLabel from "@/Components/InputLabel";
 import TextAreaInput from "@/Components/TextAreaInput";
 import TextInput from "@/Components/TextInput";
@@ -8,18 +7,19 @@ import { Head, useForm, usePage } from "@inertiajs/react";
 import { Button, Card, MenuItem, Select, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 
-export default function Edit() {
-    const { jasa } = usePage().props;
-
+export default function Create({ user }) {
     const { data, setData, put, processing, errors, reset } = useForm({
-        nama: jasa.nama || "",
-        harga: jasa.harga || "",
+        name: user.name,
+        email: user.email,
+        password: "********",
+        role: user.role,
+        isActive: Boolean(user.isActive),
     });
 
     const submit = (e) => {
         e.preventDefault();
 
-        put(route("jasa.update", jasa.id), {
+        put(route("user.update", user.id), {
             onSuccess: () => {
                 alert("Data berhasil disimpan!");
                 reset();
@@ -45,17 +45,17 @@ export default function Edit() {
                     <Button
                         variant="contained"
                         size="small"
-                        href={route("jasa.show", jasa.id)}
+                        href={route("user.index")}
                     >
                         Kembali
                     </Button>
                     <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                        Edit jasa
+                        Tambah Pengguna
                     </h2>
                 </div>
             }
         >
-            <Head title="Edit jasa" />
+            <Head title="Tambah Pengguna" />
 
             <Container>
                 <form onSubmit={submit}>
@@ -66,63 +66,57 @@ export default function Edit() {
                                     Nama
                                 </InputLabel>
                                 <TextInput
-                                    value={data.nama}
+                                    readOnly
+                                    value={data.name}
                                     onChange={(e) =>
-                                        setData("nama", e.target.value)
+                                        setData("name", e.target.value)
                                     }
                                 />
-                                {errors.nama && (
-                                    <>
-                                        <span></span>
-                                        <Typography
-                                            color="error"
-                                            variant="caption"
-                                            className="mt-1"
-                                        >
-                                            {errors.nama}
-                                        </Typography>
-                                    </>
-                                )}
 
                                 <InputLabel className="flex items-center">
-                                    Harga
+                                    Email
                                 </InputLabel>
                                 <TextInput
-                                    type="text"
-                                    inputMode="numeric"
-                                    min={0}
-                                    value={data.harga}
-                                    onChange={(e) => {
-                                        const val = e.target.value.replace(
-                                            /[^0-9]/g,
-                                            ""
-                                        );
-                                        setData("harga", Number(val));
-                                    }}
+                                    readOnly
+                                    value={data.email}
+                                    onChange={(e) =>
+                                        setData("email", e.target.value)
+                                    }
                                 />
-                                {errors.harga && (
-                                    <>
-                                        <span></span>
-                                        <Typography
-                                            color="error"
-                                            variant="caption"
-                                            className="mt-1"
-                                        >
-                                            {errors.harga}
-                                        </Typography>
-                                    </>
-                                )}
+
+                                <InputLabel className="flex items-center">
+                                    Role
+                                </InputLabel>
+                                <TextInput
+                                    readOnly
+                                    value={data.role}
+                                    onChange={(e) =>
+                                        setData("role", e.target.value)
+                                    }
+                                />
+
+                                <InputLabel className="flex items-center">
+                                    Password
+                                </InputLabel>
+                                <TextInput
+                                    readOnly
+                                    value={data.password}
+                                    onChange={(e) =>
+                                        setData("password", e.target.value)
+                                    }
+                                />
                             </div>
                         </Card>
                     </div>
                     <Button
                         type="submit"
                         variant="contained"
+                        color="warning"
                         size="small"
                         className="ms-4"
-                        disabled={processing}
+                        readOnly={processing}
                     >
-                        Simpan
+                        {data.isActive ? "Nonaktifkan" : "Aktifkan"}
                     </Button>
                 </form>
             </Container>

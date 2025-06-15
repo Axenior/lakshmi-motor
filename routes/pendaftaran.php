@@ -1,9 +1,10 @@
 <?php
 
 use App\Http\Controllers\PendaftaranController;
+use App\Http\Middleware\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth')->group(function () {
+Route::middleware(Auth::class)->group(function () {
   Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran.index');
   Route::get('/pendaftaran/create', [PendaftaranController::class, 'create'])->name('pendaftaran.create');
   Route::post('/pendaftaran', [PendaftaranController::class, 'store'])->name('pendaftaran.store');

@@ -38,21 +38,15 @@ class PenanggungController extends Controller
             'no_telepon' => 'nullable|unique:penanggung,no_telepon',
             'no_fax' => 'nullable|unique:penanggung,no_fax',
             'alamat' => 'nullable|max:255',
-            'pph' => 'required|integer',
-            'ppn' => 'required|integer',
         ]);
 
         DB::beginTransaction();
         try {
-            // Simpan data pendaftaran
             $penanggung = Penanggung::create([
                 'nama' => $request->nama,
                 'alamat' => $request->alamat,
                 'no_telepon' => $request->no_telepon,
                 'no_fax' => $request->no_fax,
-                'pph' => $request->pph,
-                'ppn' => $request->ppn,
-
             ]);
 
             DB::commit();
@@ -95,8 +89,6 @@ class PenanggungController extends Controller
             'no_telepon' => 'nullable|unique:penanggung,no_telepon,' . $penanggung->id,
             'no_fax' => 'nullable|unique:penanggung,no_fax,' . $penanggung->id,
             'alamat' => 'nullable|max:255',
-            'pph' => 'required|integer|max:100',
-            'ppn' => 'required|integer|max:100',
         ]);
 
         DB::beginTransaction();
@@ -107,8 +99,6 @@ class PenanggungController extends Controller
                 'alamat' => $request->alamat,
                 'no_telepon' => $request->no_telepon,
                 'no_fax' => $request->no_fax,
-                'pph' => $request->pph,
-                'ppn' => $request->ppn,
             ]);
 
             DB::commit();

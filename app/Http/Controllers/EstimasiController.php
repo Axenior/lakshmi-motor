@@ -27,7 +27,7 @@ class EstimasiController extends Controller
     ]);
 
     $sparepart = Sparepart::where('tipe_id', $pendaftaran->kendaraan->tipe_id)->get();
-    $jasa = Jasa::where('penanggung_id', $pendaftaran->penanggung_id)->get();
+    $jasa = Jasa::get();
 
     // dd($pendaftaran);
     return Inertia::render(
@@ -43,7 +43,7 @@ class EstimasiController extends Controller
   public function store(Request $request, $pendaftaranId)
   {
     $request->validate([
-      // 'jasa' => 'required|array',
+      'jasa' => 'required|array',
       // 'sparepart' => 'required|array',
       'jasa.*.id' => 'required|exists:jasa,id',
       'jasa.*.jumlah' => 'required|integer|min:1',
@@ -97,9 +97,20 @@ class EstimasiController extends Controller
         ]);
       }
 
+      $pendaftaran = Pendaftaran::find($pendaftaranId);
+
+      if ($pendaftaran) {
+        if ($pendaftaran->status == "pendaftaran") {
+          $pendaftaran->status = "estimasi";
+          $pendaftaran->save();
+        }
+      }
+
+
       DB::commit();
 
-      return redirect()->back()->with('success', 'Estimasi berhasil disimpan.');
+      // return redirect()->back()->with('success', 'Estimasi berhasil disimpan.');
+      return redirect(route('estimasi.create', $pendaftaranId));
     } catch (\Exception $e) {
       DB::rollBack();
       return redirect()->back()->withErrors([
@@ -121,7 +132,7 @@ class EstimasiController extends Controller
     ]);
 
     $sparepart = Sparepart::where('tipe_id', $pendaftaran->kendaraan->tipe_id)->get();
-    $jasa = Jasa::where('penanggung_id', $pendaftaran->penanggung_id)->get();
+    $jasa = Jasa::get();
 
     // dd($pendaftaran);
     return Inertia::render(

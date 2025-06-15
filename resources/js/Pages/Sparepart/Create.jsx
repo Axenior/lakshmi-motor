@@ -85,7 +85,7 @@ export default function Create() {
                 </div>
             }
         >
-            <Head title="Tambah Pendaftaran" />
+            <Head title="Tambah Sparepart" />
 
             <Container>
                 <form onSubmit={submit}>

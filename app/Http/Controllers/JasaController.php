@@ -14,27 +14,17 @@ class JasaController extends Controller
 {
   public function index(Request $request)
   {
-    $penanggung = Penanggung::all();
-    $query = Jasa::query()->with('penanggung');
-
-    if ($request->has('penanggung')) {
-      $query->where('penanggung_id', $request->penanggung);
-    }
-
-    $jasa = $query->paginate(25)->withQueryString();
+    $jasa = Jasa::paginate(25);
 
     return Inertia::render('Jasa/Index', [
       'jasa' => $jasa,
-      'penanggung' => $penanggung,
-      'selectedPenanggung' => $request->penanggung,
     ]);
   }
 
 
   public function create()
   {
-    $penanggung = Penanggung::all();
-    return Inertia::render('Jasa/Create', ['penanggung' => $penanggung]);
+    return Inertia::render('Jasa/Create');
   }
 
   public function store(Request $request)
@@ -42,7 +32,6 @@ class JasaController extends Controller
     $request->validate([
       'nama' => 'required|string',
       'harga' => 'required|numeric',
-      'penanggung' => "required"
     ]);
 
     DB::beginTransaction();
@@ -50,7 +39,6 @@ class JasaController extends Controller
       Jasa::create([
         'nama' => $request->nama,
         'harga' => $request->harga,
-        'penanggung_id' => $request->penanggung,
       ]);
 
       DB::commit();
@@ -69,16 +57,13 @@ class JasaController extends Controller
     $penanggung = Penanggung::all();
     return Inertia::render('Jasa/Show', [
       'jasa' => $jasa,
-      'penanggung' => $penanggung
     ]);
   }
 
   public function edit(Jasa $jasa)
   {
-    $penanggung = Penanggung::all();
     return Inertia::render('Jasa/Edit', [
       'jasa' => $jasa,
-      'penanggung' => $penanggung
     ]);
   }
 
@@ -88,13 +73,6 @@ class JasaController extends Controller
     $request->validate([
       'nama' => 'required|string',
       'harga' => 'required|numeric',
-      'penanggung' => [
-        'required',
-        'integer',
-        Rule::exists('penanggung', 'id')->where(function ($query) use ($request) {
-          $query->where('id', $request->penanggung);
-        }),
-      ],
     ]);
 
     DB::beginTransaction();
@@ -102,7 +80,6 @@ class JasaController extends Controller
       $jasa->update([
         'nama' => $request->nama,
         'harga' => $request->harga,
-        'penanggung_id' => $request->penanggung,
       ]);
 
       DB::commit();
@@ -127,7 +104,6 @@ class JasaController extends Controller
     } catch (\Exception $e) {
       DB::rollBack();
       if ($e->getCode() == '23000') {
-        // Error karena foreign key
         $errorMessage = 'Data tidak dapat dihapus karena telah digunakan.';
       } else {
         $errorMessage = 'Terjadi kesalahan saat menghapus data.';

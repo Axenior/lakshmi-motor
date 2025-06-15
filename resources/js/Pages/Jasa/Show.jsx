@@ -8,7 +8,7 @@ import { Button, Card, MenuItem, Select, Typography } from "@mui/material";
 import { useRef } from "react";
 
 export default function Show() {
-    const { penanggung, jasa } = usePage().props;
+    const { jasa } = usePage().props;
 
     const { delete: destroy, reset } = useForm();
     const deleting = (e) => {
@@ -46,7 +46,7 @@ export default function Show() {
                 </div>
             }
         >
-            <Head title="Detail Pendaftaran" />
+            <Head title="Detail Jasa" />
 
             <Container className="py-5">
                 <div className="flex gap-2 justify-end">
@@ -71,17 +71,6 @@ export default function Show() {
                 <div className="grid grid-cols-1">
                     <Card className="flex flex-wrap gap-x-5 gap-y-1 p-4 my-1 sm:w-fit">
                         <div className="grid grid-cols-1 sm:grid-cols-[130px_350px] gap-1 w-full sm:w-[485px] self-start">
-                            <InputLabel className="flex items-center">
-                                Penanggung
-                            </InputLabel>
-                            <CustomSelect
-                                name={"penanggung"}
-                                value={jasa.penanggung_id}
-                                onChange={(val) => setData("penanggung", val)}
-                                options={penanggung}
-                                readOnly={true}
-                            />
-
                             <InputLabel className="flex items-center">
                                 Nama
                             </InputLabel>

@@ -1,5 +1,6 @@
 import FileUpload from "@/Components/FileUpload";
 import InputLabel from "@/Components/InputLabel";
+import DownloadAllFile from "./DownloadAllFile";
 
 // Komponen untuk upload file (STNK & KTP) dengan dukungan multi file
 export default function FileUploadSection({

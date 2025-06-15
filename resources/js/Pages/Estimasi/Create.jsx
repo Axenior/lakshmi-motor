@@ -7,6 +7,7 @@ import { useForm, usePage } from "@inertiajs/react";
 import SparepartEstimate from "./Component/SparepartEstimate";
 import AccordionDetail from "./Component/AccordionDetail";
 import TextInput from "@/Components/TextInput";
+import { useEffect } from "react";
 
 export default function Create() {
     const { pendaftaran, jasa, sparepart } = usePage().props;
@@ -18,6 +19,15 @@ export default function Create() {
         diskon_sparepart: pendaftaran?.estimasi?.diskon_sparepart || 0,
         nilai_or: pendaftaran?.estimasi?.nilai_or || 0,
     });
+
+    useEffect(() => {
+        setData((prevData) => ({
+            ...prevData,
+            diskon_jasa: pendaftaran?.estimasi?.diskon_jasa || 0,
+            diskon_sparepart: pendaftaran?.estimasi?.diskon_sparepart || 0,
+            nilai_or: pendaftaran?.estimasi?.nilai_or || 0,
+        }));
+    }, [pendaftaran]);
 
     const jasaTotal = data.jasa.reduce((sum, item) => {
         const harga = parseFloat(item.harga || 0);
@@ -48,7 +58,7 @@ export default function Create() {
             },
             onError: (errors) => {
                 console.error("Terjadi kesalahan:", errors);
-                alert("Gagal menyimpan data. Periksa kembali input Anda.");
+                alert(`Gagal menyimpan data. ${errors.jasa}`);
             },
             onFinish: () => {
                 console.log("Request selesai.");
@@ -149,7 +159,7 @@ export default function Create() {
                         </div>
 
                         <Typography variant="h6">
-                            Grand Total: {grandTotal.toLocaleString("id-ID")}
+                            Grand Total: Rp {grandTotal.toLocaleString("id-ID")}
                         </Typography>
                         <div className="flex gap-5">
                             <Button

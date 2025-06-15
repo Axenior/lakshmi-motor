@@ -46,33 +46,68 @@ class Pendaftaran extends Model
         return $this->hasOne(Estimasi::class);
     }
 
+    // public function file_kerusakans()
+    // {
+    //     return $this->hasMany(FileKerusakan::class, 'pendaftaran_id');
+    // }
+
+    // public function file_stnks()
+    // {
+    //     return $this->hasMany(FileSTNK::class, 'pendaftaran_id');
+    // }
+
+    // public function file_gesek_rangkas()
+    // {
+    //     return $this->hasMany(FileGesekRangka::class, 'pendaftaran_id');
+    // }
+
+    // public function file_surat_pengantars()
+    // {
+    //     return $this->hasMany(FileSuratPengantar::class, 'pendaftaran_id');
+    // }
+
+    // public function file_spks()
+    // {
+    //     return $this->hasMany(FileSPK::class, 'pendaftaran_id');
+    // }
+
+    // public function file_epoxys()
+    // {
+    //     return $this->hasMany(FileEpoxy::class, 'pendaftaran_id');
+    // }
+
     public function file_kerusakans()
     {
-        return $this->hasMany(FileKerusakan::class, 'pendaftaran_id');
+        return $this->hasMany(File::class)->where('jenis', 'kerusakan');
     }
 
     public function file_stnks()
     {
-        return $this->hasMany(FileSTNK::class, 'pendaftaran_id');
+        return $this->hasMany(File::class)->where('jenis', 'stnk');
     }
 
     public function file_gesek_rangkas()
     {
-        return $this->hasMany(FileGesekRangka::class, 'pendaftaran_id');
+        return $this->hasMany(File::class)->where('jenis', 'gesek_rangka');
     }
 
     public function file_surat_pengantars()
     {
-        return $this->hasMany(FileSuratPengantar::class, 'pendaftaran_id');
+        return $this->hasMany(File::class)->where('jenis', 'surat_pengantar');
     }
 
     public function file_spks()
     {
-        return $this->hasMany(FileSPK::class, 'pendaftaran_id');
+        return $this->hasMany(File::class)->where('jenis', 'spk');
     }
 
     public function file_epoxys()
     {
-        return $this->hasMany(FileEpoxy::class, 'pendaftaran_id');
+        return $this->hasMany(File::class)->where('jenis', 'epoxy');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

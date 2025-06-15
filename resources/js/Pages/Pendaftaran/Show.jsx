@@ -15,6 +15,7 @@ import EstimateCard from "./Component/EstimateCard";
 import InputLabel from "@/Components/InputLabel";
 import FileUpload from "@/Components/FileUpload";
 import StatusCard from "./Component/StatusCard";
+import DownloadAllFile from "./Component/DownloadAllFile";
 
 // Fungsi bantu untuk konversi URL ke File
 async function urlToFile(url, fileName, mimeType) {
@@ -67,6 +68,7 @@ export default function Create() {
         nilai_or: pendaftaran.nilai_or || 0,
         status: pendaftaran.status || "pendaftaran",
         lunas: pendaftaran.lunas || false,
+        keterangan_pembatalan: pendaftaran.keterangan_pembatalan || "",
     });
 
     console.log(pendaftaran);
@@ -198,7 +200,7 @@ export default function Create() {
                 </div>
             }
         >
-            <Head title="Tambah Pendaftaran" />
+            <Head title="Detail Pendaftaran" />
             <Container className="py-5">
                 <div className="flex gap-2 justify-end">
                     <Button
@@ -263,7 +265,11 @@ export default function Create() {
                                 isDisabled={true}
                             />
                             <Divider sx={{ my: 2 }} />
-                            <div className="flex justify-end m-2">
+                            <div className="mb-3 flex sm:justify-end m-2">
+                                <DownloadAllFile pendaftaran={pendaftaran} />
+                            </div>
+                            <Divider sx={{ my: 2 }} />
+                            <div className="flex sm:justify-end m-2">
                                 <div className="sm:text-right">
                                     <InputLabel className="mb-2">
                                         Menu Estimasi

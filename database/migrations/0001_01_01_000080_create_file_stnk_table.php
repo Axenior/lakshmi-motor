@@ -9,19 +9,19 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-        Schema::create('file_stnk', function (Blueprint $table) {
-            $table->id();
-            $table->string('path');
-            $table->string('hash');
+    // public function up(): void
+    // {
+    //     Schema::create('file_stnk', function (Blueprint $table) {
+    //         $table->id();
+    //         $table->string('path');
+    //         $table->string('hash');
 
-            $table->unsignedBigInteger('pendaftaran_id');
-            $table->foreign('pendaftaran_id')->references('id')->on('pendaftaran');
+    //         $table->unsignedBigInteger('pendaftaran_id');
+    //         $table->foreign('pendaftaran_id')->references('id')->on('pendaftaran');
 
-            $table->timestamps();
-        });
-    }
+    //         $table->timestamps();
+    //     });
+    // }
 
     /**
      * Reverse the migrations.

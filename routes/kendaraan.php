@@ -1,11 +1,12 @@
 <?php
 
 use App\Http\Controllers\KendaraanController;
+use App\Http\Middleware\Auth;
 use App\Models\Kendaraan;
 use App\Models\Merk;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth')->group(function () {
+Route::middleware(Auth::class)->group(function () {
   Route::get('api/kendaraan/{no_rangka}', function ($no_rangka) {
     $no_rangka = urldecode($no_rangka);
 

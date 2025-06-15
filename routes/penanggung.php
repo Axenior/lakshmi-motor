@@ -1,10 +1,11 @@
 <?php
 
 use App\Http\Controllers\PenanggungController;
+use App\Http\Middleware\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::middleware('auth')->group(function () {
+Route::middleware(Auth::class)->group(function () {
   Route::get('/penanggung', [PenanggungController::class, 'index'])->name('penanggung.index');
   Route::get('/penanggung/create', [PenanggungController::class, 'create'])->name('penanggung.create');
   Route::post('/penanggung', [PenanggungController::class, 'store'])->name('penanggung.store');

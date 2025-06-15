@@ -5,16 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Estimasi;
 use App\Models\EstimasiJasa;
 use App\Models\EstimasiSparepart;
-use App\Models\FileEpoxy;
-use App\Models\FileGesekRangka;
-use App\Models\FileKerusakan;
-use App\Models\FileSPK;
-use App\Models\FileSTNK;
-use App\Models\FileSuratPengantar;
+use App\Models\File;
 use App\Models\Kendaraan;
 use App\Models\Pelanggan;
 use App\Models\Penanggung;
 use App\Models\Pendaftaran;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -27,9 +23,9 @@ class PendaftaranController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $pendaftaran = Pendaftaran::with(
+        $query = Pendaftaran::with([
             'pelanggan',
             'penanggung',
             'kendaraan',
@@ -39,13 +35,53 @@ class PendaftaranController extends Controller
             'file_surat_pengantars',
             'file_spks',
             'file_epoxys',
-
             'estimasi',
-        )->paginate(25);
-        // dd($pendaftaran);
+            'user'
+        ]);
+
+        // Filter tanggal
+        if ($request->filled('startDate') && $request->filled('endDate')) {
+            $start = Carbon::parse($request->startDate)->startOfDay();
+            $end = Carbon::parse($request->endDate)->endOfDay();
+            $query->whereBetween('tanggal_pendaftaran', [$start, $end]);
+        }
+
+        // Filter pencarian berdasar field
+        if ($request->filled('searchText')) {
+            $searchBy = $request->searchBy ?? 'nama';
+            $searchText = $request->searchText;
+
+            if ($searchBy === 'nama') {
+                // Asumsikan 'pelanggan' punya 'nama'
+                $query->whereHas('pelanggan', function ($q) use ($searchText) {
+                    $q->where('nama', 'like', "%{$searchText}%");
+                });
+            } elseif ($searchBy === 'no_pendaftaran') {
+                $query->where('no_pendaftaran', 'like', "%{$searchText}%");
+            } elseif ($searchBy === 'penanggung_id') {
+                $query->where('penanggung_id', 'like', "%{$searchText}%");
+            } elseif ($searchBy === 'no_polisi') {
+                $query->whereHas('kendaraan', function ($q) use ($searchText) {
+                    $q->where('no_polisi', 'like', "%{$searchText}%");
+                });
+            } elseif ($searchBy === 'status') {
+                $query->where('status', 'like', "%{$searchText}%");
+            };
+        }
+
+        // Sorting
+        $sortDirection = $request->sortDirection ?? 'desc';
+        $query->orderBy('tanggal_pendaftaran', $sortDirection);
+
+        $pendaftaran = $query->paginate(25);
+
+        $penanggung = Penanggung::all();
+
         return Inertia::render('Pendaftaran/Index', [
             'nama' => "Pendaftaran",
-            'pendaftaran' => $pendaftaran
+            'pendaftaran' => $pendaftaran,
+            'filters' => $request->only(['startDate', 'endDate', 'sortDirection', 'searchBy', 'searchText']),
+            'penanggung' => $penanggung,
         ]);
     }
 
@@ -96,74 +132,92 @@ class PendaftaranController extends Controller
                 'tahun' => 'required|integer|max:' . date('Y'),
                 'jenis' => 'required|string|max:50',
                 'warna' => 'required|string|max:30',
+                'user' => 'required'
             ]
         );
 
         DB::beginTransaction();
         try {
             // Cek apakah pelanggan dengan nomor telepon sudah ada
-            $pelanggan = Pelanggan::where('no_telepon', $request->no_telepon)->first();
+            $pelanggan = Pelanggan::create([
+                'nama' => $request->nama,
+                'alamat' => $request->alamat,
+                'no_telepon' => $request->no_telepon,
+            ]);
 
-            if (!$pelanggan) {
-                // Jika belum ada, buat pelanggan baru
-                $pelanggan = Pelanggan::create([
-                    'nama' => $request->nama,
-                    'alamat' => $request->alamat,
-                    'no_telepon' => $request->no_telepon,
-                ]);
-            } else {
-                // Jika sudah ada, update data pelanggan
-                $pelanggan->update([
-                    'nama' => $request->nama,
-                    'alamat' => $request->alamat,
-                ]);
-            }
+            // $pelanggan = Pelanggan::where('no_telepon', $request->no_telepon)->first();
+
+            // if (!$pelanggan) {
+            //     // Jika belum ada, buat pelanggan baru
+            //     $pelanggan = Pelanggan::create([
+            //         'nama' => $request->nama,
+            //         'alamat' => $request->alamat,
+            //         'no_telepon' => $request->no_telepon,
+            //     ]);
+            // } else {
+            //     // Jika sudah ada, update data pelanggan
+            //     $pelanggan->update([
+            //         'nama' => $request->nama,
+            //         'alamat' => $request->alamat,
+            //     ]);
+            // }
+
+            $kendaraan = Kendaraan::create([
+                'no_rangka' => $request->no_rangka,
+                'no_polisi' => $request->no_polisi,
+                'no_mesin' => $request->no_mesin,
+                // 'merk' => $request->merk,
+                'tipe_id' => $request->tipe,
+                'tahun' => $request->tahun,
+                'jenis' => $request->jenis,
+                'warna' => $request->warna,
+            ]);
 
             // Cek apakah kendaraan dengan nomor polisi sudah ada
-            $kendaraan = Kendaraan::where('no_rangka', $request->no_rangka)->first();
-            if (!$kendaraan) {
-                // Jika belum ada, buat kendaraan baru
-                $kendaraan = Kendaraan::create([
-                    'no_rangka' => $request->no_rangka,
-                    'no_polisi' => $request->no_polisi,
-                    'no_mesin' => $request->no_mesin,
-                    // 'merk' => $request->merk,
-                    'tipe_id' => $request->tipe,
-                    'tahun' => $request->tahun,
-                    'jenis' => $request->jenis,
-                    'warna' => $request->warna,
-                ]);
-            } else {
-                // Jika sudah ada, update data kendaraan
-                $kendaraan->update([
-                    'no_polisi' => $request->no_polisi,
-                    'no_mesin' => $request->no_mesin,
-                    // 'merk' => $request->merk,
-                    'tipe_id' => $request->tipe,
-                    'tahun' => $request->tahun,
-                    'jenis' => $request->jenis,
-                    'warna' => $request->warna,
-                ]);
-            }
+            // $kendaraan = Kendaraan::where('no_rangka', $request->no_rangka)->first();
+            // if (!$kendaraan) {
+            //     // Jika belum ada, buat kendaraan baru
+            //     $kendaraan = Kendaraan::create([
+            //         'no_rangka' => $request->no_rangka,
+            //         'no_polisi' => $request->no_polisi,
+            //         'no_mesin' => $request->no_mesin,
+            //         // 'merk' => $request->merk,
+            //         'tipe_id' => $request->tipe,
+            //         'tahun' => $request->tahun,
+            //         'jenis' => $request->jenis,
+            //         'warna' => $request->warna,
+            //     ]);
+            // } else {
+            //     // Jika sudah ada, update data kendaraan
+            //     $kendaraan->update([
+            //         'no_polisi' => $request->no_polisi,
+            //         'no_mesin' => $request->no_mesin,
+            //         // 'merk' => $request->merk,
+            //         'tipe_id' => $request->tipe,
+            //         'tahun' => $request->tahun,
+            //         'jenis' => $request->jenis,
+            //         'warna' => $request->warna,
+            //     ]);
+            // }
 
             // Simpan data pendaftaran
             $pendaftaran = Pendaftaran::create([
                 'no_register' => $request->no_register,
                 'no_polis' => $request->no_polis,
-
                 'km_masuk' => $request->km_masuk,
                 'tanggal_pendaftaran' => $request->tanggal_pendaftaran,
                 'keterangan' => $request->keterangan,
                 'pelanggan_id' => $pelanggan->id,
                 'kendaraan_id' => $kendaraan->id,
                 'penanggung_id' => $request->penanggung,
-                'keterangan' => $request->keterangan
+                'keterangan' => $request->keterangan,
+                'user_id' => $request->user
             ]);
 
-            $this->syncUploadedFiles($request, 'file_kerusakan', FileKerusakan::class, 'pendaftaran_id', $pendaftaran->id, 'K', 'kerusakan');
-            $this->syncUploadedFiles($request, 'file_stnk', FileSTNK::class, 'pendaftaran_id', $pendaftaran->id, 'STNK', 'stnk');
-            $this->syncUploadedFiles($request, 'file_gesek_rangka', FileGesekRangka::class, 'pendaftaran_id', $pendaftaran->id, 'GR', 'gesek-rangka');
-            $this->syncUploadedFiles($request, 'file_surat_pengantar', FileSuratPengantar::class, 'pendaftaran_id', $pendaftaran->id, 'SP', 'surat-pengantar');
+            $this->syncUploadedFiles($request, 'file_kerusakan', 'pendaftaran_id', $pendaftaran->id, 'K', 'kerusakan', 'kerusakan');
+            $this->syncUploadedFiles($request, 'file_stnk', 'pendaftaran_id', $pendaftaran->id, 'STNK', 'stnk', 'stnk');
+            $this->syncUploadedFiles($request, 'file_gesek_rangka', 'pendaftaran_id', $pendaftaran->id, 'GR', 'gesek-rangka', 'gesek_rangka');
+            $this->syncUploadedFiles($request, 'file_surat_pengantar', 'pendaftaran_id', $pendaftaran->id, 'SP', 'surat-pengantar', 'surat_pengantar');
 
             DB::commit();
             return redirect(route('pendaftaran.show', $pendaftaran->id, absolute: false));
@@ -190,7 +244,9 @@ class PendaftaranController extends Controller
             'file_spks',
             'file_epoxys',
             'estimasi',
+            'user'
         ]);
+
         $penanggung = Penanggung::all();
         return Inertia::render('Pendaftaran/Show', [
             'pendaftaran' => $pendaftaran,
@@ -255,9 +311,15 @@ class PendaftaranController extends Controller
                 'tahun' => 'required|integer|max:' . date('Y'),
                 'jenis' => 'required|string|max:50',
                 'warna' => 'required|string|max:30',
+                'user' => 'required',
+                'lunas' => 'required',
             ]
         );
-
+        if ($request->status == "batal") {
+            $request->validate([
+                'keterangan_pembatalan' => 'required'
+            ]);
+        }
 
         DB::beginTransaction();
         try {
@@ -315,8 +377,7 @@ class PendaftaranController extends Controller
                     EstimasiJasa::where('estimasi_id', $estimasi->id)->delete();
                 }
             }
-            // dd($request->status);
-            // Update data pendaftaran
+
             $pendaftaran->update([
                 'no_register' => $request->no_register,
                 'no_polis' => $request->no_polis,
@@ -326,15 +387,17 @@ class PendaftaranController extends Controller
                 'penanggung_id' => $request->penanggung,
                 'status' => $request->status,
                 'lunas' => $request->lunas,
+                'user_id' => $request->user,
+                'keterangan_pembatalan' => $request->keterangan_pembatalan
             ]);
 
-            $this->syncUploadedFiles($request, 'file_kerusakan', FileKerusakan::class, 'pendaftaran_id', $pendaftaran->id, 'K', 'kerusakan');
-            $this->syncUploadedFiles($request, 'file_stnk', FileSTNK::class, 'pendaftaran_id', $pendaftaran->id, 'STNK', 'stnk');
-            $this->syncUploadedFiles($request, 'file_gesek_rangka', FileGesekRangka::class, 'pendaftaran_id', $pendaftaran->id, 'GR', 'gesek-rangka');
-            $this->syncUploadedFiles($request, 'file_surat_pengantar', FileSuratPengantar::class, 'pendaftaran_id', $pendaftaran->id, 'SP', 'surat-pengantar');
+            $this->syncUploadedFiles($request, 'file_kerusakan', 'pendaftaran_id', $pendaftaran->id, 'K', 'kerusakan', 'kerusakan');
+            $this->syncUploadedFiles($request, 'file_stnk', 'pendaftaran_id', $pendaftaran->id, 'STNK', 'stnk', 'stnk');
+            $this->syncUploadedFiles($request, 'file_gesek_rangka', 'pendaftaran_id', $pendaftaran->id, 'GR', 'gesek-rangka', 'gesek_rangka');
+            $this->syncUploadedFiles($request, 'file_surat_pengantar', 'pendaftaran_id', $pendaftaran->id, 'SP', 'surat-pengantar', 'surat_pengantar');
 
-            $this->syncUploadedFiles($request, 'file_spk', FileSPK::class, 'pendaftaran_id', $pendaftaran->id, 'SPK', 'surat-perintah-kerja');
-            $this->syncUploadedFiles($request, 'file_epoxy', FileEpoxy::class, 'pendaftaran_id', $pendaftaran->id, 'EP', 'epoxy');
+            $this->syncUploadedFiles($request, 'file_spk', 'pendaftaran_id', $pendaftaran->id, 'SPK', 'surat-perintah-kerja', 'spk');
+            $this->syncUploadedFiles($request, 'file_epoxy', 'pendaftaran_id', $pendaftaran->id, 'EP', 'epoxy', 'epoxy');
 
             DB::commit();
             return redirect(route('pendaftaran.index', false));
@@ -345,9 +408,6 @@ class PendaftaranController extends Controller
         }
     }
 
-
-
-
     /**
      * Remove the specified resource from storage.
      */
@@ -356,62 +416,147 @@ class PendaftaranController extends Controller
         //
     }
 
-    private function syncUploadedFiles(Request $request, $fieldName, $modelClass, $foreignKey, $foreignId, $prefix, $folderName)
+    // private function syncUploadedFiles(Request $request, $fieldName, $modelClass, $foreignKey, $foreignId, $prefix, $folderName)
+    // {
+    //     // Array untuk menyimpan hash file yang dipertahankan (file yang dikirimkan)
+    //     $fileHashExisting = [];
+
+    //     // Jika tidak ada file yang dikirimkan, hapus seluruh file terkait
+    //     if (!$request->hasFile($fieldName)) {
+    //         $modelClass::where($foreignKey, $foreignId)->get()->each(function ($record) {
+    //             Storage::disk('public')->delete($record->path);
+    //             $record->delete();
+    //         });
+    //     } else {
+    //         $files = $request->file($fieldName);
+
+    //         foreach ($files as $file) {
+    //             $fileHash = md5_file($file->getRealPath());
+    //             // Cek apakah file dengan hash tersebut sudah ada untuk record ini
+    //             $existing = $modelClass::where('hash', $fileHash)
+    //                 ->where($foreignKey, $foreignId)
+    //                 ->first();
+
+    //             if ($existing) {
+    //                 // Jika sudah ada, pertahankan dengan menyimpan hash-nya
+    //                 $fileHashExisting[] = $fileHash;
+    //                 continue;
+    //             }
+
+    //             // Buat nama file unik menggunakan prefix, nomor pendaftaran, timestamp, dan string acak
+    //             $extension = $file->getClientOriginalExtension();
+    //             $fileName = "{$prefix}-{$request->no_pendaftaran}-"
+    //                 . now()->format('YmdHis')
+    //                 . '-' . Str::random(8)
+    //                 . ".{$extension}";
+    //             // Simpan file ke storage, misalnya di folder sesuai prefix (dalam disk 'public')
+    //             $path = $file->storeAs("uploads/" . $folderName, $fileName, 'public');
+
+    //             // Buat record baru di database
+    //             $modelClass::create([
+    //                 $foreignKey => $foreignId,
+    //                 'path'      => $path,
+    //                 'hash'      => $fileHash,
+    //             ]);
+
+    //             // Tambahkan hash file baru ke array untuk pertahanan
+    //             $fileHashExisting[] = $fileHash;
+    //         }
+    //     }
+
+    //     // Ambil seluruh record file yang sudah tersimpan untuk record induk
+    //     $allRecords = $modelClass::where($foreignKey, $foreignId)->get();
+
+    //     // Hapus record (dan file fisik) yang hash-nya tidak ada di $fileHashExisting
+    //     foreach ($allRecords as $record) {
+    //         if (!in_array($record->hash, $fileHashExisting)) {
+    //             Storage::disk('public')->delete($record->path);
+    //             $record->delete();
+    //         }
+    //     }
+    // }
+
+    // private function syncUploadedFiles(Request $request, $fieldName, string $jenis, $foreignId, $prefix, $folderName)
+    // {
+    //     $fileHashExisting = [];
+
+    //     if (!$request->hasFile($fieldName)) {
+    //         File::where('pendaftaran_id', $foreignId)
+    //             ->where('jenis', $jenis)
+    //             ->get()
+    //             ->each(function ($record) {
+    //                 Storage::disk('public')->delete($record->path);
+    //                 $record->delete();
+    //             });
+    //     } else {
+    //         $files = $request->file($fieldName);
+
+    //         foreach ($files as $file) {
+    //             $fileHash = md5_file($file->getRealPath());
+
+    //             $existing = File::where('hash', $fileHash)
+    //                 ->where('pendaftaran_id', $foreignId)
+    //                 ->where('jenis', $jenis)
+    //                 ->first();
+
+    //             if ($existing) {
+    //                 $fileHashExisting[] = $fileHash;
+    //                 continue;
+    //             }
+
+    //             $extension = $file->getClientOriginalExtension();
+    //             $fileName = "{$prefix}-{$request->no_pendaftaran}-"
+    //                 . now()->format('YmdHis')
+    //                 . '-' . Str::random(8)
+    //                 . ".{$extension}";
+
+    //             $path = $file->storeAs("uploads/{$folderName}", $fileName, 'public');
+
+    //             File::create([
+    //                 'pendaftaran_id' => $foreignId,
+    //                 'path'           => $path,
+    //                 'jenis'          => $jenis,
+    //             ]);
+
+    //             $fileHashExisting[] = $fileHash;
+    //         }
+    //     }
+
+    //     $allRecords = File::where('pendaftaran_id', $foreignId)
+    //         ->where('jenis', $jenis)
+    //         ->get();
+
+    //     foreach ($allRecords as $record) {
+    //         if (!in_array($record->hash, $fileHashExisting)) {
+    //             Storage::disk('public')->delete($record->path);
+    //             $record->delete();
+    //         }
+    //     }
+    // }
+
+    private function syncUploadedFiles(Request $request, $fieldName, $foreignKey, $foreignId, $prefix, $folderName, $jenis)
     {
-        // Array untuk menyimpan hash file yang dipertahankan (file yang dikirimkan)
-        $fileHashExisting = [];
+        // Hapus semua file sebelumnya untuk jenis tersebut
+        $files = File::where($foreignKey, $foreignId)
+            ->where('jenis', $jenis)
+            ->get();
 
-        // Jika tidak ada file yang dikirimkan, hapus seluruh file terkait
-        if (!$request->hasFile($fieldName)) {
-            $modelClass::where($foreignKey, $foreignId)->get()->each(function ($record) {
-                Storage::disk('public')->delete($record->path);
-                $record->delete();
-            });
-        } else {
-            $files = $request->file($fieldName);
-
-            foreach ($files as $file) {
-                $fileHash = md5_file($file->getRealPath());
-                // Cek apakah file dengan hash tersebut sudah ada untuk record ini
-                $existing = $modelClass::where('hash', $fileHash)
-                    ->where($foreignKey, $foreignId)
-                    ->first();
-
-                if ($existing) {
-                    // Jika sudah ada, pertahankan dengan menyimpan hash-nya
-                    $fileHashExisting[] = $fileHash;
-                    continue;
-                }
-
-                // Buat nama file unik menggunakan prefix, nomor pendaftaran, timestamp, dan string acak
-                $extension = $file->getClientOriginalExtension();
-                $fileName = "{$prefix}-{$request->no_pendaftaran}-"
-                    . now()->format('YmdHis')
-                    . '-' . Str::random(8)
-                    . ".{$extension}";
-                // Simpan file ke storage, misalnya di folder sesuai prefix (dalam disk 'public')
-                $path = $file->storeAs("uploads/" . $folderName, $fileName, 'public');
-
-                // Buat record baru di database
-                $modelClass::create([
-                    $foreignKey => $foreignId,
-                    'path'      => $path,
-                    'hash'      => $fileHash,
-                ]);
-
-                // Tambahkan hash file baru ke array untuk pertahanan
-                $fileHashExisting[] = $fileHash;
-            }
+        foreach ($files as $file) {
+            Storage::disk('public')->delete($file->path);
+            $file->delete();
         }
 
-        // Ambil seluruh record file yang sudah tersimpan untuk record induk
-        $allRecords = $modelClass::where($foreignKey, $foreignId)->get();
+        if ($request->hasFile($fieldName)) {
+            foreach ($request->file($fieldName) as $file) {
+                $extension = $file->getClientOriginalExtension();
+                $fileName = "{$prefix}-{$request->no_pendaftaran}-" . now()->format('YmdHis') . '-' . Str::random(8) . ".{$extension}";
+                $path = $file->storeAs("uploads/{$folderName}", $fileName, 'public');
 
-        // Hapus record (dan file fisik) yang hash-nya tidak ada di $fileHashExisting
-        foreach ($allRecords as $record) {
-            if (!in_array($record->hash, $fileHashExisting)) {
-                Storage::disk('public')->delete($record->path);
-                $record->delete();
+                \App\Models\File::create([
+                    $foreignKey => $foreignId,
+                    'path' => $path,
+                    'jenis' => $jenis,
+                ]);
             }
         }
     }

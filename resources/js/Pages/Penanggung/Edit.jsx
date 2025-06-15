@@ -61,7 +61,7 @@ export default function Show() {
                 </div>
             }
         >
-            <Head title="Tambah Pendaftaran" />
+            <Head title="Edit Penanggung" />
 
             <Container>
                 <form onSubmit={submit}>
@@ -160,7 +160,7 @@ export default function Show() {
                                     </>
                                 )}
 
-                                <InputLabel className="flex items-center">
+                                {/* <InputLabel className="flex items-center">
                                     Pph
                                 </InputLabel>
                                 <div className="flex gap-2 items-center ">
@@ -284,7 +284,7 @@ export default function Show() {
                                             {errors.jenis_penanggung}
                                         </Typography>
                                     </>
-                                )}
+                                )} */}
                             </div>
                         </Card>
                     </div>

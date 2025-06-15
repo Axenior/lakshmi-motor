@@ -52,7 +52,12 @@ export default function AuthenticatedLayout({ header, children }) {
                         <div className="flex">
                             <div className="flex shrink-0 items-center">
                                 <Link href="/">
-                                    <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
+                                    <img
+                                        src="/asset/logo.png"
+                                        alt="Logo"
+                                        style={{ width: "38px" }}
+                                    />
+                                    {/* <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" /> */}
                                 </Link>
                             </div>
 
@@ -96,6 +101,13 @@ export default function AuthenticatedLayout({ header, children }) {
                                     </Dropdown.Trigger>
 
                                     <Dropdown.Content>
+                                        {user.role == "admin" && (
+                                            <Dropdown.Link
+                                                href={route("user.index")}
+                                            >
+                                                Pengguna
+                                            </Dropdown.Link>
+                                        )}
                                         <Dropdown.Link
                                             href={route("profile.edit")}
                                         >
@@ -185,9 +197,11 @@ export default function AuthenticatedLayout({ header, children }) {
                         </div>
 
                         <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route("profile.edit")}>
-                                Profile
-                            </ResponsiveNavLink>
+                            {user.role == "admin" && (
+                                <ResponsiveNavLink href={route("user.index")}>
+                                    Pengguna
+                                </ResponsiveNavLink>
+                            )}
                             <ResponsiveNavLink
                                 method="post"
                                 href={route("logout")}

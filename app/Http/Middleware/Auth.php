@@ -12,8 +12,7 @@ class Auth
   public function handle(Request $request, Closure $next): Response
   {
     if (!FacadesAuth::check()) {
-      // dd(auth());
-      return redirect()->route('login'); // Custom login page
+      return redirect()->route('login');
     }
 
     return $next($request);

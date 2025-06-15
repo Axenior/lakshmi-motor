@@ -14,9 +14,9 @@ class CheckAdmin
   public function handle(Request $request, Closure $next): Response
   {
     // Pastikan user sudah login dan memiliki role 'admin'
-    if (!$request->user() || $request->user()->email !== 'matiuss@gmail.com') {
+    if (!$request->user() || $request->user()->role !== 'admin') {
       // Redirect atau berikan response error jika user bukan admin
-      dd('s');
+      // dd('s');
       return redirect('/'); // Atau gunakan response lain sesuai kebutuhan
     }
 

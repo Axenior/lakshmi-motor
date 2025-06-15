@@ -10,8 +10,8 @@ class Pelanggan extends Model
 
     protected $guarded = [];
 
-    public function pendaftarans()
+    public function pendaftaran()
     {
-        return $this->hasMany(Pendaftaran::class);
+        return $this->hasOne(Pendaftaran::class);
     }
 }

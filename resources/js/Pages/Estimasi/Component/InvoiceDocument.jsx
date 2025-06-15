@@ -1,13 +1,5 @@
 import React from "react";
-import {
-    Document,
-    Page,
-    Text,
-    View,
-    StyleSheet,
-    Font,
-    Line,
-} from "@react-pdf/renderer";
+import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
 
 const numberToWord = (num) => {
     const numToWords = [
@@ -92,64 +84,30 @@ const numberToWord = (num) => {
     return convert(num).trim();
 };
 
-// Style
+// Styles
 const styles = StyleSheet.create({
-    page: {
-        padding: 40,
-        fontSize: 11,
-        fontFamily: "Helvetica",
-    },
-    title: {
-        textAlign: "center",
-        fontSize: 14,
-        fontWeight: "bold",
-        marginBottom: 4,
-    },
-    subtitle: {
-        // textAlign: "center",
-        fontSize: 12,
+    page: { padding: 30, fontSize: 10, fontFamily: "Helvetica" },
+    header: { textAlign: "center", marginBottom: 10 },
+    section: { marginBottom: 10 },
+    row: {
+        flexDirection: "row",
+        // borderBottom: 1,
+        paddingBottom: 2,
         marginBottom: 2,
-        fontWeight: "bold",
     },
-    amountInWords: {
-        fontSize: 10,
-        fontStyle: "italic",
-        marginBottom: 20,
-        textTransform: "uppercase",
-    },
-    section: {
-        marginTop: 10,
-        marginBottom: 8,
-        lineHeight: 1.4,
-    },
+    col: { flex: 1 },
     tableHeader: {
-        flexDirection: "row",
-        borderBottomWidth: 1,
-        borderTopWidth: 1,
-        borderColor: "#000",
-        paddingVertical: 4,
         fontWeight: "bold",
+        borderTop: 1,
+        borderBottom: 1,
+        marginTop: 5,
     },
-    tableRow: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        paddingVertical: 2,
-    },
-    label: {
-        width: "70%",
-    },
-    value: {
-        width: "30%",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        textAlign: "right",
-    },
-    totalAmount: {
-        marginTop: 16,
-        fontSize: 14,
-        fontWeight: "bold",
-    },
+    rightText: { textAlign: "right" },
+    infoRow: { flexDirection: "row", marginBottom: 2 },
+    label: { width: 90 }, // Lebar tetap untuk rata titik dua
+    value: { flex: 1 },
     footer: {
+        marginTop: 20,
         textAlign: "right",
         fontSize: 11,
     },
@@ -161,7 +119,44 @@ const styles = StyleSheet.create({
     },
 });
 
+function calculateTotalItem(harga, diskon, jumlah) {
+    return harga * ((100 - diskon) / 100) * jumlah;
+}
+
 const InvoiceDocument = ({ data }) => {
+    // const data = {
+    //     spareparts: [
+    //         {
+    //             kode: "86300-0K200",
+    //             nama: "ANTENA RADIO",
+    //             qty: 1,
+    //             harga: 940000,
+    //             total: 940000,
+    //         },
+    //         {
+    //             kode: "52119-0K901",
+    //             nama: "BUMPER DEPAN",
+    //             qty: 1,
+    //             harga: 2350000,
+    //             total: 2350000,
+    //         },
+    //         // ... lanjutkan sesuai gambar
+    //     ],
+    //     jasa: [
+    //         {
+    //             nama: "ALL BODY RINGAN + ROOF",
+    //             qty: 2,
+    //             harga: 5500000,
+    //             total: 5500000,
+    //         },
+    //     ],
+    //     total_sparepart: 6955000,
+    //     total_jasa: 5500000,
+    //     total_semua: 15155000,
+    //     terbilang: "Lima Belas Juta Seratus Lima Puluh Lima Ribu Rupiah",
+    // };
+    console.log(data);
+
     const total_jasa =
         data.estimasi.estimasi_jasas.reduce((acc, item) => {
             const jumlah = item.jumlah;
@@ -178,95 +173,246 @@ const InvoiceDocument = ({ data }) => {
             return acc + harga * jumlah * (1 - diskon / 100);
         }, 0) - data.estimasi.diskon_sparepart;
 
-    const grandTotal = total_jasa + total_sparepart - data.estimasi.nilai_or;
+    const grandTotal =
+        total_sparepart +
+        total_jasa -
+        data.estimasi.diskon_sparepart -
+        data.estimasi.diskon_jasa -
+        data.estimasi.nilai_or;
+
+    const jasa = data.estimasi.estimasi_jasas;
+    const sparepart = data.estimasi.estimasi_spareparts;
+
+    const now = new Date(Date.now());
+    const options = { day: "numeric", month: "long", year: "numeric" };
+    const formattedDate = now.toLocaleDateString("id-ID", options);
+
     return (
         <Document>
-            <Page size={[595.44, 425.89]} style={styles.page}>
-                {/* Header */}
-                <Text style={styles.subtitle}>INV.W118.97687.03.2025</Text>
-                <Text style={styles.subtitle}>{data.penanggung.nama}</Text>
-
-                {/* Description */}
-                <Text style={styles.section}>
-                    <Text style={styles.section}>
-                        {`Biaya penggantian Spare Part dan Jasa Kerja pada mobil ${data.kendaraan.merk} ${data.kendaraan.tipe} ${data.kendaraan.no_polisi}`}
+            <Page size="A4" style={styles.page}>
+                <View style={styles.section}>
+                    <Text>Palembang, {formattedDate}</Text>
+                    <Text>Kepada Yth:</Text>
+                    <Text>
+                        {(data.penanggung?.nama != "Pribadi"
+                            ? data.penanggung?.nama
+                            : data.pelanggan?.nama
+                        ).toUpperCase()}
                     </Text>
+                    {/* <Text>Di Palembang</Text> */}
+                </View>
+
+                <Text style={styles.section}>Dengan hormat,</Text>
+                <Text style={styles.section}>
+                    Bersama ini kami mengajukan penawaran untuk kendaraan dengan
+                    spesifikasi sebagai berikut:
                 </Text>
 
-                {/* Table */}
-                <View style={styles.tableHeader}>
-                    <Text style={styles.label}>Keterangan</Text>
-                    <Text style={styles.value}>Jumlah</Text>
+                <View
+                    style={[styles.section, { flexDirection: "row", gap: 10 }]}
+                >
+                    <View style={{ flex: 1 }}>
+                        <View style={styles.infoRow}>
+                            <Text style={styles.label}>Nama Pemilik</Text>
+                            <Text style={styles.value}>
+                                : {data.pelanggan?.nama.toUpperCase()}
+                            </Text>
+                        </View>
+                        <View style={styles.infoRow}>
+                            <Text style={styles.label}>Telp</Text>
+                            <Text style={styles.value}>
+                                : {data.pelanggan?.no_telepon}
+                            </Text>
+                        </View>
+                        <View style={styles.infoRow}>
+                            <Text style={styles.label}>No. Polis</Text>
+                            <Text style={styles.value}>
+                                : {data.no_polis?.toUpperCase()}
+                            </Text>
+                        </View>
+                    </View>
+
+                    <View style={{ flex: 1 }}>
+                        <View style={styles.infoRow}>
+                            <Text style={styles.label}>No. Rangka</Text>
+                            <Text style={styles.value}>
+                                : {data.kendaraan.no_rangka.toUpperCase()}
+                            </Text>
+                        </View>
+                        <View style={styles.infoRow}>
+                            <Text style={styles.label}>No. Mesin</Text>
+                            <Text style={styles.value}>
+                                : {data.kendaraan.no_mesin.toUpperCase()}
+                            </Text>
+                        </View>
+                        <View style={styles.infoRow}>
+                            <Text style={styles.label}>Merk / Type</Text>
+                            <Text style={styles.value}>
+                                : {data.kendaraan.tipe.merk.nama.toUpperCase()}{" "}
+                                {data.kendaraan.tipe.nama.toUpperCase()} /{" "}
+                                {data.kendaraan.warna.toUpperCase()}
+                            </Text>
+                        </View>
+                        <View style={styles.infoRow}>
+                            <Text style={styles.label}>No. Polisi / Thn</Text>
+                            <Text style={styles.value}>
+                                : {data.kendaraan.no_polisi.toUpperCase()} /{" "}
+                                {data.kendaraan.tahun}
+                            </Text>
+                        </View>
+                    </View>
                 </View>
 
-                <View style={styles.tableRow}>
-                    <Text style={styles.label}>Jasa</Text>
-                    <View style={styles.value}>
-                        <Text>Rp</Text>
-                        <Text style={{ textAlign: "right" }}>
-                            {total_jasa.toLocaleString("id-ID")}
-                        </Text>
-                    </View>
-                </View>
-                <View style={styles.tableRow}>
-                    <Text style={styles.label}>Spare Part</Text>
-                    <View style={styles.value}>
-                        <Text>Rp</Text>
-                        <Text style={{ textAlign: "right" }}>
-                            {" "}
-                            {total_sparepart.toLocaleString("id-ID")}
-                        </Text>
-                    </View>
-                </View>
-                <View style={styles.tableRow}>
-                    <Text style={styles.label}>OR</Text>
-                    <View style={styles.value}>
-                        <Text>Rp</Text>
-                        <Text style={{ textAlign: "right" }}>
-                            {data.estimasi.nilai_or.toLocaleString("id-ID")}
-                        </Text>
-                    </View>
-                </View>
-                <View style={styles.tableRow}>
-                    <Text style={styles.label}>PPN</Text>
-                    <View style={styles.value}>
-                        <Text>Rp</Text>
-                        <Text style={{ textAlign: "right" }}>293.453</Text>
-                    </View>
-                </View>
+                <Text>SPAREPART</Text>
                 <View
                     style={[
-                        styles.tableRow,
-                        {
-                            borderTopWidth: 1,
-                            borderColor: "#000",
-                            marginTop: 4,
-                            paddingTop: 4,
-                        },
+                        styles.row,
+                        styles.tableHeader,
+                        { fontWeight: "bold" },
                     ]}
                 >
-                    <Text style={[styles.label, { fontWeight: "bold" }]}>
-                        Total
-                    </Text>
-                    <View style={styles.value}>
-                        <Text style={{ fontWeight: "bold" }}>Rp</Text>
-                        <Text
-                            style={{ textAlign: "right", fontWeight: "bold" }}
-                        >
-                            {grandTotal.toLocaleString("id-ID")}
-                        </Text>
-                    </View>
+                    <Text style={{ flex: 0.4 }}>No</Text>
+                    <Text style={styles.col}>Kode Part</Text>
+                    <Text style={{ flex: 2 }}>Nama Sparepart</Text>
+                    <Text style={{ flex: 0.65 }}>Qty</Text>
+                    <Text style={{ flex: 0.75 }}>Diskon %</Text>
+                    <Text style={styles.col}>Harga Satuan</Text>
+                    <Text style={styles.col}>Total</Text>
                 </View>
 
-                {/* Total number */}
-                <Text style={styles.totalAmount}>
-                    Rp {grandTotal.toLocaleString("id-ID")}
+                {sparepart.map((item, index) => (
+                    <View style={styles.row} key={index}>
+                        <Text style={{ flex: 0.4 }}>{index + 1}</Text>
+                        <Text style={styles.col}>{item.sparepart.kode}</Text>
+                        <Text style={{ flex: 2 }}>{item.sparepart.nama}</Text>
+                        <Text style={{ flex: 0.65 }}>
+                            {item.jumlah} {item.sparepart.satuan}
+                        </Text>
+                        <Text style={{ flex: 0.75 }}>{item.diskon}</Text>
+                        <Text style={styles.col}>
+                            Rp {item.sparepart.harga.toLocaleString("ID")}
+                        </Text>
+                        <Text style={styles.col}>
+                            Rp{" "}
+                            {calculateTotalItem(
+                                item.sparepart.harga,
+                                item.diskon,
+                                item.jumlah
+                            ).toLocaleString("ID")}
+                        </Text>
+                    </View>
+                ))}
+
+                <View style={[styles.row, { borderTop: 1, paddingTop: 2 }]}>
+                    <Text style={{ flex: 4 }}></Text>
+                    <Text style={{ flex: 1.8 }}>
+                        Total Seluruh Sparepart
+                    </Text>{" "}
+                    <Text style={[styles.col, { marginBottom: 10 }]}>
+                        Rp {total_sparepart.toLocaleString("ID")}
+                    </Text>{" "}
+                </View>
+
+                <Text>JASA</Text>
+                <View
+                    style={[
+                        styles.row,
+                        styles.tableHeader,
+                        { fontWeight: "bold" },
+                    ]}
+                >
+                    <Text style={{ flex: 0.4 }}>No</Text>
+                    <Text style={{ flex: 2 }}>Nama Jasa</Text>
+                    <Text style={{ flex: 0.75 }}>Qty</Text>
+                    <Text style={{ flex: 0.75 }}>Diskon %</Text>
+                    <Text style={styles.col}>Harga</Text>
+                    <Text style={{ flex: 0.85 }}>Total</Text>
+                </View>
+
+                {jasa.map((item, index) => (
+                    <View style={styles.row} key={index}>
+                        <Text style={{ flex: 0.4 }}>{index + 1}</Text>
+                        <Text style={{ flex: 2 }}>{item.jasa.nama}</Text>
+                        <Text style={{ flex: 0.75 }}>{item.jumlah}</Text>
+                        <Text style={{ flex: 0.75 }}>{item.diskon}</Text>
+                        <Text style={styles.col}>
+                            Rp {item.jasa.harga.toLocaleString("ID")}
+                        </Text>
+                        <Text style={{ flex: 0.85 }}>
+                            Rp{" "}
+                            {calculateTotalItem(
+                                item.jasa.harga,
+                                item.diskon,
+                                item.jumlah
+                            ).toLocaleString("ID")}
+                        </Text>
+                    </View>
+                ))}
+
+                <View style={[styles.row, { borderTop: 1, paddingTop: 2 }]}>
+                    <Text style={{ flex: 4 }}></Text>
+                    <Text style={{ flex: 1.8 }}>Total Seluruh Jasa</Text>{" "}
+                    <Text style={[styles.col, styles.leftText]}>
+                        Rp {total_jasa.toLocaleString("ID")}
+                    </Text>
+                </View>
+
+                <View style={[styles.row, { marginTop: 10 }]}>
+                    <Text style={{ flex: 4 }}></Text>
+                    <Text style={{ flex: 1.8 }}>
+                        Diskon Sparepart Lainnya
+                    </Text>{" "}
+                    <Text style={[styles.col, styles.leftText]}>
+                        Rp {data.estimasi.diskon_sparepart.toLocaleString("ID")}
+                    </Text>
+                </View>
+                <View style={[styles.row]}>
+                    <Text style={{ flex: 4 }}></Text>
+                    <Text style={{ flex: 1.8 }}>Diskon Jasa Lainnya</Text>{" "}
+                    <Text style={[styles.col, styles.leftText]}>
+                        Rp {data.estimasi.diskon_jasa.toLocaleString("ID")}
+                    </Text>
+                </View>
+                {data.penanggung?.nama != "Pribadi" && (
+                    <View style={[styles.row]}>
+                        <Text style={{ flex: 4 }}></Text>
+                        <Text style={{ flex: 1.8 }}>Nilai OR</Text>{" "}
+                        <Text style={[styles.col, styles.leftText]}>
+                            Rp {data.estimasi.nilai_or.toLocaleString("ID")}
+                        </Text>
+                    </View>
+                )}
+
+                <View style={[styles.row, { fontWeight: "bold" }]}>
+                    <Text style={{ flex: 4 }}></Text>
+                    <Text style={{ flex: 1.8 }}>Total</Text>{" "}
+                    <Text style={[styles.col, styles.leftText]}>
+                        Rp {grandTotal.toLocaleString("ID")}
+                    </Text>
+                </View>
+
+                <Text
+                    style={{
+                        marginTop: 20,
+                        fontWeight: "bold",
+                        fontStyle: "italic",
+                    }}
+                >
+                    TERBILANG :
                 </Text>
-                <Text style={styles.amountInWords}>
-                    *{numberToWord(grandTotal)} rupiah*
+
+                <Text
+                    style={{
+                        marginTop: 8,
+                        marginLeft: 20,
+                        fontWeight: "bold",
+                        fontStyle: "italic",
+                    }}
+                >
+                    * {numberToWord(grandTotal).toUpperCase()} RUPIAH *
                 </Text>
-                {/* Footer */}
-                <Text style={styles.footer}>Palembang, 13 Maret 2025</Text>
+
+                <Text style={styles.footer}>Palembang, {formattedDate}</Text>
                 <Text style={styles.signature}>Ir. ARTAMAN</Text>
             </Page>
         </Document>

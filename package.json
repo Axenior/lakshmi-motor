@@ -29,6 +29,8 @@
         "@mui/x-date-pickers": "^7.27.3",
         "@react-pdf/renderer": "^4.3.0",
         "dayjs": "^1.11.13",
+        "file-saver": "^2.0.5",
+        "jszip": "^3.10.1",
         "pdfjs-dist": "^5.2.133",
         "react-pdf": "^9.2.1",
         "react-router-dom": "^7.3.0"

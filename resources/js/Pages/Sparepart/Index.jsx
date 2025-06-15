@@ -24,7 +24,10 @@ export default function Index() {
         { id: "harga", label: "Harga", width: 300 },
     ];
 
-    const rows = sparepart.data;
+    const rows = sparepart.data.map((data) => ({
+        ...data,
+        harga: "Rp " + data.harga.toLocaleString("id-ID"),
+    }));
 
     const merkRef = useRef(null);
     const tipeRef = useRef(null);
@@ -199,7 +202,7 @@ export default function Index() {
 
                 <StickyHeadTable
                     columns={columns}
-                    rows={sparepart.data}
+                    rows={rows}
                     paginationLinks={sparepart.links}
                     paginationMeta={sparepart}
                     urlDetailRow={"/sparepart"}

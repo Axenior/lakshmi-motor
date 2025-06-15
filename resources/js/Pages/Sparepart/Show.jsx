@@ -70,7 +70,7 @@ export default function Show() {
                 </div>
             }
         >
-            <Head title="Detail Pendaftaran" />
+            <Head title="Detail Sparepart" />
 
             <Container className="py-5">
                 <div className="flex gap-2 justify-end">

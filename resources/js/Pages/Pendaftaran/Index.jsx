@@ -8,23 +8,53 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/id";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useState } from "react";
-import { Button } from "@mui/material";
+import {
+    Button,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select,
+    TextField,
+} from "@mui/material";
+import dayjs from "dayjs";
 
 export default function Index() {
-    const { pendaftaran } = usePage().props;
-    console.log(pendaftaran);
+    const { pendaftaran, penanggung } = usePage().props;
+    console.log(penanggung);
 
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
+    const { data, setData, get } = useForm({
+        startDate: null,
+        endDate: null,
+        sortDirection: "",
+        searchBy: "",
+        searchText: "",
+    });
 
     const handleStartDateChange = (newValue) => {
-        setStartDate(newValue);
-        console.log("Start Date:", newValue?.format("YYYY-MM-DD"));
+        setData("startDate", newValue ? newValue.format("YYYY-MM-DD") : null);
     };
 
     const handleEndDateChange = (newValue) => {
-        setEndDate(newValue);
-        console.log("End Date:", newValue?.format("YYYY-MM-DD"));
+        setData("endDate", newValue ? newValue.format("YYYY-MM-DD") : null);
+    };
+
+    const handleSortChange = (event) => {
+        setData("sortDirection", event.target.value);
+    };
+
+    const handleSearchByChange = (event) => {
+        setData("searchBy", event.target.value);
+    };
+
+    const handleSearchTextChange = (event) => {
+        setData("searchText", event.target.value);
+    };
+
+    const handleSearch = () => {
+        get(route("pendaftaran.index"), {
+            preserveState: true,
+            replace: true,
+        });
     };
 
     const columns = [
@@ -51,6 +81,7 @@ export default function Index() {
         { id: "file_spk", label: "SPK", minWidth: 100 },
         { id: "file_epoxy", label: "Foto Epoxy", minWidth: 100 },
         { id: "status", label: "Status", minWidth: 100 },
+        { id: "last_editor", label: "Last Editor", minWidth: 75 },
     ];
 
     const checkboxFields = [
@@ -67,7 +98,9 @@ export default function Index() {
         no: index + 1, // Menambahkan nomor urut
         id: item.id,
         no_pendaftaran: item.id,
-        tanggal_pendaftaran: item.tanggal_pendaftaran,
+        tanggal_pendaftaran: new Date(
+            item.tanggal_pendaftaran
+        ).toLocaleDateString("id-ID"),
         nama_pelanggan: item.pelanggan ? item.pelanggan.nama : null,
         nama_penanggung: item.penanggung ? item.penanggung.nama : null,
         no_polisi: item.kendaraan ? item.kendaraan.no_polisi : null,
@@ -79,8 +112,9 @@ export default function Index() {
         file_spk: item.file_spks,
         file_stnk: item.file_stnks,
         status: item.status.charAt(0).toUpperCase() + item.status.slice(1),
+        last_editor: item.user ? item.user.name : null,
     }));
-
+    console.log(pendaftaran);
     console.log(rows);
     return (
         <AuthenticatedLayout
@@ -94,48 +128,166 @@ export default function Index() {
 
             <Container className="py-5">
                 {/* <h2>Pendaftaran {nama}</h2> */}
-
                 <LocalizationProvider
                     dateAdapter={AdapterDayjs}
                     adapterLocale="id"
                 >
-                    <div className="flex gap-5 mb-5">
-                        <DatePicker
-                            label="Tanggal Awal"
-                            format="DD/MM/YYYY"
-                            value={startDate}
-                            onChange={handleStartDateChange}
-                            slotProps={{
-                                textField: {
-                                    size: "small",
-                                    sx: {
-                                        "& input": {
-                                            "--tw-ring-shadow":
-                                                "0 0 #000 !important",
+                    <div className="flex flex-wrap gap-4 mb-5">
+                        <div className="flex gap-2">
+                            <DatePicker
+                                label="Tanggal Awal"
+                                format="DD/MM/YYYY"
+                                value={
+                                    data.startDate
+                                        ? dayjs(data.startDate)
+                                        : null
+                                }
+                                onChange={handleStartDateChange}
+                                slotProps={{
+                                    textField: {
+                                        size: "small",
+                                        sx: {
+                                            "& input": {
+                                                "--tw-ring-shadow":
+                                                    "0 0 #000 !important",
+                                            },
                                         },
                                     },
-                                },
-                            }}
-                        />
-                        _
-                        <DatePicker
-                            label="Tanggal Akhir"
-                            format="DD/MM/YYYY"
-                            value={endDate}
-                            onChange={handleEndDateChange}
-                            slotProps={{
-                                textField: {
-                                    size: "small",
-                                    sx: {
-                                        "& input": {
-                                            "--tw-ring-shadow":
-                                                "0 0 #000 !important",
+                                }}
+                            />
+                            <DatePicker
+                                label="Tanggal Akhir"
+                                format="DD/MM/YYYY"
+                                value={
+                                    data.endDate ? dayjs(data.endDate) : null
+                                }
+                                onChange={handleEndDateChange}
+                                slotProps={{
+                                    textField: {
+                                        size: "small",
+                                        sx: {
+                                            "& input": {
+                                                "--tw-ring-shadow":
+                                                    "0 0 #000 !important",
+                                            },
                                         },
                                     },
-                                },
-                            }}
-                        />
-                        <Button variant="contained" size="small">
+                                }}
+                            />
+                        </div>
+                        <FormControl size="small" sx={{ minWidth: 140 }}>
+                            <InputLabel id="sort-label">Sort</InputLabel>
+                            <Select
+                                labelId="sort-label"
+                                value={data.sortDirection}
+                                label="Sort"
+                                onChange={handleSortChange}
+                            >
+                                <MenuItem value="asc">Terlama</MenuItem>
+                                <MenuItem value="desc">Terbaru</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <div className="flex gap-2">
+                            <FormControl size="small" sx={{ minWidth: 160 }}>
+                                <InputLabel id="searchby-label">
+                                    Cari Berdasarkan
+                                </InputLabel>
+                                <Select
+                                    labelId="searchby-label"
+                                    value={data.searchBy}
+                                    label="Cari Berdasarkan"
+                                    onChange={handleSearchByChange}
+                                >
+                                    <MenuItem value="no_pendaftaran">
+                                        No. Pendaftaran
+                                    </MenuItem>
+                                    <MenuItem value="nama">
+                                        Nama Pelanggan
+                                    </MenuItem>
+                                    <MenuItem value="penanggung_id">
+                                        Nama Penanggung
+                                    </MenuItem>
+                                    <MenuItem value="no_polisi">
+                                        No Polisi
+                                    </MenuItem>
+                                    <MenuItem value="status">Status</MenuItem>
+                                </Select>
+                            </FormControl>
+
+                            {data.searchBy === "penanggung_id" ? (
+                                // Jika pilih "Nama Penanggung", tampilkan Select untuk daftar penanggung
+                                <FormControl
+                                    size="small"
+                                    sx={{ minWidth: 160 }}
+                                >
+                                    <InputLabel id="penanggung-select-label">
+                                        Pilih Penanggung
+                                    </InputLabel>
+                                    <Select
+                                        labelId="penanggung-select-label"
+                                        value={data.searchText}
+                                        label="Pilih Penanggung"
+                                        onChange={handleSearchTextChange}
+                                    >
+                                        {penanggung.map((p) => (
+                                            <MenuItem key={p.id} value={p.id}>
+                                                {p.nama}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            ) : data.searchBy === "status" ? (
+                                <FormControl
+                                    size="small"
+                                    sx={{ minWidth: 160 }}
+                                >
+                                    <InputLabel id="penanggung-select-label">
+                                        Pilih Status
+                                    </InputLabel>
+                                    <Select
+                                        labelId="penanggung-select-label"
+                                        value={data.searchText}
+                                        label="Pilih Status"
+                                        onChange={handleSearchTextChange}
+                                    >
+                                        <MenuItem key={1} value={"pendaftaran"}>
+                                            Pendaftaran
+                                        </MenuItem>
+                                        <MenuItem key={1} value={"estimasi"}>
+                                            Estimasi
+                                        </MenuItem>
+                                        <MenuItem key={1} value={"pengerjaan"}>
+                                            Pengerjaan
+                                        </MenuItem>
+                                        <MenuItem key={1} value={"selesai"}>
+                                            Selesai
+                                        </MenuItem>
+                                        <MenuItem key={1} value={"batal"}>
+                                            Batal
+                                        </MenuItem>
+                                    </Select>
+                                </FormControl>
+                            ) : (
+                                <TextField
+                                    size="small"
+                                    label="Isi Pencarian"
+                                    value={data.searchText}
+                                    onChange={handleSearchTextChange}
+                                    sx={{
+                                        "& .MuiInputBase-input:focus": {
+                                            outline: "none",
+                                            boxShadow: "none",
+                                        },
+                                    }}
+                                />
+                            )}
+                        </div>
+
+                        <Button
+                            variant="contained"
+                            size="small"
+                            onClick={handleSearch}
+                        >
                             Cari
                         </Button>
                         <Button

@@ -15,6 +15,7 @@ import FileUploadSection from "./Component/FileUploadSection";
 import FileUpload from "@/Components/FileUpload";
 import InputLabel from "@/Components/InputLabel";
 import StatusCard from "./Component/StatusCard";
+import DownloadAllFile from "./Component/DownloadAllFile";
 
 // Fungsi bantu untuk konversi URL ke File
 async function urlToFile(url, fileName, mimeType) {
@@ -25,6 +26,7 @@ async function urlToFile(url, fileName, mimeType) {
 
 export default function Edit() {
     const { pendaftaran, penanggung } = usePage().props;
+    const user = usePage().props.auth.user;
     // console.log(pendaftaran);
     const [kendaraan, setKendaraan] = useState(pendaftaran.kendaraan);
     const [pelanggan, setPelanggan] = useState(pendaftaran.pelanggan);
@@ -63,6 +65,8 @@ export default function Edit() {
         keterangan: pendaftaran.keterangan || "",
         status: pendaftaran.status || "pendaftaran",
         lunas: pendaftaran.lunas || false,
+        keterangan_pembatalan: pendaftaran.keterangan_pembatalan || "",
+        user: user.id,
     });
 
     useEffect(() => {
@@ -266,7 +270,7 @@ export default function Edit() {
         >
             <Head title="Edit Pendaftaran" />
             <Container>
-                <form onSubmit={submit}>
+                <form onSubmit={submit} className="mb-5">
                     <LocalizationProvider
                         dateAdapter={AdapterDayjs}
                         adapterLocale="id"
@@ -314,6 +318,12 @@ export default function Edit() {
                                     }
                                     errors={errors}
                                 />
+                                <Divider sx={{ my: 2 }} />
+                                <div className="mb-3 flex sm:justify-end m-2">
+                                    <DownloadAllFile
+                                        pendaftaran={pendaftaran}
+                                    />
+                                </div>
                                 <Divider sx={{ my: 2 }} />
                                 <div className="flex justify-end m-2">
                                     <div className="sm:text-right">

@@ -9,10 +9,7 @@ import { Button, Card, MenuItem, Select, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 
 export default function Create() {
-    const { penanggung } = usePage().props;
-
     const { data, setData, post, processing, errors, reset } = useForm({
-        penanggung: "",
         nama: "",
         harga: "",
     });
@@ -56,37 +53,13 @@ export default function Create() {
                 </div>
             }
         >
-            <Head title="Tambah Pendaftaran" />
+            <Head title="Tambah Jasa" />
 
             <Container>
                 <form onSubmit={submit}>
                     <div className="grid grid-cols-1">
                         <Card className="flex flex-wrap gap-x-5 gap-y-1 p-4 my-1 sm:w-fit">
                             <div className="grid grid-cols-1 sm:grid-cols-[130px_350px] gap-1 w-full sm:w-[485px] self-start">
-                                <InputLabel className="flex items-center">
-                                    Penanggung
-                                </InputLabel>
-                                <CustomSelect
-                                    name={"penanggung"}
-                                    value={data.penanggung}
-                                    onChange={(val) =>
-                                        setData("penanggung", val)
-                                    }
-                                    options={penanggung}
-                                />
-                                {errors.penanggung && (
-                                    <>
-                                        <span></span>
-                                        <Typography
-                                            color="error"
-                                            variant="caption"
-                                            className="mt-1"
-                                        >
-                                            {errors.penanggung}
-                                        </Typography>
-                                    </>
-                                )}
-
                                 <InputLabel className="flex items-center">
                                     Nama
                                 </InputLabel>

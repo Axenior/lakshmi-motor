@@ -22,15 +22,12 @@ class JasaSeeder extends Seeder
       'Perbaikan Fender',
     ];
 
-    for ($penanggungId = 1; $penanggungId <= 6; $penanggungId++) {
-      foreach ($namaJasaList as $namaJasa) {
-        $harga = rand(40, 200) * 5000;
-        Jasa::create([
-          'nama' => $namaJasa,
-          'harga' => $harga,
-          'penanggung_id' => $penanggungId,
-        ]);
-      }
+    foreach ($namaJasaList as $namaJasa) {
+      $harga = rand(40, 200) * 5000;
+      Jasa::create([
+        'nama' => $namaJasa,
+        'harga' => $harga,
+      ]);
     }
   }
 }

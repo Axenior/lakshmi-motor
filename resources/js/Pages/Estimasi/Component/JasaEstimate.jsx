@@ -54,6 +54,11 @@ export default function JasaEstimate({ jasa, onChangeRows, defaultRows = [] }) {
     const handleInputChange = (field) => (e) => {
         const val = e.target.value.replace(/[^0-9]/g, "");
 
+        if (e.target.name == "diskon") {
+            if (val > 100) val = 100;
+            // Jika nilai kurang dari 0, set ke 0
+            if (val < 0) val = 0;
+        }
         setFormData((prev) => ({ ...prev, [field]: val }));
     };
 
@@ -94,7 +99,7 @@ export default function JasaEstimate({ jasa, onChangeRows, defaultRows = [] }) {
                 total,
                 hapus: (
                     <Button onClick={() => handleDeleteJasa(index)}>
-                        <DeleteIcon />
+                        <DeleteIcon color="error" />
                     </Button>
                 ),
             };
@@ -170,6 +175,7 @@ export default function JasaEstimate({ jasa, onChangeRows, defaultRows = [] }) {
                 />
 
                 <TextField
+                    name="jumlah"
                     label="Jumlah"
                     size="small"
                     value={formData.jumlah}
@@ -178,6 +184,7 @@ export default function JasaEstimate({ jasa, onChangeRows, defaultRows = [] }) {
                 />
 
                 <TextField
+                    name="diskon"
                     label="Diskon (%)"
                     size="small"
                     value={formData.diskon}

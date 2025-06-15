@@ -47,6 +47,7 @@ class PendaftaranSeeder extends Seeder
           'kendaraan_id' => $kendaraan->id,
           'penanggung_id' => $penanggungId,
           'km_masuk' => rand(1000, 5000),
+          'user_id' => 2,
         ]);
       }
     }

@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('jasa', function (Blueprint $table) {
+        Schema::create('file', function (Blueprint $table) {
             $table->id();
-            $table->string('nama')->unique();
-            $table->unsignedBigInteger('harga');
+            $table->string('path');
+            // $table->string('hash');
+            $table->enum('jenis', ['stnk', 'surat_pengantar', 'kerusakan', 'gesek_rangka', 'spk', 'epoxy']);
 
-            // $table->unsignedBigInteger('penanggung_id');
-            // $table->foreign('penanggung_id')->references('id')->on('penanggung');
-
-            // $table->unique(['nama', 'penanggung_id']);
+            $table->unsignedBigInteger('pendaftaran_id');
+            $table->foreign('pendaftaran_id')->references('id')->on('pendaftaran');
 
             $table->timestamps();
         });
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('jasa');
+        Schema::dropIfExists('file');
     }
 };

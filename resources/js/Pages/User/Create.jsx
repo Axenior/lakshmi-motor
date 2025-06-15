@@ -1,5 +1,4 @@
 import Container from "@/Components/Container";
-import CustomSelect from "@/Components/CustomSelect";
 import InputLabel from "@/Components/InputLabel";
 import TextAreaInput from "@/Components/TextAreaInput";
 import TextInput from "@/Components/TextInput";
@@ -8,18 +7,18 @@ import { Head, useForm, usePage } from "@inertiajs/react";
 import { Button, Card, MenuItem, Select, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 
-export default function Edit() {
-    const { jasa } = usePage().props;
-
-    const { data, setData, put, processing, errors, reset } = useForm({
-        nama: jasa.nama || "",
-        harga: jasa.harga || "",
+export default function Create() {
+    const { data, setData, post, processing, errors, reset } = useForm({
+        name: "",
+        email: "",
+        password: "",
+        role: "user",
     });
 
     const submit = (e) => {
         e.preventDefault();
 
-        put(route("jasa.update", jasa.id), {
+        post(route("user.store"), {
             onSuccess: () => {
                 alert("Data berhasil disimpan!");
                 reset();
@@ -45,17 +44,17 @@ export default function Edit() {
                     <Button
                         variant="contained"
                         size="small"
-                        href={route("jasa.show", jasa.id)}
+                        href={route("user.index")}
                     >
                         Kembali
                     </Button>
                     <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                        Edit jasa
+                        Tambah Pengguna
                     </h2>
                 </div>
             }
         >
-            <Head title="Edit jasa" />
+            <Head title="Tambah Pengguna" />
 
             <Container>
                 <form onSubmit={submit}>
@@ -66,12 +65,12 @@ export default function Edit() {
                                     Nama
                                 </InputLabel>
                                 <TextInput
-                                    value={data.nama}
+                                    value={data.name}
                                     onChange={(e) =>
-                                        setData("nama", e.target.value)
+                                        setData("name", e.target.value)
                                     }
                                 />
-                                {errors.nama && (
+                                {errors.name && (
                                     <>
                                         <span></span>
                                         <Typography
@@ -79,28 +78,21 @@ export default function Edit() {
                                             variant="caption"
                                             className="mt-1"
                                         >
-                                            {errors.nama}
+                                            {errors.name}
                                         </Typography>
                                     </>
                                 )}
 
                                 <InputLabel className="flex items-center">
-                                    Harga
+                                    Email
                                 </InputLabel>
                                 <TextInput
-                                    type="text"
-                                    inputMode="numeric"
-                                    min={0}
-                                    value={data.harga}
-                                    onChange={(e) => {
-                                        const val = e.target.value.replace(
-                                            /[^0-9]/g,
-                                            ""
-                                        );
-                                        setData("harga", Number(val));
-                                    }}
+                                    value={data.email}
+                                    onChange={(e) =>
+                                        setData("email", e.target.value)
+                                    }
                                 />
-                                {errors.harga && (
+                                {errors.email && (
                                     <>
                                         <span></span>
                                         <Typography
@@ -108,7 +100,29 @@ export default function Edit() {
                                             variant="caption"
                                             className="mt-1"
                                         >
-                                            {errors.harga}
+                                            {errors.email}
+                                        </Typography>
+                                    </>
+                                )}
+
+                                <InputLabel className="flex items-center">
+                                    Password
+                                </InputLabel>
+                                <TextInput
+                                    value={data.password}
+                                    onChange={(e) =>
+                                        setData("password", e.target.value)
+                                    }
+                                />
+                                {errors.password && (
+                                    <>
+                                        <span></span>
+                                        <Typography
+                                            color="error"
+                                            variant="caption"
+                                            className="mt-1"
+                                        >
+                                            {errors.password}
                                         </Typography>
                                     </>
                                 )}
