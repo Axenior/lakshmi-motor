@@ -41,9 +41,9 @@ export default function Edit() {
 
     const { data, setData, post, processing, reset, errors } = useForm({
         no_pendaftaran: String(pendaftaran.id).padStart(6, "0") || "",
-        no_telepon: pendaftaran.pelanggan?.no_telepon || "",
-        nama: pendaftaran.pelanggan?.nama || "",
-        alamat: pendaftaran.pelanggan?.alamat || "",
+        no_telepon: pendaftaran.no_telepon || "",
+        nama: pendaftaran.nama || "",
+        alamat: pendaftaran.alamat || "",
         tanggal_pendaftaran: dayjs(pendaftaran.tanggal_pendaftaran).format(
             "YYYY-MM-DD"
         ),
@@ -51,17 +51,17 @@ export default function Edit() {
         no_register: pendaftaran.no_register || "",
         penanggung: pendaftaran.penanggung_id || "",
         no_polis: pendaftaran.no_polis || "",
-        no_rangka: pendaftaran.kendaraan?.no_rangka || "",
-        no_mesin: pendaftaran.kendaraan?.no_mesin || "",
-        no_polisi: pendaftaran.kendaraan?.no_polisi || "",
+        no_rangka: pendaftaran.no_rangka || "",
+        no_mesin: pendaftaran.no_mesin || "",
+        no_polisi: pendaftaran.no_polisi || "",
         plate_prefix: "",
         plate_number: "",
         plate_suffix: "",
-        merk: pendaftaran.kendaraan?.tipe?.merk?.id || "",
-        tipe: pendaftaran.kendaraan?.tipe_id || "",
-        tahun: pendaftaran.kendaraan?.tahun || "",
-        jenis: pendaftaran.kendaraan?.jenis || "",
-        warna: pendaftaran.kendaraan?.warna || "",
+        merk: pendaftaran.tipe?.merk?.id || "",
+        tipe: pendaftaran.tipe_id || "",
+        tahun: pendaftaran.tahun || "",
+        jenis: pendaftaran.jenis || "",
+        warna: pendaftaran.warna || "",
         keterangan: pendaftaran.keterangan || "",
         status: pendaftaran.status || "pendaftaran",
         lunas: pendaftaran.lunas || false,
@@ -127,9 +127,9 @@ export default function Edit() {
     useEffect(() => {
         // Parsing string defaultPlate menjadi object dengan prefix, number, dan suffix.
 
-        const initialPlate = pendaftaran.kendaraan?.no_polisi
+        const initialPlate = pendaftaran.no_polisi
             ? (() => {
-                  const parts = pendaftaran.kendaraan?.no_polisi.split(" ");
+                  const parts = pendaftaran.no_polisi.split(" ");
                   return {
                       prefix: parts[0] || "",
                       number: parts[1] || "",
@@ -139,48 +139,7 @@ export default function Edit() {
             : { prefix: "", number: "", suffix: "" };
         setPlate(initialPlate);
         // const [plate, setPlate] = useState(initialPlate);
-    }, [pendaftaran.kendaraan?.no_polisi]);
-
-    // console.log(data.kelengkapan);
-    const fetchKendaraan = async () => {
-        if (`${data.no_rangka}`.trim() === "") return;
-        try {
-            const response = await axios.get(
-                route("api.kendaraan.no_rangka", {
-                    no_rangka: `${data.no_rangka}`,
-                })
-            );
-
-            // setKendaraan(response.data);
-
-            if (Object.keys(response.data).length > 0) {
-                console.log(response.data);
-                setKendaraan(response.data);
-            }
-        } catch (error) {
-            console.error("Gagal mengambil data kendaraan", error);
-            // setKendaraan(null);
-        }
-    };
-
-    const fetchPelanggan = async () => {
-        if (data.no_telepon.trim() === "") return;
-        try {
-            const response = await axios.get(
-                route("api.pelanggan.no_telepon", {
-                    no_telepon: data.no_telepon,
-                })
-            );
-
-            if (Object.keys(response.data).length > 0) {
-                console.log(response.data);
-                setPelanggan(response.data);
-            }
-            // setPelanggan(response.data);
-        } catch (error) {
-            console.error("Gagal mengambil data pelanggan", error);
-        }
-    };
+    }, [pendaftaran.no_polisi]);
 
     useEffect(() => {
         setData(
@@ -191,22 +150,6 @@ export default function Edit() {
         setData("plate_number", plate.number);
         setData("plate_suffix", plate.suffix);
     }, [plate]);
-
-    useEffect(() => {
-        console.log("kendaraan", kendaraan);
-        setData("no_rangka", kendaraan?.no_rangka || "");
-        setData("no_mesin", kendaraan?.no_mesin || "");
-        setData("merk", kendaraan?.tipe?.merk?.id || "");
-        setData("tipe", kendaraan?.tipe_id || "");
-        setData("tahun", kendaraan?.tahun || "");
-        setData("jenis", kendaraan?.jenis || "");
-        setData("warna", kendaraan?.warna || "");
-    }, [kendaraan]);
-
-    useEffect(() => {
-        setData("nama", pelanggan?.nama || "");
-        setData("alamat", pelanggan?.alamat || "");
-    }, [pelanggan]);
 
     useEffect(() => {
         setData("file_stnk", stnkFiles);
@@ -280,7 +223,6 @@ export default function Edit() {
                                 <PersonalInfoCard
                                     data={data}
                                     setData={setData}
-                                    fetchPelanggan={fetchPelanggan}
                                     penanggung={penanggung}
                                     errors={errors}
                                 />
@@ -289,7 +231,6 @@ export default function Edit() {
                                     setData={setData}
                                     plate={plate}
                                     setPlate={setPlate}
-                                    fetchKendaraan={fetchKendaraan}
                                     errors={errors}
                                 />
 
@@ -347,6 +288,7 @@ export default function Edit() {
                                             label="SPK"
                                             selectedFiles={spkFiles}
                                             setSelectedFiles={setSpkFiles}
+                                            allowedType="pdf"
                                         />
                                         <InputLabel className="my-2">
                                             Foto Epoxy

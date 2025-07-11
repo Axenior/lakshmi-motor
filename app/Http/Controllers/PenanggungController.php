@@ -9,9 +9,6 @@ use Inertia\Inertia;
 
 class PenanggungController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $penanggung = Penanggung::paginate(25);
@@ -20,17 +17,11 @@ class PenanggungController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return Inertia::render('Penanggung/Create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -58,20 +49,13 @@ class PenanggungController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Penanggung $penanggung)
     {
-        // dd($penanggung);
         return Inertia::render('Penanggung/Show', [
             'penanggung' => $penanggung
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Penanggung $penanggung)
     {
         return Inertia::render('Penanggung/Edit', [
@@ -79,9 +63,6 @@ class PenanggungController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Penanggung $penanggung)
     {
         $request->validate([
@@ -93,7 +74,6 @@ class PenanggungController extends Controller
 
         DB::beginTransaction();
         try {
-            // Perbarui data penanggung
             $penanggung->update([
                 'nama' => $request->nama,
                 'alamat' => $request->alamat,
@@ -111,10 +91,6 @@ class PenanggungController extends Controller
         }
     }
 
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Penanggung $penanggung)
     {
         DB::beginTransaction();
@@ -126,7 +102,6 @@ class PenanggungController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             if ($e->getCode() == '23000') {
-                // Error karena foreign key
                 $errorMessage = 'Data tidak dapat dihapus karena telah digunakan.';
             } else {
                 $errorMessage = 'Terjadi kesalahan saat menghapus data.';

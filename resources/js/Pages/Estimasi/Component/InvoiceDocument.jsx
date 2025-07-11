@@ -196,7 +196,7 @@ const InvoiceDocument = ({ data }) => {
                     <Text>
                         {(data.penanggung?.nama != "Pribadi"
                             ? data.penanggung?.nama
-                            : data.pelanggan?.nama
+                            : data.nama
                         ).toUpperCase()}
                     </Text>
                     {/* <Text>Di Palembang</Text> */}
@@ -215,13 +215,13 @@ const InvoiceDocument = ({ data }) => {
                         <View style={styles.infoRow}>
                             <Text style={styles.label}>Nama Pemilik</Text>
                             <Text style={styles.value}>
-                                : {data.pelanggan?.nama.toUpperCase()}
+                                : {data.nama.toUpperCase()}
                             </Text>
                         </View>
                         <View style={styles.infoRow}>
                             <Text style={styles.label}>Telp</Text>
                             <Text style={styles.value}>
-                                : {data.pelanggan?.no_telepon}
+                                : {data.no_telepon}
                             </Text>
                         </View>
                         <View style={styles.infoRow}>
@@ -236,28 +236,27 @@ const InvoiceDocument = ({ data }) => {
                         <View style={styles.infoRow}>
                             <Text style={styles.label}>No. Rangka</Text>
                             <Text style={styles.value}>
-                                : {data.kendaraan.no_rangka.toUpperCase()}
+                                : {data.no_rangka.toUpperCase()}
                             </Text>
                         </View>
                         <View style={styles.infoRow}>
                             <Text style={styles.label}>No. Mesin</Text>
                             <Text style={styles.value}>
-                                : {data.kendaraan.no_mesin.toUpperCase()}
+                                : {data.no_mesin.toUpperCase()}
                             </Text>
                         </View>
                         <View style={styles.infoRow}>
                             <Text style={styles.label}>Merk / Type</Text>
                             <Text style={styles.value}>
-                                : {data.kendaraan.tipe.merk.nama.toUpperCase()}{" "}
-                                {data.kendaraan.tipe.nama.toUpperCase()} /{" "}
-                                {data.kendaraan.warna.toUpperCase()}
+                                : {data.tipe.merk.nama.toUpperCase()}{" "}
+                                {data.tipe.nama.toUpperCase()} /{" "}
+                                {data.warna.toUpperCase()}
                             </Text>
                         </View>
                         <View style={styles.infoRow}>
                             <Text style={styles.label}>No. Polisi / Thn</Text>
                             <Text style={styles.value}>
-                                : {data.kendaraan.no_polisi.toUpperCase()} /{" "}
-                                {data.kendaraan.tahun}
+                                : {data.no_polisi.toUpperCase()} / {data.tahun}
                             </Text>
                         </View>
                     </View>

@@ -3,7 +3,7 @@ import InputLabel from "@/Components/InputLabel";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Button, Card, Divider, Typography } from "@mui/material";
 import JasaEstimate from "./Component/JasaEstimate";
-import { useForm, usePage } from "@inertiajs/react";
+import { Head, useForm, usePage } from "@inertiajs/react";
 import SparepartEstimate from "./Component/SparepartEstimate";
 import AccordionDetail from "./Component/AccordionDetail";
 import TextInput from "@/Components/TextInput";
@@ -84,6 +84,7 @@ export default function Create() {
                 </div>
             }
         >
+            <Head title="Estimasi" />
             <Container className="py-5">
                 <form onSubmit={submit}>
                     <AccordionDetail pendaftaran={pendaftaran} />

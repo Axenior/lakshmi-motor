@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Jasa;
-use App\Models\Merk;
-use App\Models\Penanggung;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -54,7 +52,6 @@ class JasaController extends Controller
 
   public function show(Jasa $jasa)
   {
-    $penanggung = Penanggung::all();
     return Inertia::render('Jasa/Show', [
       'jasa' => $jasa,
     ]);

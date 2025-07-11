@@ -143,9 +143,13 @@ export default function Show() {
                                 </InputLabel>
                                 <TextInput
                                     value={data.no_fax}
-                                    onChange={(e) =>
-                                        setData("no_fax", e.target.value)
-                                    }
+                                    onChange={(e) => {
+                                        const val = e.target.value.replace(
+                                            /[^0-9- ]/g,
+                                            ""
+                                        );
+                                        setData("no_fax", val);
+                                    }}
                                 />
                                 {errors.no_fax && (
                                     <>
@@ -159,132 +163,6 @@ export default function Show() {
                                         </Typography>
                                     </>
                                 )}
-
-                                {/* <InputLabel className="flex items-center">
-                                    Pph
-                                </InputLabel>
-                                <div className="flex gap-2 items-center ">
-                                    <TextInput
-                                        type="text"
-                                        inputMode="numeric"
-                                        className="w-[52px]"
-                                        min={0}
-                                        value={data.pph}
-                                        onChange={(e) => {
-                                            const val = e.target.value.replace(
-                                                /[^0-9]/g,
-                                                ""
-                                            );
-                                            setData("pph", Number(val));
-                                        }}
-                                    />
-                                    <span>%</span>
-                                </div>
-                                {errors.pph && (
-                                    <>
-                                        <span></span>
-                                        <Typography
-                                            color="error"
-                                            variant="caption"
-                                            className="mt-1"
-                                        >
-                                            {errors.pph}
-                                        </Typography>
-                                    </>
-                                )}
-
-                                <InputLabel className="flex items-center">
-                                    PPN
-                                </InputLabel>
-                                <div className="flex gap-2 items-center ">
-                                    <TextInput
-                                        type="text"
-                                        inputMode="numeric"
-                                        className="w-[52px]"
-                                        min={0}
-                                        value={data.ppn}
-                                        onChange={(e) => {
-                                            const val = e.target.value.replace(
-                                                /[^0-9]/g,
-                                                ""
-                                            );
-                                            setData("ppn", Number(val));
-                                        }}
-                                    />
-                                    <span>%</span>
-                                </div>
-                                {errors.ppn && (
-                                    <>
-                                        <span></span>
-                                        <Typography
-                                            color="error"
-                                            variant="caption"
-                                            className="mt-1"
-                                        >
-                                            {errors.ppn}
-                                        </Typography>
-                                    </>
-                                )}
-
-                                <InputLabel className="flex items-center">
-                                    Jenis Penanggung
-                                </InputLabel>
-                                <Select
-                                    ref={penanggungRef}
-                                    // value={data.jenis_penanggung}
-                                    value={data.jenis_penanggung}
-                                    onChange={(e) =>
-                                        setData(
-                                            "jenis_penanggung",
-                                            e.target.value
-                                        )
-                                    }
-                                    className="h-8"
-                                    onClose={() => {
-                                        penanggungRef.current.classList.remove(
-                                            "Mui-focused"
-                                        );
-                                        penanggungRef.current.previousSibling?.classList.remove(
-                                            "Mui-focused"
-                                        );
-                                    }}
-                                    onOpen={() => {
-                                        penanggungRef.current.classList?.add(
-                                            "Mui-focused"
-                                        );
-                                        penanggungRef.current.previousSibling?.classList.add(
-                                            "Mui-focused"
-                                        );
-                                    }}
-                                    sx={{
-                                        "& .MuiOutlinedInput-notchedOutline": {
-                                            borderColor: "black",
-                                            borderRadius: "0.375rem",
-                                        },
-                                    }}
-                                >
-                                    {jenis &&
-                                        jenis.map((item) => (
-                                            <MenuItem
-                                                key={item.id}
-                                                value={item.id}
-                                            >
-                                                {item.nama}
-                                            </MenuItem>
-                                        ))}
-                                </Select>
-                                {errors.jenis_penanggung && (
-                                    <>
-                                        <span></span>
-                                        <Typography
-                                            color="error"
-                                            variant="caption"
-                                            className="mt-1"
-                                        >
-                                            {errors.jenis_penanggung}
-                                        </Typography>
-                                    </>
-                                )} */}
                             </div>
                         </Card>
                     </div>

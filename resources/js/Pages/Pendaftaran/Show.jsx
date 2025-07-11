@@ -42,27 +42,27 @@ export default function Create() {
         setData,
     } = useForm({
         no_pendaftaran: String(pendaftaran.id).padStart(6, "0") || "",
-        no_telepon: pendaftaran.pelanggan?.no_telepon || "",
-        nama: pendaftaran.pelanggan?.nama || "",
-        alamat: pendaftaran.pelanggan?.alamat || "",
+        no_telepon: pendaftaran.no_telepon || "",
+        nama: pendaftaran.nama || "",
+        alamat: pendaftaran.alamat || "",
         tanggal_pendaftaran: dayjs(pendaftaran.tanggal_pendaftaran).format(
             "YYYY-MM-DD"
         ),
-        km_masuk: pendaftaran.km_masuk ?? 0,
+        km_masuk: pendaftaran.km_masuk || 0,
         no_register: pendaftaran.no_register || "",
         penanggung: pendaftaran.penanggung_id || "",
         no_polis: pendaftaran.no_polis || "",
-        no_rangka: pendaftaran.kendaraan?.no_rangka || "",
-        no_mesin: pendaftaran.kendaraan?.no_mesin || "",
-        no_polisi: pendaftaran.kendaraan?.no_polisi || "",
+        no_rangka: pendaftaran.no_rangka || "",
+        no_mesin: pendaftaran.no_mesin || "",
+        no_polisi: pendaftaran.no_polisi || "",
         plate_prefix: "",
         plate_number: "",
         plate_suffix: "",
-        merk: pendaftaran.kendaraan?.tipe?.merk?.id || "",
-        tipe: pendaftaran.kendaraan?.tipe_id || "",
-        tahun: pendaftaran.kendaraan?.tahun || "",
-        jenis: pendaftaran.kendaraan?.jenis || "",
-        warna: pendaftaran.kendaraan?.warna || "",
+        merk: pendaftaran.tipe?.merk?.id || "",
+        tipe: pendaftaran.tipe_id || "",
+        tahun: pendaftaran.tahun || "",
+        jenis: pendaftaran.jenis || "",
+        warna: pendaftaran.warna || "",
         keterangan: pendaftaran.keterangan || "",
         perkiraan_waktu: pendaftaran.perkiraan_waktu || 0,
         nilai_or: pendaftaran.nilai_or || 0,
@@ -71,7 +71,6 @@ export default function Create() {
         keterangan_pembatalan: pendaftaran.keterangan_pembatalan || "",
     });
 
-    console.log(pendaftaran);
     useEffect(() => {
         async function convertUrlToFileArray(fieldName, setter) {
             const filesData = pendaftaran[fieldName];
@@ -125,9 +124,9 @@ export default function Create() {
     useEffect(() => {
         // Parsing string defaultPlate menjadi object dengan prefix, number, dan suffix.
 
-        const initialPlate = pendaftaran.kendaraan?.no_polisi
+        const initialPlate = pendaftaran.no_polisi
             ? (() => {
-                  const parts = pendaftaran.kendaraan?.no_polisi.split(" ");
+                  const parts = pendaftaran.no_polisi.split(" ");
                   return {
                       prefix: parts[0] || "",
                       number: parts[1] || "",
@@ -137,7 +136,7 @@ export default function Create() {
             : { prefix: "", number: "", suffix: "" };
         setPlate(initialPlate);
         // const [plate, setPlate] = useState(initialPlate);
-    }, [pendaftaran.kendaraan?.no_polisi]);
+    }, [pendaftaran.no_polisi]);
 
     useEffect(() => {
         setData(
@@ -292,6 +291,7 @@ export default function Create() {
                                         selectedFiles={spkFiles}
                                         setSelectedFiles={setSpkFiles}
                                         isDisabled={true}
+                                        allowedType="pdf"
                                     />
                                     <InputLabel className="my-2">
                                         Foto Epoxy

@@ -18,18 +18,15 @@ class EstimasiController extends Controller
   public function create(Pendaftaran $pendaftaran, Request $request)
   {
     $pendaftaran->load([
-      'pelanggan',
       'penanggung',
-      'kendaraan.tipe.merk',
+      'tipe.merk',
       'estimasi.estimasiJasas',
       'estimasi.estimasiSpareparts',
-      // 'estimasi.spareparts',
     ]);
 
-    $sparepart = Sparepart::where('tipe_id', $pendaftaran->kendaraan->tipe_id)->get();
+    $sparepart = Sparepart::where('tipe_id', $pendaftaran->tipe_id)->get();
     $jasa = Jasa::get();
 
-    // dd($pendaftaran);
     return Inertia::render(
       'Estimasi/Create',
       [
@@ -44,7 +41,6 @@ class EstimasiController extends Controller
   {
     $request->validate([
       'jasa' => 'required|array',
-      // 'sparepart' => 'required|array',
       'jasa.*.id' => 'required|exists:jasa,id',
       'jasa.*.jumlah' => 'required|integer|min:1',
       'jasa.*.diskon' => 'nullable|integer|min:0',
@@ -55,11 +51,9 @@ class EstimasiController extends Controller
 
     DB::beginTransaction();
     try {
-      // Cari estimasi berdasarkan pendaftaran_id
       $estimasi = Estimasi::where('pendaftaran_id', $pendaftaranId)->first();
 
       if ($estimasi) {
-        // Jika sudah ada, hapus jasa & sparepart yang terkait
         $estimasi->update([
           'nilai_or' => $request->nilai_or,
           'diskon_jasa' => $request->diskon_jasa,
@@ -68,7 +62,6 @@ class EstimasiController extends Controller
         EstimasiJasa::where('estimasi_id', $estimasi->id)->delete();
         EstimasiSparepart::where('estimasi_id', $estimasi->id)->delete();
       } else {
-        // Jika belum ada, buat estimasi baru
         $estimasi = Estimasi::create([
           'pendaftaran_id' => $pendaftaranId,
           'nilai_or' => $request->nilai_or,
@@ -77,7 +70,6 @@ class EstimasiController extends Controller
         ]);
       }
 
-      // Simpan data jasa
       foreach ($request->jasa as $jasaItem) {
         EstimasiJasa::create([
           'estimasi_id' => $estimasi->id,
@@ -87,7 +79,6 @@ class EstimasiController extends Controller
         ]);
       }
 
-      // Simpan data sparepart
       foreach ($request->sparepart as $sparepartItem) {
         EstimasiSparepart::create([
           'estimasi_id' => $estimasi->id,
@@ -109,13 +100,11 @@ class EstimasiController extends Controller
 
       DB::commit();
 
-      // return redirect()->back()->with('success', 'Estimasi berhasil disimpan.');
       return redirect(route('estimasi.create', $pendaftaranId));
     } catch (\Exception $e) {
       DB::rollBack();
       return redirect()->back()->withErrors([
         'error' => 'Terjadi kesalahan saat menyimpan estimasi: ' . $e->getMessage(),
-        // 'trace' => $e->getTraceAsString(), // opsional
       ]);
     }
   }
@@ -123,18 +112,15 @@ class EstimasiController extends Controller
   public function invoice(Pendaftaran $pendaftaran, Request $request)
   {
     $pendaftaran->load([
-      'pelanggan',
       'penanggung',
-      'kendaraan.tipe.merk',
+      'tipe.merk',
       'estimasi.estimasiJasas.jasa',
       'estimasi.estimasiSpareparts.sparepart',
-      // 'estimasi.spareparts',
     ]);
 
-    $sparepart = Sparepart::where('tipe_id', $pendaftaran->kendaraan->tipe_id)->get();
+    $sparepart = Sparepart::where('tipe_id', $pendaftaran->tipe_id)->get();
     $jasa = Jasa::get();
 
-    // dd($pendaftaran);
     return Inertia::render(
       'Estimasi/Preview',
       [

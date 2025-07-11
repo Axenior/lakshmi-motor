@@ -67,9 +67,9 @@ export default function Dashboard({
         tanggal_pendaftaran: new Date(
             item.tanggal_pendaftaran
         ).toLocaleDateString("id-ID"),
-        nama_pelanggan: item.pelanggan ? item.pelanggan.nama : null,
+        nama_pelanggan: item.nama,
         nama_penanggung: item.penanggung ? item.penanggung.nama : null,
-        no_polisi: item.kendaraan ? item.kendaraan.no_polisi : null,
+        no_polisi: item.no_polisi,
         estimasi: item.estimasi,
         file_kerusakan: item.file_kerusakans,
         file_epoxy: item.file_epoxys,

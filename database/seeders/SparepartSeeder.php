@@ -12,17 +12,23 @@ class SparepartSeeder extends Seeder
   public function run(): void
   {
     $spareparts = [
-      ['nama' => 'Kampas Rem', 'kode' => '51603', 'harga' => 75000, 'satuan' => 'Pc'],
-      ['nama' => 'Filter Oli', 'kode' => '15400', 'harga' => 50000, 'satuan' => 'Pc'],
-      ['nama' => 'Busi', 'kode' => '98079', 'harga' => 45000, 'satuan' => 'Pc'],
-      ['nama' => 'Oli Mesin', 'kode' => '08798', 'harga' => 120000, 'satuan' => 'Set'],
-      ['nama' => 'Lampu Depan', 'kode' => '35120', 'harga' => 300000, 'satuan' => 'Set'],
-      ['nama' => 'Radiator', 'kode' => '17700', 'harga' => 850000, 'satuan' => 'Set'],
-      ['nama' => 'Karet Wiper', 'kode' => '76620', 'harga' => 100000, 'satuan' => 'Set'],
-      ['nama' => 'Knalpot', 'kode' => '18307', 'harga' => 600000, 'satuan' => 'Set'],
-      ['nama' => 'Kampas Kopling', 'kode' => '30100', 'harga' => 200000, 'satuan' => 'Set'],
-      ['nama' => 'Fan Belt', 'kode' => '38920', 'harga' => 95000,  'satuan' => 'Pc'],
+      ['nama' => 'Pintu Depan Kiri',        'kode' => 'BD001', 'harga' => 1500000, 'satuan' => 'Pc'],
+      ['nama' => 'Pintu Depan Kanan',       'kode' => 'BD002', 'harga' => 1500000, 'satuan' => 'Pc'],
+      ['nama' => 'Kap Mesin',               'kode' => 'BD003', 'harga' => 2500000, 'satuan' => 'Pc'],
+      ['nama' => 'Bumper Depan',            'kode' => 'BD004', 'harga' => 2200000, 'satuan' => 'Pc'],
+      ['nama' => 'Bumper Belakang',         'kode' => 'BD005', 'harga' => 2000000, 'satuan' => 'Pc'],
+      ['nama' => 'Spakbor Depan Kiri',      'kode' => 'BD006', 'harga' => 1200000, 'satuan' => 'Pc'],
+      ['nama' => 'Spakbor Depan Kanan',     'kode' => 'BD007', 'harga' => 1200000, 'satuan' => 'Pc'],
+      ['nama' => 'Panel Belakang Kiri',     'kode' => 'BD008', 'harga' => 1800000, 'satuan' => 'Pc'],
+      ['nama' => 'Panel Belakang Kanan',    'kode' => 'BD009', 'harga' => 1800000, 'satuan' => 'Pc'],
+      ['nama' => 'Roof Panel',              'kode' => 'BD010', 'harga' => 3000000, 'satuan' => 'Pc'],
+      ['nama' => 'Grill Depan',             'kode' => 'BD011', 'harga' => 950000,  'satuan' => 'Pc'],
+      ['nama' => 'Kap Bagasi',              'kode' => 'BD012', 'harga' => 2100000, 'satuan' => 'Pc'],
+      ['nama' => 'Handle Pintu',            'kode' => 'BD013', 'harga' => 350000,  'satuan' => 'Set'],
+      ['nama' => 'Cowl Top Panel',          'kode' => 'BD014', 'harga' => 800000,  'satuan' => 'Pc'],
+      ['nama' => 'Apron Assy',              'kode' => 'BD015', 'harga' => 1700000, 'satuan' => 'Pc'],
     ];
+
 
     $tipeList = Tipe::all()->values();
 

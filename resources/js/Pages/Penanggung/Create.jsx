@@ -147,9 +147,13 @@ export default function Create() {
                                 </InputLabel>
                                 <TextInput
                                     value={data.no_fax}
-                                    onChange={(e) =>
-                                        setData("no_fax", e.target.value)
-                                    }
+                                    onChange={(e) => {
+                                        const val = e.target.value.replace(
+                                            /[^0-9- ]/g,
+                                            ""
+                                        );
+                                        setData("no_fax", val);
+                                    }}
                                 />
                                 {errors.no_fax && (
                                     <>

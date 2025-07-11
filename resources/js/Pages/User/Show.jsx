@@ -50,12 +50,12 @@ export default function Create({ user }) {
                         Kembali
                     </Button>
                     <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                        Tambah Pengguna
+                        Detail Pengguna
                     </h2>
                 </div>
             }
         >
-            <Head title="Tambah Pengguna" />
+            <Head title="Detail Pengguna" />
 
             <Container>
                 <form onSubmit={submit}>

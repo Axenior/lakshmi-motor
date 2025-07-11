@@ -11,9 +11,6 @@ use Inertia\Inertia;
 
 class KendaraanController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
 
     public function indexMerk()
     {
@@ -53,9 +50,6 @@ class KendaraanController extends Controller
         );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function storeMerk(Request $request)
     {
         $request->validate([
@@ -83,8 +77,8 @@ class KendaraanController extends Controller
     public function storeTipe(Request $request)
     {
         $request->validate([
-            'merk' => 'required|integer|exists:merk,id', // Memastikan merk ada di tabel merks
-            'tipe' => 'required|string|unique:tipe,nama,NULL,id,merk_id,' . $request->merk, // Validasi tipe tidak duplikat dengan merk_id
+            'merk' => 'required|integer|exists:merk,id',
+            'tipe' => 'required|string|unique:tipe,nama,NULL,id,merk_id,' . $request->merk,
         ]);
 
         DB::beginTransaction();
@@ -124,9 +118,6 @@ class KendaraanController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function editMerk(Merk $merk)
     {
         return Inertia::render('Kendaraan/Merk/Edit', [
@@ -142,9 +133,7 @@ class KendaraanController extends Controller
             'tipe' => $tipe,
         ]);
     }
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function updateMerk(Request $request, Merk $merk)
     {
         $request->validate([
@@ -195,7 +184,6 @@ class KendaraanController extends Controller
     {
         DB::beginTransaction();
         try {
-            // $merk->tipes()->delete();
             $merk->delete();
 
             DB::commit();
@@ -204,7 +192,6 @@ class KendaraanController extends Controller
             DB::rollBack();
 
             if ($e->getCode() == '23000') {
-                // Error karena foreign key
                 $errorMessage = 'Data tidak dapat dihapus karena telah digunakan.';
             } else {
                 $errorMessage = 'Terjadi kesalahan saat menghapus data.';
@@ -228,7 +215,6 @@ class KendaraanController extends Controller
             DB::rollBack();
 
             if ($e->getCode() == '23000') {
-                // Error karena foreign key
                 $errorMessage = 'Data tidak dapat dihapus karena telah digunakan.';
             } else {
                 $errorMessage = 'Terjadi kesalahan saat menghapus data.';

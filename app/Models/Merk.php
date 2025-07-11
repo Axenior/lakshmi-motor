@@ -10,10 +10,10 @@ class Merk extends Model
 
     protected $guarded = [];
 
-    public function kendaraans()
-    {
-        return $this->hasMany(Kendaraan::class);
-    }
+    // public function kendaraans()
+    // {
+    //     return $this->hasMany(Kendaraan::class);
+    // }
 
     public function tipes()
     {

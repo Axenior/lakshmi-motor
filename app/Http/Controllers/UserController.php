@@ -18,7 +18,6 @@ class UserController extends Controller
     ]);
   }
 
-
   public function create()
   {
     return Inertia::render('User/Create');
@@ -58,8 +57,6 @@ class UserController extends Controller
     ]);
   }
 
-  public function edit(User $user) {}
-
   public function update(Request $request, User $user)
   {
     DB::beginTransaction();
@@ -77,7 +74,4 @@ class UserController extends Controller
         ->withInput();
     }
   }
-
-
-  public function destroy(User $user) {}
 }

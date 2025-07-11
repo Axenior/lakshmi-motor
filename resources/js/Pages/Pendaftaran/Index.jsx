@@ -4,7 +4,6 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-// import dayjs from "dayjs";
 import "dayjs/locale/id";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useState } from "react";
@@ -95,15 +94,15 @@ export default function Index() {
     ];
 
     const rows = pendaftaran.data.map((item, index) => ({
-        no: index + 1, // Menambahkan nomor urut
+        no: index + 1,
         id: item.id,
         no_pendaftaran: item.id,
         tanggal_pendaftaran: new Date(
             item.tanggal_pendaftaran
         ).toLocaleDateString("id-ID"),
-        nama_pelanggan: item.pelanggan ? item.pelanggan.nama : null,
+        nama_pelanggan: item.nama,
         nama_penanggung: item.penanggung ? item.penanggung.nama : null,
-        no_polisi: item.kendaraan ? item.kendaraan.no_polisi : null,
+        no_polisi: item.no_polisi,
         estimasi: item.estimasi,
         file_kerusakan: item.file_kerusakans,
         file_epoxy: item.file_epoxys,
@@ -127,7 +126,6 @@ export default function Index() {
             <Head title="Pendaftaran" />
 
             <Container className="py-5">
-                {/* <h2>Pendaftaran {nama}</h2> */}
                 <LocalizationProvider
                     dateAdapter={AdapterDayjs}
                     adapterLocale="id"
@@ -215,7 +213,6 @@ export default function Index() {
                             </FormControl>
 
                             {data.searchBy === "penanggung_id" ? (
-                                // Jika pilih "Nama Penanggung", tampilkan Select untuk daftar penanggung
                                 <FormControl
                                     size="small"
                                     sx={{ minWidth: 160 }}

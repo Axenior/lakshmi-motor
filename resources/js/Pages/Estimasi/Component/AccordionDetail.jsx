@@ -60,7 +60,7 @@ export default function AccordionDetail({ pendaftaran }) {
                                             No Polisi
                                         </InputLabel>
                                         <InputLabel className="w-3/5 px-4 py-1">
-                                            {pendaftaran.kendaraan.no_polisi}
+                                            {pendaftaran.no_polisi}
                                         </InputLabel>
                                     </div>
                                     <div className="flex border-b">
@@ -68,7 +68,7 @@ export default function AccordionDetail({ pendaftaran }) {
                                             Nama
                                         </InputLabel>
                                         <InputLabel className="w-3/5 px-4 py-1">
-                                            {pendaftaran.pelanggan.nama}
+                                            {pendaftaran.nama}
                                         </InputLabel>
                                     </div>
                                     <div className="flex">
@@ -76,7 +76,7 @@ export default function AccordionDetail({ pendaftaran }) {
                                             Alamat
                                         </InputLabel>
                                         <InputLabel className="w-3/5 px-4 py-1">
-                                            {pendaftaran.pelanggan.alamat}
+                                            {pendaftaran.alamat}
                                         </InputLabel>
                                     </div>
                                 </div>
@@ -94,10 +94,7 @@ export default function AccordionDetail({ pendaftaran }) {
                                             Merk
                                         </InputLabel>
                                         <InputLabel className="w-3/5 px-4 py-1">
-                                            {
-                                                pendaftaran.kendaraan.tipe.merk
-                                                    .nama
-                                            }
+                                            {pendaftaran.tipe.merk.nama}
                                         </InputLabel>
                                     </div>
                                     <div className="flex border-b">
@@ -105,7 +102,7 @@ export default function AccordionDetail({ pendaftaran }) {
                                             Tipe
                                         </InputLabel>
                                         <InputLabel className="w-3/5 px-4 py-1">
-                                            {pendaftaran.kendaraan.tipe.nama}
+                                            {pendaftaran.tipe.nama}
                                         </InputLabel>
                                     </div>
                                     <div className="flex border-b">
@@ -113,7 +110,7 @@ export default function AccordionDetail({ pendaftaran }) {
                                             No Rangka
                                         </InputLabel>
                                         <InputLabel className="w-3/5 px-4 py-1">
-                                            {pendaftaran.kendaraan.no_rangka}
+                                            {pendaftaran.no_rangka}
                                         </InputLabel>
                                     </div>
                                     <div className="flex border-b">
@@ -121,7 +118,7 @@ export default function AccordionDetail({ pendaftaran }) {
                                             Tahun
                                         </InputLabel>
                                         <InputLabel className="w-3/5 px-4 py-1">
-                                            {pendaftaran.kendaraan.tahun}
+                                            {pendaftaran.tahun}
                                         </InputLabel>
                                     </div>
                                     <div className="flex border-b">
@@ -129,7 +126,7 @@ export default function AccordionDetail({ pendaftaran }) {
                                             Jenis
                                         </InputLabel>
                                         <InputLabel className="w-3/5 px-4 py-1">
-                                            {pendaftaran.kendaraan.jenis}
+                                            {pendaftaran.jenis}
                                         </InputLabel>
                                     </div>
                                     <div className="flex border-b">
@@ -137,7 +134,7 @@ export default function AccordionDetail({ pendaftaran }) {
                                             warna
                                         </InputLabel>
                                         <InputLabel className="w-3/5 px-4 py-1">
-                                            {pendaftaran.kendaraan.warna}
+                                            {pendaftaran.warna}
                                         </InputLabel>
                                     </div>
                                 </div>

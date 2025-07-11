@@ -17,27 +17,27 @@ return new class extends Migration
             $table->string('no_polis')->nullable();
             $table->date('tanggal_pendaftaran');
             $table->string('keterangan');
-            $table->timestamps();
-
-            $table->unsignedBigInteger('pelanggan_id');
-            $table->foreign('pelanggan_id')->references('id')->on('pelanggan');
-
-            $table->unsignedBigInteger('kendaraan_id');
-            $table->foreign('kendaraan_id')->references('id')->on('kendaraan');
-
-            $table->unsignedBigInteger('penanggung_id')->nullable();
-            $table->foreign('penanggung_id')->references('id')->on('penanggung');
-
-            // $table->integer('estimasi')->nullable();
+            $table->string('nama');
+            $table->string('alamat');
+            $table->string('no_telepon');
+            $table->string('no_rangka');
+            $table->string('no_polisi');
+            $table->string('no_mesin');
+            $table->integer('tahun');
+            $table->string('jenis');
+            $table->string('warna');
             $table->integer('km_masuk')->nullable();
             $table->enum('status', ['pendaftaran', 'estimasi', 'pengerjaan', 'selesai', 'batal'])->default('pendaftaran');
             $table->string('keterangan_pembatalan')->nullable();
             $table->boolean('lunas')->default(false);
+            $table->timestamps();
 
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            // $table->unsignedBigInteger('nilai_or')->nullable();
-            // $table->boolean('selesai')->default(false);
+            $table->unsignedBigInteger('tipe_id');
+            $table->foreign('tipe_id')->references('id')->on('tipe');
+            $table->unsignedBigInteger('penanggung_id')->nullable();
+            $table->foreign('penanggung_id')->references('id')->on('penanggung');
         });
     }
 

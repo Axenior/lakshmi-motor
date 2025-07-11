@@ -144,7 +144,6 @@ class SparepartController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             if ($e->getCode() == '23000') {
-                // Error karena foreign key
                 $errorMessage = 'Data tidak dapat dihapus karena telah digunakan.';
             } else {
                 $errorMessage = 'Terjadi kesalahan saat menghapus data.';

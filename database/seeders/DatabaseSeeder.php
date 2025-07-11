@@ -15,8 +15,8 @@ class DatabaseSeeder extends Seeder
             MerkSeeder::class,
             TipeSeeder::class,
             SparepartSeeder::class,
-            PelangganSeeder::class,
-            KendaraanSeeder::class,
+            // PelangganSeeder::class,
+            // KendaraanSeeder::class,
             PendaftaranSeeder::class
         ]);
     }

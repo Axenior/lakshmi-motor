@@ -19,9 +19,7 @@ import EstimateCard from "./Component/EstimateCard";
 export default function Create() {
     const { nextId, penanggung } = usePage().props;
     const user = usePage().props.auth.user;
-    // console.log(penanggung);
-    const [kendaraan, setKendaraan] = useState(null);
-    const [pelanggan, setPelanggan] = useState(null);
+
     const [plate, setPlate] = useState({ prefix: "", number: "", suffix: "" });
 
     const [stnkFiles, setStnkFiles] = useState([]);
@@ -60,51 +58,6 @@ export default function Create() {
         user: user.id,
     });
 
-    const fetchKendaraan = async () => {
-        if (`${data.no_rangka}`.trim() === "") return;
-        try {
-            const response = await axios.get(
-                route("api.kendaraan.no_rangka", {
-                    no_rangka: `${data.no_rangka}`,
-                })
-            );
-
-            // setKendaraan(response.data);
-
-            if (Object.keys(response.data).length > 0) {
-                console.log(response.data);
-                setKendaraan(response.data);
-            }
-        } catch (error) {
-            console.error("Gagal mengambil data kendaraan", error);
-            // setKendaraan(null);
-        }
-    };
-
-    const fetchPelanggan = async () => {
-        if (data.no_telepon.trim() === "") return;
-        try {
-            const response = await axios.get(
-                route("api.pelanggan.no_telepon", {
-                    no_telepon: data.no_telepon,
-                })
-            );
-
-            if (Object.keys(response.data).length > 0) {
-                console.log(response.data);
-                setPelanggan(response.data);
-            }
-            // setPelanggan(response.data);
-        } catch (error) {
-            console.error("Gagal mengambil data pelanggan", error);
-            setPelanggan(null);
-        }
-    };
-
-    useEffect(() => {
-        console.log(data.tipe);
-    }, [data.tipe]);
-
     useEffect(() => {
         setData(
             "no_polisi",
@@ -114,20 +67,6 @@ export default function Create() {
         setData("plate_number", plate.number);
         setData("plate_suffix", plate.suffix);
     }, [plate]);
-
-    useEffect(() => {
-        setData("no_mesin", kendaraan?.no_mesin || "");
-        setData("merk", kendaraan?.tipe.merk.id || "");
-        setData("tipe", kendaraan?.tipe_id || "");
-        setData("tahun", kendaraan?.tahun || "");
-        setData("jenis", kendaraan?.jenis || "");
-        setData("warna", kendaraan?.warna || "");
-    }, [kendaraan]);
-
-    useEffect(() => {
-        setData("nama", pelanggan?.nama || "");
-        setData("alamat", pelanggan?.alamat || "");
-    }, [pelanggan]);
 
     useEffect(() => {
         setData("file_stnk", stnkFiles);
@@ -191,7 +130,6 @@ export default function Create() {
                                 <PersonalInfoCard
                                     data={data}
                                     setData={setData}
-                                    fetchPelanggan={fetchPelanggan}
                                     penanggung={penanggung}
                                     errors={errors}
                                 />
@@ -200,7 +138,6 @@ export default function Create() {
                                     setData={setData}
                                     plate={plate}
                                     setPlate={setPlate}
-                                    fetchKendaraan={fetchKendaraan}
                                     errors={errors}
                                 />
 

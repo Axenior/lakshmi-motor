@@ -1,6 +1,6 @@
 import { PDFViewer } from "@react-pdf/renderer";
 import InvoiceDocument from "./Component/InvoiceDocument";
-import { usePage } from "@inertiajs/react";
+import { Head, usePage } from "@inertiajs/react";
 
 const Preview = () => {
     const { pendaftaran } = usePage().props;
@@ -12,6 +12,7 @@ const Preview = () => {
 
     return (
         <div style={{ height: "100vh" }}>
+            <Head title="Surat Estimasi" />
             <PDFViewer width="100%" height="100%">
                 <InvoiceDocument data={pendaftaran} />
             </PDFViewer>

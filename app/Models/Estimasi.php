@@ -24,14 +24,4 @@ class Estimasi extends Model
   {
     return $this->hasMany(EstimasiSparepart::class);
   }
-
-  public function file_spks()
-  {
-    return $this->hasMany(FileSPK::class, 'estimasi_id');
-  }
-
-  public function file_epoxys()
-  {
-    return $this->hasMany(FileEpoxy::class, 'estimasi_id');
-  }
 }

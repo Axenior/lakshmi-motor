@@ -22,9 +22,7 @@ class DashboardController extends Controller
     $jumlah_estimasi = Pendaftaran::where('status', 'estimasi')->count();
 
     $query = Pendaftaran::with([
-      'pelanggan',
       'penanggung',
-      'kendaraan',
       'file_kerusakans',
       'file_stnks',
       'file_gesek_rangkas',

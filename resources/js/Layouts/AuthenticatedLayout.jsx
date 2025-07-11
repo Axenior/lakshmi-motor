@@ -33,7 +33,7 @@ export default function AuthenticatedLayout({ header, children }) {
             active: route().current()?.startsWith("kendaraan"),
         },
         {
-            name: "Daftar Sparepat",
+            name: "Daftar Sparepart",
             href: route("sparepart.index"),
             active: route().current()?.startsWith("sparepart"),
         },
@@ -57,7 +57,6 @@ export default function AuthenticatedLayout({ header, children }) {
                                         alt="Logo"
                                         style={{ width: "38px" }}
                                     />
-                                    {/* <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" /> */}
                                 </Link>
                             </div>
 
