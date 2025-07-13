@@ -8,6 +8,7 @@ import { Alert, Button, Card, MenuItem, Select } from "@mui/material";
 import { useRef } from "react";
 
 export default function Show() {
+    const user = usePage().props.auth.user;
     const { penanggung } = usePage().props;
     console.log(usePage().props);
     const penanggungRef = useRef(null);

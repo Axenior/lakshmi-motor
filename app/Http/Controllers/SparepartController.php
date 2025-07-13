@@ -17,10 +17,13 @@ class SparepartController extends Controller
         $merk = Merk::all();
         $query = Sparepart::query();
 
-        if ($request->has('tipe')) {
-            $query->where('tipe_id', $request->tipe);
+        if ($request->filled('selectedTipe')) {
+            $query->where('tipe_id', $request->selectedTipe);
         }
-
+        if ($request->filled('searchText')) {
+            $searchText = $request->searchText;
+            $query->where('nama', 'like', "%{$searchText}%");
+        }
         $sparepart = $query->paginate(25)->withQueryString();
 
         return Inertia::render('Sparepart/Index', [

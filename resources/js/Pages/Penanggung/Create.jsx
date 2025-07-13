@@ -10,19 +10,11 @@ import { useEffect, useRef, useState } from "react";
 export default function Create() {
     const penanggungRef = useRef(null);
 
-    const jenis = [
-        { id: "1", nama: "Pribadi" },
-        { id: "2", nama: "PT. Ajinomoto" },
-    ];
-
     const { data, setData, post, processing, errors, reset } = useForm({
         nama: "",
         alamat: "",
         no_telepon: "",
         no_fax: "",
-        pph: 0,
-        ppn: 0,
-        jenis_penanggung: "",
     });
 
     const submit = (e) => {
@@ -167,72 +159,6 @@ export default function Create() {
                                         </Typography>
                                     </>
                                 )}
-
-                                {/* <InputLabel className="flex items-center">
-                                    Pph
-                                </InputLabel>
-                                <div className="flex gap-2 items-center ">
-                                    <TextInput
-                                        type="text"
-                                        inputMode="numeric"
-                                        className="w-[52px]"
-                                        min={0}
-                                        value={data.pph}
-                                        onChange={(e) => {
-                                            const val = e.target.value.replace(
-                                                /[^0-9]/g,
-                                                ""
-                                            );
-                                            setData("pph", Number(val));
-                                        }}
-                                    />
-                                    <span>%</span>
-                                </div>
-                                {errors.pph && (
-                                    <>
-                                        <span></span>
-                                        <Typography
-                                            color="error"
-                                            variant="caption"
-                                            className="mt-1"
-                                        >
-                                            {errors.pph}
-                                        </Typography>
-                                    </>
-                                )}
-
-                                <InputLabel className="flex items-center">
-                                    PPN
-                                </InputLabel>
-                                <div className="flex gap-2 items-center ">
-                                    <TextInput
-                                        type="text"
-                                        inputMode="numeric"
-                                        className="w-[52px]"
-                                        min={0}
-                                        value={data.ppn}
-                                        onChange={(e) => {
-                                            const val = e.target.value.replace(
-                                                /[^0-9]/g,
-                                                ""
-                                            );
-                                            setData("ppn", Number(val));
-                                        }}
-                                    />
-                                    <span>%</span>
-                                </div>
-                                {errors.ppn && (
-                                    <>
-                                        <span></span>
-                                        <Typography
-                                            color="error"
-                                            variant="caption"
-                                            className="mt-1"
-                                        >
-                                            {errors.ppn}
-                                        </Typography>
-                                    </>
-                                )} */}
                             </div>
                         </Card>
                     </div>

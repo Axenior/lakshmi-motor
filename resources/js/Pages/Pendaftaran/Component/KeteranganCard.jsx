@@ -1,9 +1,14 @@
 import InputLabel from "@/Components/InputLabel";
 import TextAreaInput from "@/Components/TextAreaInput";
-import { Card } from "@mui/material";
+import { Card, Typography } from "@mui/material";
 
 // Komponen untuk keterangan tambahan
-export default function KeteranganCard({ data, setData, isReadOnly = false }) {
+export default function KeteranganCard({
+    data,
+    setData,
+    isReadOnly = false,
+    errors = {},
+}) {
     const handleDefaultChange = (e) => {
         setData(e.target.name, e.target.value);
     };
@@ -20,6 +25,21 @@ export default function KeteranganCard({ data, setData, isReadOnly = false }) {
                     onChange={handleDefaultChange}
                 />
             </div>
+            {console.log(errors)}
+            {errors?.keterangan && (
+                <>
+                    <div className="grid grid-cols-1 sm:grid-cols-[130px_calc(86.5%-130px)] gap-1 w-full self-start">
+                        <span></span>
+                        <Typography
+                            variant="caption"
+                            color="error"
+                            className="mt-1"
+                        >
+                            {errors.keterangan}
+                        </Typography>
+                    </div>
+                </>
+            )}
         </Card>
     );
 }

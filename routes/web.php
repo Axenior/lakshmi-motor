@@ -34,7 +34,6 @@ require __DIR__ . '/dashboard.php';
 require __DIR__ . '/pendaftaran.php';
 require __DIR__ . '/penanggung.php';
 require __DIR__ . '/kendaraan.php';
-require __DIR__ . '/pelanggan.php';
 require __DIR__ . '/sparepart.php';
 require __DIR__ . '/jasa.php';
 require __DIR__ . '/estimasi.php';

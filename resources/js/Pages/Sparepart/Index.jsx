@@ -1,20 +1,22 @@
 import Container from "@/Components/Container";
 import InputLabel from "@/Components/InputLabel";
 import StickyHeadTable from "@/Components/StickyHeadTable";
+import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, usePage } from "@inertiajs/react";
+import { Head, useForm, usePage } from "@inertiajs/react";
 import { Button, MenuItem, Select } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 
 export default function Index() {
-    const {
-        sparepart,
-        merk,
-        selectedMerk: selectedMerkFromProps,
-        selectedTipe: selectedTipeFromProps,
-    } = usePage().props;
+    const { sparepart, merk } = usePage().props;
 
     console.log(sparepart);
+
+    const { data, setData, get } = useForm({
+        selectedMerk: "",
+        selectedTipe: "",
+        searchText: "",
+    });
 
     const columns = [
         { id: "no", label: "No", width: 50 },
@@ -32,21 +34,12 @@ export default function Index() {
     const merkRef = useRef(null);
     const tipeRef = useRef(null);
 
-    const params = new URLSearchParams(window.location.search);
-
-    const [selectedMerk, setSelectedMerk] = useState(
-        selectedMerkFromProps || ""
-    );
-    const [selectedTipe, setSelectedTipe] = useState(
-        selectedTipeFromProps || ""
-    );
-
     const [tipe, setTipe] = useState(null);
     const fetchTipe = async () => {
         try {
-            console.log(selectedMerk);
+            console.log(data.selectedMerk);
             const response = await axios.get(
-                route("api.tipe", { merk: selectedMerk })
+                route("api.tipe", { merk: data.selectedMerk })
             );
 
             console.log(response);
@@ -58,20 +51,17 @@ export default function Index() {
     };
 
     useEffect(() => {
-        if (selectedMerk) {
+        if (data.selectedMerk) {
             fetchTipe();
         }
-    }, [selectedMerk]);
+        setData("selectedTipe", "");
+    }, [data.selectedMerk]);
 
-    const searchTipe = (e) => {
-        e.preventDefault();
-        const params = new URLSearchParams();
-        if (selectedMerk) params.set("merk", selectedMerk);
-        if (selectedTipe) params.set("tipe", selectedTipe);
-
-        window.location.href = `${route(
-            "sparepart.index"
-        )}?${params.toString()}`;
+    const handleSearch = () => {
+        get(route("sparepart.index"), {
+            preserveState: true,
+            replace: true,
+        });
     };
 
     return (
@@ -85,111 +75,99 @@ export default function Index() {
             <Head title="Sparepart" />
 
             <Container className="py-5">
-                <form onSubmit={searchTipe}>
-                    <div className="grid grid-cols-1 sm:grid-cols-[130px_350px] gap-1 w-full sm:w-[485px] self-start">
-                        <InputLabel className="flex items-center">
-                            Merk
-                        </InputLabel>
-                        <Select
-                            required
-                            ref={merkRef}
-                            name="merk"
-                            value={selectedMerk}
-                            onChange={(e) => {
-                                setSelectedMerk(e.target.value);
-                                params.set("merk", e.target.value);
-                                params.delete("tipe");
-                                setSelectedTipe("");
+                <div className="grid grid-cols-1 sm:grid-cols-[130px_350px] gap-1 w-full sm:w-[485px] self-start">
+                    <InputLabel className="flex items-center">Merk</InputLabel>
+                    <Select
+                        required
+                        ref={merkRef}
+                        name="merk"
+                        value={data.selectedMerk}
+                        onChange={(e) => {
+                            console.log(e.target.value);
+                            console.log(data.selectedMerk);
 
-                                window.history.pushState(
-                                    {},
-                                    "",
-                                    `${
-                                        window.location.pathname
-                                    }?${params.toString()}`
-                                );
-                            }}
-                            className="h-8"
-                            onClose={() => {
-                                merkRef.current.classList.remove("Mui-focused");
-                                merkRef.current.previousSibling?.classList.remove(
-                                    "Mui-focused"
-                                );
-                            }}
-                            onOpen={() => {
-                                merkRef.current.classList.add("Mui-focused");
-                                merkRef.current.previousSibling?.classList.add(
-                                    "Mui-focused"
-                                );
-                            }}
-                            sx={{
-                                "& .MuiOutlinedInput-notchedOutline": {
-                                    borderColor: "black",
-                                    borderRadius: "0.375rem",
-                                },
-                            }}
-                        >
-                            {merk &&
-                                merk.map((item) => (
-                                    <MenuItem key={item.id} value={item.id}>
-                                        {item.nama}
-                                    </MenuItem>
-                                ))}
-                        </Select>
+                            setData("selectedMerk", e.target.value);
+                        }}
+                        className="h-8"
+                        onClose={() => {
+                            merkRef.current.classList.remove("Mui-focused");
+                            merkRef.current.previousSibling?.classList.remove(
+                                "Mui-focused"
+                            );
+                        }}
+                        onOpen={() => {
+                            merkRef.current.classList.add("Mui-focused");
+                            merkRef.current.previousSibling?.classList.add(
+                                "Mui-focused"
+                            );
+                        }}
+                        sx={{
+                            "& .MuiOutlinedInput-notchedOutline": {
+                                borderColor: "black",
+                                borderRadius: "0.375rem",
+                            },
+                        }}
+                    >
+                        {merk &&
+                            merk.map((item) => (
+                                <MenuItem key={item.id} value={item.id}>
+                                    {item.nama}
+                                </MenuItem>
+                            ))}
+                    </Select>
 
-                        <InputLabel className="flex items-center">
-                            Tipe
-                        </InputLabel>
-                        <Select
-                            required
-                            ref={tipeRef}
-                            name="tipe"
-                            value={selectedTipe}
-                            onChange={(e) => {
-                                setSelectedTipe(e.target.value);
-                                params.set("tipe", e.target.value);
-                                window.history.pushState(
-                                    {},
-                                    "",
-                                    `${
-                                        window.location.pathname
-                                    }?${params.toString()}`
-                                );
-                            }}
-                            className="h-8"
-                            onClose={() => {
-                                tipeRef.current.classList.remove("Mui-focused");
-                                tipeRef.current.previousSibling?.classList.remove(
-                                    "Mui-focused"
-                                );
-                            }}
-                            onOpen={() => {
-                                tipeRef.current.classList.add("Mui-focused");
-                                tipeRef.current.previousSibling?.classList.add(
-                                    "Mui-focused"
-                                );
-                            }}
-                            sx={{
-                                "& .MuiOutlinedInput-notchedOutline": {
-                                    borderColor: "black",
-                                    borderRadius: "0.375rem",
-                                },
-                            }}
-                        >
-                            {tipe &&
-                                tipe.map((item) => (
-                                    <MenuItem key={item.id} value={item.id}>
-                                        {item.nama}
-                                    </MenuItem>
-                                ))}
-                        </Select>
-                    </div>
-                    <div className="my-1">
-                        <Button variant="contained" size="small" type="submit">
-                            Cari
-                        </Button>
-                    </div>
-                </form>
+                    <InputLabel className="flex items-center">Tipe</InputLabel>
+
+                    <Select
+                        required
+                        ref={tipeRef}
+                        name="tipe"
+                        value={data.selectedTipe}
+                        onChange={(e) => {
+                            setData("selectedTipe", e.target.value);
+                        }}
+                        className="h-8"
+                        onClose={() => {
+                            tipeRef.current.classList.remove("Mui-focused");
+                            tipeRef.current.previousSibling?.classList.remove(
+                                "Mui-focused"
+                            );
+                        }}
+                        onOpen={() => {
+                            tipeRef.current.classList.add("Mui-focused");
+                            tipeRef.current.previousSibling?.classList.add(
+                                "Mui-focused"
+                            );
+                        }}
+                        sx={{
+                            "& .MuiOutlinedInput-notchedOutline": {
+                                borderColor: "black",
+                                borderRadius: "0.375rem",
+                            },
+                        }}
+                    >
+                        {tipe &&
+                            tipe.map((item) => (
+                                <MenuItem key={item.id} value={item.id}>
+                                    {item.nama}
+                                </MenuItem>
+                            ))}
+                    </Select>
+                    <InputLabel className="flex items-center">Nama</InputLabel>
+                    <TextInput
+                        value={data.searchText}
+                        onChange={(e) => setData("searchText", e.target.value)}
+                    />
+                </div>
+                <div className="my-1">
+                    <Button
+                        variant="contained"
+                        size="small"
+                        onClick={handleSearch}
+                    >
+                        Cari
+                    </Button>
+                </div>
                 <Button
                     variant="contained"
                     size="small"

@@ -6,6 +6,7 @@ import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 
 export default function Show() {
+    const user = usePage().props.auth.user;
     const { merk } = usePage().props;
     const { delete: destroy, reset } = useForm();
 
@@ -47,25 +48,27 @@ export default function Show() {
             <Head title="Detail Merk Kendaraan" />
 
             <Container className="py-5">
-                <div className="flex gap-2 justify-end">
-                    <Button
-                        variant="contained"
-                        size="small"
-                        color="warning"
-                        href={route("kendaraan.merk.edit", merk.id)}
-                    >
-                        Edit
-                    </Button>
+                {user.role == "admin" && (
+                    <div className="flex gap-2 justify-end">
+                        <Button
+                            variant="contained"
+                            size="small"
+                            color="warning"
+                            href={route("kendaraan.merk.edit", merk.id)}
+                        >
+                            Edit
+                        </Button>
 
-                    <Button
-                        variant="contained"
-                        size="small"
-                        color="error"
-                        onClick={deleting}
-                    >
-                        Hapus
-                    </Button>
-                </div>
+                        <Button
+                            variant="contained"
+                            size="small"
+                            color="error"
+                            onClick={deleting}
+                        >
+                            Hapus
+                        </Button>
+                    </div>
+                )}
 
                 <Card className="flex flex-wrap gap-x-5 gap-y-1 p-4 my-1 sm:max-w-max mb-2">
                     <div className="grid grid-cols-1 sm:grid-cols-[130px_200px] w-full gap-1 sm:w-[350px] self-start">

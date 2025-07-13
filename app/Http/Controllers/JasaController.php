@@ -12,7 +12,13 @@ class JasaController extends Controller
 {
   public function index(Request $request)
   {
-    $jasa = Jasa::paginate(25);
+    $query = Jasa::query();
+    if ($request->filled('searchText')) {
+      $searchText = $request->searchText;
+      $query->where('nama', 'like', "%{$searchText}%");
+    }
+
+    $jasa = $query->paginate(25)->withQueryString();
 
     return Inertia::render('Jasa/Index', [
       'jasa' => $jasa,

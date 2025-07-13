@@ -5,6 +5,7 @@ import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import { Button } from "@mui/material";
 
 export default function Index() {
+    const user = usePage().props.auth.user;
     const { merk } = usePage().props;
 
     const columns = [
@@ -46,13 +47,15 @@ export default function Index() {
                     paginationMeta={merk}
                 />
                 <div className="mt-2">
-                    <Button
-                        variant="contained"
-                        size="small"
-                        href={route("kendaraan.merk.create")}
-                    >
-                        Tambah Merk
-                    </Button>
+                    {user.role == "admin" && (
+                        <Button
+                            variant="contained"
+                            size="small"
+                            href={route("kendaraan.merk.create")}
+                        >
+                            Tambah Merk
+                        </Button>
+                    )}
                 </div>
             </Container>
         </AuthenticatedLayout>

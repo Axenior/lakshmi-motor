@@ -5,6 +5,7 @@ import { Head, usePage } from "@inertiajs/react";
 import { Button } from "@mui/material";
 
 export default function Index() {
+    const user = usePage().props.auth.user;
     const { penanggung } = usePage().props;
 
     const columns = [
@@ -17,18 +18,6 @@ export default function Index() {
         },
         { id: "no_telepon", label: "No Telepon", minWidth: 170 },
         { id: "no_fax", label: "No Fax", minWidth: 170 },
-        // {
-        //     id: "pph",
-        //     label: "PPH",
-        //     minWidth: 100,
-        //     format: (value) => (value !== null ? `${value}%` : "-"),
-        // },
-        // {
-        //     id: "ppn",
-        //     label: "PPN",
-        //     minWidth: 100,
-        //     format: (value) => (value !== null ? `${value}%` : "-"),
-        // },
     ];
 
     const rows = penanggung.data;

@@ -17,7 +17,10 @@ export default function Create() {
         sparepart: [{ id: "", jumlah: "", diskon: "" }],
         diskon_jasa: pendaftaran?.estimasi?.diskon_jasa || 0,
         diskon_sparepart: pendaftaran?.estimasi?.diskon_sparepart || 0,
-        nilai_or: pendaftaran?.estimasi?.nilai_or || 0,
+        nilai_or:
+            pendaftaran.penanggung.nama == "Pribadi"
+                ? 0
+                : pendaftaran?.estimasi?.nilai_or,
     });
 
     useEffect(() => {
@@ -25,7 +28,10 @@ export default function Create() {
             ...prevData,
             diskon_jasa: pendaftaran?.estimasi?.diskon_jasa || 0,
             diskon_sparepart: pendaftaran?.estimasi?.diskon_sparepart || 0,
-            nilai_or: pendaftaran?.estimasi?.nilai_or || 0,
+            nilai_or:
+                pendaftaran.penanggung.nama == "Pribadi"
+                    ? 0
+                    : pendaftaran?.estimasi?.nilai_or,
         }));
     }, [pendaftaran]);
 
@@ -41,7 +47,8 @@ export default function Create() {
         const diskon = parseFloat(item.diskon || 0);
         return sum + harga * jumlah * (1 - diskon / 100);
     }, 0);
-
+    console.log(jasaTotal);
+    console.log(sparepartTotal);
     const grandTotal =
         jasaTotal +
         sparepartTotal -
@@ -140,23 +147,27 @@ export default function Create() {
                                     setData("diskon_sparepart", Number(val));
                                 }}
                             />
-                            <InputLabel className="flex items-center">
-                                Nilai OR
-                            </InputLabel>
-                            <TextInput
-                                name="nilai_or"
-                                type="text"
-                                inputMode="numeric"
-                                min={0}
-                                value={data.nilai_or}
-                                onChange={(e) => {
-                                    const val = e.target.value.replace(
-                                        /[^0-9]/g,
-                                        ""
-                                    );
-                                    setData("nilai_or", Number(val));
-                                }}
-                            />
+                            {pendaftaran.penanggung.nama != "Pribadi" && (
+                                <>
+                                    <InputLabel className="flex items-center">
+                                        Nilai OR
+                                    </InputLabel>
+                                    <TextInput
+                                        name="nilai_or"
+                                        type="text"
+                                        inputMode="numeric"
+                                        min={0}
+                                        value={data.nilai_or}
+                                        onChange={(e) => {
+                                            const val = e.target.value.replace(
+                                                /[^0-9]/g,
+                                                ""
+                                            );
+                                            setData("nilai_or", Number(val));
+                                        }}
+                                    />
+                                </>
+                            )}
                         </div>
 
                         <Typography variant="h6">

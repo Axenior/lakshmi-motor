@@ -201,7 +201,7 @@ export default function JasaEstimate({ jasa, onChangeRows, defaultRows = [] }) {
                     +
                 </Button>
             </Box>
-
+            {console.log(jasaColumns)}
             <StickyHeadTable columns={jasaColumns} rows={displayRows}>
                 <TableRow>
                     <TableCell colSpan={5}>Subtotal</TableCell>

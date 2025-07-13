@@ -7,6 +7,7 @@ import TextInput from "@/Components/TextInput";
 import CustomSelect from "@/Components/CustomSelect";
 
 export default function Create() {
+    const user = usePage().props.auth.user;
     const { merk, tipe } = usePage().props;
 
     const { delete: destroy, reset } = useForm();
@@ -48,25 +49,27 @@ export default function Create() {
             <Head title="Detail Tipe Kendaraan" />
 
             <Container className="py-5">
-                <div className="flex gap-2 justify-end">
-                    <Button
-                        variant="contained"
-                        size="small"
-                        color="warning"
-                        href={route("kendaraan.tipe.edit", tipe.id)}
-                    >
-                        Edit
-                    </Button>
+                {user.role == "admin" && (
+                    <div className="flex gap-2 justify-end">
+                        <Button
+                            variant="contained"
+                            size="small"
+                            color="warning"
+                            href={route("kendaraan.tipe.edit", tipe.id)}
+                        >
+                            Edit
+                        </Button>
 
-                    <Button
-                        variant="contained"
-                        size="small"
-                        color="error"
-                        onClick={deleting}
-                    >
-                        Hapus
-                    </Button>
-                </div>
+                        <Button
+                            variant="contained"
+                            size="small"
+                            color="error"
+                            onClick={deleting}
+                        >
+                            Hapus
+                        </Button>
+                    </div>
+                )}
                 <Card className="flex flex-wrap gap-x-5 gap-y-1 p-4 my-1 sm:max-w-max mb-2">
                     <div className="grid grid-cols-1 sm:grid-cols-[130px_200px] w-full gap-1 sm:w-[350px] self-start">
                         <InputLabel className="flex items-center">

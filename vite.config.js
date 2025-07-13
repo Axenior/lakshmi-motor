@@ -10,12 +10,14 @@ export default defineConfig({
         }),
         react(),
     ],
+    // php artisan serve --host=192.168.1.22 --port=8000
+    // npm run dev
     // server: {
     //     host: "0.0.0.0",
     //     port: 5173,
     //     cors: true, // ✅ Enable CORS
     //     hmr: {
-    //         host: "192.168.179.159", // ✅ Change to your local IP
+    //         host: "192.168.1.22", // ✅ Change to your local IP
     //     },
     // },
 });

@@ -111,7 +111,8 @@ class PendaftaranController extends Controller
                 'tahun' => 'required|integer|max:' . date('Y'),
                 'jenis' => 'required|string|max:50',
                 'warna' => 'required|string|max:30',
-                'user' => 'required'
+                'user' => 'required',
+                'keterangan' => 'required'
             ]
         );
 
@@ -226,6 +227,7 @@ class PendaftaranController extends Controller
                 'warna' => 'required|string|max:30',
                 'user' => 'required',
                 'lunas' => 'required',
+                'keterangan' => 'required'
             ]
         );
         if ($request->status == "batal") {

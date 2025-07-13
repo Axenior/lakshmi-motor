@@ -8,6 +8,7 @@ import { Button, Card, MenuItem, Select, Typography } from "@mui/material";
 import { useRef } from "react";
 
 export default function Show() {
+    const user = usePage().props.auth.user;
     const { jasa } = usePage().props;
 
     const { delete: destroy, reset } = useForm();
@@ -49,25 +50,27 @@ export default function Show() {
             <Head title="Detail Jasa" />
 
             <Container className="py-5">
-                <div className="flex gap-2 justify-end">
-                    <Button
-                        variant="contained"
-                        size="small"
-                        color="warning"
-                        href={route("jasa.edit", jasa.id)}
-                    >
-                        Edit
-                    </Button>
+                {user.role == "admin" && (
+                    <div className="flex gap-2 justify-end">
+                        <Button
+                            variant="contained"
+                            size="small"
+                            color="warning"
+                            href={route("jasa.edit", jasa.id)}
+                        >
+                            Edit
+                        </Button>
 
-                    <Button
-                        variant="contained"
-                        size="small"
-                        color="error"
-                        onClick={deleting}
-                    >
-                        Hapus
-                    </Button>
-                </div>
+                        <Button
+                            variant="contained"
+                            size="small"
+                            color="error"
+                            onClick={deleting}
+                        >
+                            Hapus
+                        </Button>
+                    </div>
+                )}
                 <div className="grid grid-cols-1">
                     <Card className="flex flex-wrap gap-x-5 gap-y-1 p-4 my-1 sm:w-fit">
                         <div className="grid grid-cols-1 sm:grid-cols-[130px_350px] gap-1 w-full sm:w-[485px] self-start">
